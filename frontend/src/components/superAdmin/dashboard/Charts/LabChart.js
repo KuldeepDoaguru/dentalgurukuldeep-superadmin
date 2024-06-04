@@ -78,9 +78,13 @@ const LabChart = () => {
 
   console.log(appointmentList);
   const filterForPayStatus = appointmentList?.filter((item) => {
-    return item.payment_status === "done";
+    return (
+      item.payment_status === "done" &&
+      item.authenticate_date?.split("T")[0]?.slice(0, 7) === formattedDate
+    );
   });
 
+  console.log(filterForPayStatus);
   // Group appointments by date and count appointments for each day
   const dailyAppointments = filterForPayStatus?.reduce((acc, appointment) => {
     if (appointment.authenticate_date) {

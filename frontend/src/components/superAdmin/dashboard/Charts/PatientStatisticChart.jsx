@@ -64,29 +64,33 @@ const PatientStatisticChart = () => {
   const firstDay = `${year}-${month}-01`;
   const lastDay = new Date(year, month, 0).getDate(); // Last day of the current month
   const formattedDate = `${year}-${month}`;
+  console.log(formattedDate);
 
   const filterByTreated = appointmentList?.filter(
     (item) =>
-      item.treatment_provided === "OPD" && item.payment_Status === "paid"
+      item.treatment_provided === "OPD" &&
+      item.payment_Status === "paid" &&
+      item.appointment_dateTime?.split("T")[0]?.slice(0, 7) === formattedDate
   );
 
+  console.log(filterByTreated);
   // Group appointments by date and count appointments for each day
   const dailyAppointments = filterByTreated.reduce((acc, appointment) => {
-    const date = appointment.created_at.split(" ")[0];
+    const date = appointment.appointment_dateTime?.split("T")[0];
     acc[date] = acc[date] ? acc[date] + 1 : 1;
     return acc;
   }, {});
 
-  console.log(dailyAppointments[formattedDate]);
+  console.log(dailyAppointments);
 
   let totalAmountPerDay = {}; // Object to store total amount for each day
 
   filterByTreated.forEach((item) => {
     if (item.appointment_dateTime) {
       // Ensure payment_date_time is not null or undefined
-      const date = item.created_at.split(" ")[0];
+      const date = item.appointment_dateTime.split("T")[0];
       totalAmountPerDay[date] =
-        (totalAmountPerDay[date] || 0) + parseFloat(item.opd_amount);
+        (totalAmountPerDay[date] || 0) + parseInt(item.opd_amount);
     }
   });
   console.log(totalAmountPerDay);
@@ -100,6 +104,8 @@ const PatientStatisticChart = () => {
       Amount: totalAmountPerDay[date] || 0,
     };
   });
+
+  console.log(data);
 
   const tickValues = Object.keys(dailyAppointments)
     .filter((date) => new Date(date).getDate() === 1)

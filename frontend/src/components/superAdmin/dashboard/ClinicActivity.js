@@ -5,14 +5,15 @@ import { IoIosArrowDropdownCircle } from "react-icons/io";
 import { FaDotCircle } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
+import moment from "moment";
 
 const ClinicActivity = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
   // console.log(`User Name: ${user.name}, User ID: ${user.id}`);
-  // console.log("User State:", user);
+  console.log("User State:", user);
   const branch = useSelector((state) => state.branch);
-  // console.log(`User Name: ${branch.name}`);
+  console.log(`User Name: ${branch.name}`);
   const [showCalender, setShowCalender] = useState(false);
   const [appointmentList, setAppointmentList] = useState([]);
   const [patDetails, setPatDetails] = useState([]);
@@ -145,33 +146,6 @@ const ClinicActivity = () => {
     getTreatmentValues();
   }, [branch.name]);
 
-  // console.log(currentDate);
-
-  // UTC Time Start here
-
-  // const ConvertToIST = ( utcDateString ) => {
-  //   // Convert the date string to a Date object
-  //   const utcDate = new Date(utcDateString);
-
-  //   // Convert the UTC date to IST by adding 5 hours and 30 minutes
-  //   const istOffset = 5.5 * 60 * 60 * 1000; // IST is UTC + 5:30
-  //   const istDate = new Date(utcDate.getTime() + istOffset);
-
-  //   // Format the IST date
-  //   const options = {
-  //     timeZone: 'Asia/Kolkata',
-  //     year: 'numeric',
-  //     month: '2-digit',
-  //     day: '2-digit',
-  //     // hour: '2-digit',
-  //     // minute: '2-digit',
-  //     // second: '2-digit',
-  //   };
-  //   const istDateString = new Intl.DateTimeFormat('en-IN', options).format(istDate);
-
-  //   return istDateString;
-  // };
-
   const ConvertToIST = (utcDateString) => {
     // Convert the date string to a Date object
     const utcDate = new Date(utcDateString);
@@ -191,18 +165,34 @@ const ClinicActivity = () => {
     return istDateString;
   };
 
+  console.log(ConvertToIST);
+
+  const getAppMonth = appointmentList?.filter((item) => {
+    return (
+      item.appointment_created_at?.split(" ")[0]?.slice(0, 7) ===
+      todayDate?.split("T")[0]?.slice(0, 7)
+    );
+  });
+
+  console.log(getAppMonth);
+
+  console.log(currentDate);
+  console.log(appointmentList[0]?.appointment_created_at?.split(" ")[0]);
+  console.log(todayDate?.split("T")[0]);
   //filter for day wise Appointment
   const filterAppointment = appointmentList?.filter((item) => {
     if (currentDate) {
       // return item.created_at?.split("T")[0] === currentDate;
-      return ConvertToIST(item.created_at) === currentDate;
+      return item.appointment_created_at?.split(" ")[0] === currentDate;
     } else {
       return (
         // item.created_at?.split("T")[0] === todayDate?.split("T")[0]
-        ConvertToIST(item.created_at) === todayDate?.split("T")[0]
+        item.appointment_created_at?.split(" ")[0] === todayDate?.split("T")[0]
       );
     }
   });
+
+  console.log(filterAppointment);
 
   const getFormattedTimeDifference = (createdAt) => {
     const currentTime = new Date();
@@ -219,8 +209,12 @@ const ClinicActivity = () => {
   console.log(currentDate);
   console.log(todayDate?.split("T")[0]);
 
+  const filterTreatmentVal = appointmentList?.filter((item) => {
+    return item.treatment_provided !== "OPD";
+  });
+
   //filter for day wise Treatment
-  const filterTreatment = appointmentList?.filter((item) => {
+  const filterTreatment = filterTreatmentVal?.filter((item) => {
     if (currentDate) {
       return item.appointment_dateTime?.split("T")[0] === currentDate;
     } else {
@@ -400,47 +394,18 @@ const ClinicActivity = () => {
                           </h5>
                         </div>
                         <div>
-                          {/* {item.created_at.split("T")[0] ===
+                          {item.appointment_created_at.split(" ")[0] ===
                           formattedDate ? (
-                            <>
-                              <p className="fw-bold">
-                                {formattedTime >=
-                                item.created_at
-                                  .split("T")[1]
-                                  ?.split(":")[0]
-                                  ? formattedTime -
-                                    item.created_at
-                                      .split("T")[1]
-                                      ?.split(":")[0]
-                                  : "--:--"}{" "}
-                                Hours ago
-                              </p>
-                            </>
-                          ) : (
-                            <>
-                              <p className="fw-bold">{item.created_at.split("T")[0]}</p>
-                            </>
-                          )} */}
-                          {item.created_at.split(" ")[0] === formattedDate ? 
-                          // (
-                          //   <p className="fw-bold">
-                          //     {formattedTime >=
-                          //     item.created_at.split(" ")[1]?.split(":")[0]
-                          //       ? getFormattedTimeDifference(item.created_at)
-                          //       : "--:--"}{" "}
-                          //     Hours ago
-                          //   </p>
-                          // ) 
-                          (
                             <p className="fw-bold">
-                            
-                             {  item.created_at.split(" ")[1] }
-                               
+                              {moment(item.appointment_created_at).format(
+                                "h:mm:ss A"
+                              )}
                             </p>
-                          ) 
-                          : (
+                          ) : (
                             <p className="fw-bold">
-                              {item.created_at}
+                              {moment(item.appointment_created_at).format(
+                                "YYYY-MM-DD -- h:mm:ss A"
+                              )}
                             </p>
                           )}
                         </div>
