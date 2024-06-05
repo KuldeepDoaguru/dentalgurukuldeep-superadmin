@@ -209,17 +209,19 @@ const ClinicActivity = () => {
   console.log(currentDate);
   console.log(todayDate?.split("T")[0]);
 
-  const filterTreatmentVal = appointmentList?.filter((item) => {
+  const filterTreatmentVal = filterAppointment?.filter((item) => {
     return item.treatment_provided !== "OPD";
   });
+
+  console.log(filterTreatmentVal);
 
   //filter for day wise Treatment
   const filterTreatment = filterTreatmentVal?.filter((item) => {
     if (currentDate) {
-      return item.appointment_dateTime?.split("T")[0] === currentDate;
+      return item.appointment_dateTime?.split(" ")[0] === currentDate;
     } else {
       return (
-        item.appointment_dateTime?.split("T")[0] === todayDate?.split("T")[0]
+        item.appointment_dateTime?.split(" ")[0] === todayDate?.split("T")[0]
       );
     }
   });
@@ -424,7 +426,7 @@ const ClinicActivity = () => {
               aria-labelledby="pills-treatment-tab"
             >
               <ul className="appointHeight">
-                {filterTreatment?.map((item) => (
+                {filterTreatmentVal?.map((item) => (
                   <>
                     <li>
                       <div className="d-flex justify-content-between">
@@ -437,16 +439,16 @@ const ClinicActivity = () => {
                           </h5>
                         </div>
                         <div>
-                          {item.appointment_dateTime.split("T")[0] ===
+                          {item.appointment_created_at.split("T")[0] ===
                           formattedDate ? (
                             <>
                               <p className="fw-bold">
                                 {formattedTime >=
-                                item.appointment_dateTime
+                                item.appointment_created_at
                                   .split("T")[1]
                                   ?.split(":")[0]
                                   ? formattedTime -
-                                    item.appointment_dateTime
+                                    item.appointment_created_at
                                       .split("T")[1]
                                       ?.split(":")[0]
                                   : "0"}{" "}
@@ -455,7 +457,7 @@ const ClinicActivity = () => {
                             </>
                           ) : (
                             <>
-                              <p>{item.appointment_dateTime.split("T")[0]}</p>
+                              <p>{item.appointment_created_at.split("T")[0]}</p>
                             </>
                           )}
                           {/* {item.created_at.split("T")[0] ===

@@ -10,6 +10,7 @@ import axios from "axios";
 import { utils, writeFile } from "xlsx";
 import Lottie from "react-lottie";
 import animationData from "../../../animation/loading-effect.json";
+import cogoToast from "cogo-toast";
 
 const AppointmentReport = () => {
   const user = useSelector((state) => state.user);
@@ -22,6 +23,28 @@ const AppointmentReport = () => {
   const location = useLocation();
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
+  const [error, setError] = useState(false);
+
+  console.log(toDate - fromDate);
+
+  const differenceError = () => {
+    const from = new Date(fromDate).getTime();
+    const to = new Date(toDate).getTime();
+    const differenceInMilliseconds = to - from;
+    const differenceInDays = differenceInMilliseconds / (1000 * 60 * 60 * 24);
+    if (differenceInDays >= 30) {
+      setError(true);
+      cogoToast.error(
+        "The difference between the dates should be less than 30 days"
+      );
+    } else {
+      setError(false);
+    }
+  };
+
+  useEffect(() => {
+    differenceError();
+  }, [toDate, fromDate]);
 
   const getAppointList = async () => {
     setLoading(true);
@@ -175,12 +198,23 @@ const AppointmentReport = () => {
                                     onChange={(e) => setToDate(e.target.value)}
                                   />
                                 </div>
-                                <button
-                                  className="btn btn-warning mx-2"
-                                  type="submit"
-                                >
-                                  Download Report
-                                </button>
+                                <div className="d-flex flex-column">
+                                  <button
+                                    className="btn btn-warning mx-2"
+                                    type="submit"
+                                    disabled={error}
+                                  >
+                                    Download Report
+                                  </button>
+                                  {error && (
+                                    <>
+                                      <small className="text-danger">
+                                        The difference between the dates should
+                                        be less than 30 days
+                                      </small>
+                                    </>
+                                  )}
+                                </div>
                               </div>
                             </form>
                           </div>

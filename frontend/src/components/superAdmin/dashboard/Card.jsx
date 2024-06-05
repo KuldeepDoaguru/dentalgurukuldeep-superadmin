@@ -126,7 +126,7 @@ const Card = () => {
 
   const totalOpdValue = totalPrice();
 
-  // console.log(availableEmp[0]?.date.split("T")[0]);
+  console.log(availableEmp);
   // console.log(formateForDay);
   //filter for employee availability
   const filterForEmpAVToday = availableEmp?.filter(
