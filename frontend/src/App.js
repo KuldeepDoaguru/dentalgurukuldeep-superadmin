@@ -63,12 +63,7 @@ const App = () => {
   // const storedUserData = localStorage.getItem("userData");
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
-  console.log(user.id === null);
-  // if (storedUserData) {
-  //   const userData = JSON.parse(storedUserData);
-  //   dispatch(setUser(userData));
-  // }
-
+  console.log(user);
   const selectedBranch = localStorage.getItem("branchName");
   const branch = useSelector((state) => state.name);
 
@@ -81,7 +76,10 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<UniversalLogin />} />
+        <Route
+          path="/"
+          element={user.id !== null ? <ErrorPage /> : <UniversalLogin />}
+        />
         {/* ************************************************************************************ */}
         {/* super admin routes start  */}
 

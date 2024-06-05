@@ -60,8 +60,7 @@ const LabReport = () => {
 
   const filterBillDataByMonth = labBills?.filter((item) => {
     return (
-      item.authenticate_date?.split("T")[0].slice(0, 7) ===
-      formattedDate.slice(0, 7)
+      item.created_date?.split("T")[0].slice(0, 7) === formattedDate.slice(0, 7)
     );
   });
 
@@ -110,6 +109,15 @@ const LabReport = () => {
   }, [branch.name]);
 
   console.log(fromDate, toDate);
+
+  const checkFilter = labBills?.filter((item) => {
+    return (
+      item.created_date?.split("T")[0] >= fromDate &&
+      item.created_date?.split("T")[0] <= toDate
+    );
+  });
+
+  console.log(checkFilter);
 
   return (
     <>
@@ -174,7 +182,7 @@ const LabReport = () => {
                           ? labBills
                               ?.filter((item) => {
                                 const billDate =
-                                  item.authenticate_date?.split("T")[0];
+                                  item.created_date?.split("T")[0];
                                 if (fromDate && toDate) {
                                   return (
                                     billDate >= fromDate && billDate <= toDate
@@ -188,7 +196,7 @@ const LabReport = () => {
                                   <tr className="table-row">
                                     <td className="table-sno">{item.testid}</td>
                                     <td className="table-small">
-                                      {item.authenticate_date?.split("T")[0]}
+                                      {item.created_date?.split("T")[0]}
                                     </td>
                                     <td className="table-small">
                                       {item.patient_uhid}
@@ -204,9 +212,9 @@ const LabReport = () => {
                                     <td>{item.payment_status}</td>
 
                                     <td>
-                                      {item?.collection_date
+                                      {item?.created_date
                                         ? moment(
-                                            item?.collection_date,
+                                            item?.created_date,
                                             "YYYY-MM-DDTHH:mm"
                                           ).format("DD/MM/YYYY hh:mm A")
                                         : "--"}
@@ -214,10 +222,10 @@ const LabReport = () => {
                                   </tr>
                                 </>
                               ))
-                          : filterBillDataByMonth
+                          : labBills
                               ?.filter((item) => {
                                 const billDate =
-                                  item.authenticate_date?.split("T")[0];
+                                  item.created_date?.split("T")[0];
                                 if (fromDate && toDate) {
                                   return (
                                     billDate >= fromDate && billDate <= toDate
@@ -231,7 +239,7 @@ const LabReport = () => {
                                   <tr className="table-row">
                                     <td className="table-sno">{item.testid}</td>
                                     <td className="table-small">
-                                      {item.authenticate_date?.split("T")[0]}
+                                      {item.created_date?.split("T")[0]}
                                     </td>
                                     <td className="table-small">
                                       {item.patient_uhid}
@@ -246,9 +254,9 @@ const LabReport = () => {
                                     </td>
                                     <td>{item.payment_status}</td>
                                     <td>
-                                      {item?.collection_date
+                                      {item?.created_date
                                         ? moment(
-                                            item?.collection_date,
+                                            item?.created_date,
                                             "YYYY-MM-DDTHH:mm"
                                           ).format("DD/MM/YYYY hh:mm A")
                                         : "--"}

@@ -100,7 +100,7 @@ const Header = () => {
           <div className="container-fluid">
             <Link to="/superadmin-dashboard">
               <img
-                src="https://res.cloudinary.com/dq5upuxm8/image/upload/v1707404036/dental%20guru/dentalguru_v1g7k0.png"
+                src="https://res.cloudinary.com/dq5upuxm8/image/upload/v1717595664/dental%20guru/test_1_liu3zb.png"
                 alt="Logo"
                 width="75"
                 height="60"
@@ -109,10 +109,10 @@ const Header = () => {
             </Link>
             <li style={{ listStyle: "none" }}>
               <Link
-                className="nav-link active text-white mt-2 mx-2 fs-5"
+                className="nav-link active text-white mt-2 mx-2 fs-5 fw-bold text-shadow"
                 to="/superadmin-dashboard"
               >
-                Dental Guru
+                DentalGuru
               </Link>
             </li>
             <button
@@ -276,7 +276,15 @@ const Wrapper = styled.div`
     }
   }
   .navbar {
-    background-color: #004aad;
+    /* background-color: #004aad; */
+    background: linear-gradient(
+      45deg,
+      transparent,
+      #004aad,
+      #004aad,
+      #004aad,
+      #004aad
+    );
     box-shadow: 1px 1px 6px black;
   }
 

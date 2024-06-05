@@ -27,6 +27,7 @@ const CalenderSetting = () => {
     open_time: "",
     close_time: "",
     appoint_slot_duration: "",
+    week_off: "",
   });
   const [holidays, setHolidays] = useState({
     branch_name: branch.name,
@@ -59,30 +60,36 @@ const CalenderSetting = () => {
         ...upData,
         [name]: value,
       });
+    } else {
+      setUpData({
+        ...upData,
+        [name]: value,
+      });
     }
   };
 
-
-  const ConvertToIST = ( utcDateString ) => {
+  const ConvertToIST = (utcDateString) => {
     // Convert the date string to a Date object
     const utcDate = new Date(utcDateString);
-  
+
     // Convert the UTC date to IST by adding 5 hours and 30 minutes
     const istOffset = 5.5 * 60 * 60 * 1000; // IST is UTC + 5:30
     const istDate = new Date(utcDate.getTime() + istOffset);
-  
+
     // Format the IST date
     const options = {
-      timeZone: 'Asia/Kolkata',
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
+      timeZone: "Asia/Kolkata",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
       // hour: '2-digit',
       // minute: '2-digit',
       // second: '2-digit',
     };
-    const istDateString = new Intl.DateTimeFormat('en-IN', options).format(istDate);
-  
+    const istDateString = new Intl.DateTimeFormat("en-IN", options).format(
+      istDate
+    );
+
     return istDateString;
   };
 
@@ -110,7 +117,7 @@ const CalenderSetting = () => {
     setShowAddBlockDays(true);
   };
 
-  const openEditBlockDaysPopup = (id,item) => {
+  const openEditBlockDaysPopup = (id, item) => {
     console.log(id);
     setSelected(item);
     console.log("open pop up");
@@ -127,7 +134,7 @@ const CalenderSetting = () => {
       holiday_start_time: "",
       holiday_end_time: "",
       notes: "",
-    })
+    });
   };
 
   const goBack = () => {
@@ -171,37 +178,36 @@ const CalenderSetting = () => {
       console.log(error);
     }
   };
- 
+
   useEffect(() => {
     getBranchDetails();
   }, []);
 
-    // Convert UTC date to IST date
-    const convertToIST = (utcDateString) => {
-      const utcDate = new Date(utcDateString);
-      const istOffset = 5.5 * 60 * 60 * 1000; // IST is UTC + 5:30
-      const istDate = new Date(utcDate.getTime() + istOffset);
-    
-      // Format the date to YYYY-MM-DD for input field
-      const year = istDate.getUTCFullYear();
-      const month = (`0${istDate.getUTCMonth() + 1}`).slice(-2); // months are zero-based
-      const day = (`0${istDate.getUTCDate() + 1}`).slice(-2);
-    
-      return `${year}-${month}-${day}`;
-    };
+  // Convert UTC date to IST date
+  const convertToIST = (utcDateString) => {
+    const utcDate = new Date(utcDateString);
+    const istOffset = 5.5 * 60 * 60 * 1000; // IST is UTC + 5:30
+    const istDate = new Date(utcDate.getTime() + istOffset);
 
-    // const convertToIST = (utcDateString) => {
-    //   const utcDate = new Date(utcDateString);
-    //   const istOffset = 5.5 * 60 * 60 * 1000; // IST is UTC + 5:30
-    //   const istDate = new Date(utcDate.getTime() + istOffset);
-    //   return istDate;
-    // };
+    // Format the date to YYYY-MM-DD for input field
+    const year = istDate.getUTCFullYear();
+    const month = `0${istDate.getUTCMonth() + 1}`.slice(-2); // months are zero-based
+    const day = `0${istDate.getUTCDate() + 1}`.slice(-2);
 
-    console.log(selected);
+    return `${year}-${month}-${day}`;
+  };
+
+  // const convertToIST = (utcDateString) => {
+  //   const utcDate = new Date(utcDateString);
+  //   const istOffset = 5.5 * 60 * 60 * 1000; // IST is UTC + 5:30
+  //   const istDate = new Date(utcDate.getTime() + istOffset);
+  //   return istDate;
+  // };
+
+  console.log(selected);
 
   useEffect(() => {
     if (selected) {
-
       console.log("UTC Date:", selected.holiday_date);
       // Format the date and time fields correctly
       // const istDate = convertToIST(selected.holiday_date);
@@ -210,7 +216,7 @@ const CalenderSetting = () => {
       // const formattedDate =  new Date(selected.holiday_date).toISOString().split("T")[0];
       const formattedStartTime = selected.holiday_start_time.slice(0, 5);
       const formattedEndTime = selected.holiday_end_time.slice(0, 5);
-      console.log("Formatted Date:", formattedDate); 
+      console.log("Formatted Date:", formattedDate);
       setUpHolidays({
         ...upHolidays,
         holiday_name: selected.holiday_name || "",
@@ -264,7 +270,7 @@ const CalenderSetting = () => {
         holiday_start_time: "",
         holiday_end_time: "",
         notes: "",
-      })
+      });
       closeUpdatePopup();
       getHolidayList();
     } catch (error) {
@@ -278,8 +284,7 @@ const CalenderSetting = () => {
     console.log(selected);
     try {
       const response = await axios.put(
-        `https://dentalgurusuperadmin.doaguru.com/api/v1/super-admin/updateHolidays/${selected.holiday_id
-      }`,
+        `https://dentalgurusuperadmin.doaguru.com/api/v1/super-admin/updateHolidays/${selected.holiday_id}`,
         upHolidays,
         {
           headers: {
@@ -299,7 +304,9 @@ const CalenderSetting = () => {
   console.log(selected);
 
   const deleteHoliday = async (id) => {
-    const isConfirmed = window.confirm("Are you sure you want to delete this data?");
+    const isConfirmed = window.confirm(
+      "Are you sure you want to delete this data?"
+    );
     if (!isConfirmed) {
       return; // Exit if the user cancels the action
     }
@@ -324,11 +331,18 @@ const CalenderSetting = () => {
     getHolidayList();
   }, [branch.name]);
 
-  useEffect(()=>{
-
-  }, []);
+  useEffect(() => {}, []);
 
   console.log(holidayList);
+  const weekdays = [
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+    "sunday",
+  ];
 
   return (
     <>
@@ -465,6 +479,22 @@ const CalenderSetting = () => {
                         </div>
                       </div>
                     </div>
+                    <div className="container d-flex justify-content-center align-item-center mb-2">
+                      <h6 className="fw-bold mx-2">Set week-off Day :</h6>
+                      <select
+                        name="week_off"
+                        id=""
+                        onChange={handleChange}
+                        className="p-1 rounded"
+                      >
+                        <option value="">--select--</option>
+                        {weekdays.map((item) => (
+                          <>
+                            <option value={item}>{item}</option>
+                          </>
+                        ))}
+                      </select>
+                    </div>
                     <div className="d-flex justify-content-center">
                       <button className="btn btn-success mx-2">Change</button>
                     </div>
@@ -519,7 +549,10 @@ const CalenderSetting = () => {
                                   <button
                                     className="btn btn-warning"
                                     onClick={() =>
-                                      openEditBlockDaysPopup(item.holiday_id,item)
+                                      openEditBlockDaysPopup(
+                                        item.holiday_id,
+                                        item
+                                      )
                                     }
                                   >
                                     Edit
@@ -758,7 +791,7 @@ const Container = styled.div`
     color: white;
     z-index: 1;
   }
-  .table-responsive{
+  .table-responsive {
     height: 20rem;
   }
 `;
