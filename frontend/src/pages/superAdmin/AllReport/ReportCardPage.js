@@ -298,7 +298,6 @@
 //   }, []);
 
 //   console.log(testCounts);
-  
 
 //   return (
 //     <Wrapper>
@@ -468,7 +467,6 @@
 //   }
 // `;
 
-
 // ================================================================================
 
 import React, { useEffect, useState } from "react";
@@ -495,7 +493,7 @@ const ReportCardPage = () => {
     const fetchTestCounts = async () => {
       try {
         const response = await axios.get(
-         `https://dentalgurusuperadmin.doaguru.com/api/v1/super-admin/getPatientLabTest/${branch.name}`,
+          `https://dentalgurusuperadmin.doaguru.com/api/v1/super-admin/getPatientLabTest/${branch.name}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -506,15 +504,25 @@ const ReportCardPage = () => {
         if (response.status === 200) {
           const data = response.data;
 
-           // Log the data to check its structure
-           console.log("Fetched data:", data);
-          
+          // Log the data to check its structure
+          console.log("Fetched data:", data);
+
           // Count the reports based on lab_name and test_status
-          const oralCount = data.filter((item) => item.lab_name === "oral").length;
-          const bloodCount = data.filter((item) => item.lab_name === "pathology").length;
-          const radiologyCount = data.filter((item) => item.lab_name === "radiology").length;
-          const doneTestCount = data.filter((item) => item.test_status === "done").length;
-          const pendingTestCount = data.filter((item) => item.test_status === "pending").length;
+          const oralCount = data.filter(
+            (item) => item.lab_name === "oral"
+          ).length;
+          const bloodCount = data.filter(
+            (item) => item.lab_name === "pathology"
+          ).length;
+          const radiologyCount = data.filter(
+            (item) => item.lab_name === "radiology"
+          ).length;
+          const doneTestCount = data.filter(
+            (item) => item.test_status === "done"
+          ).length;
+          const pendingTestCount = data.filter(
+            (item) => item.test_status === "pending"
+          ).length;
 
           // Update state with test counts
           setTestCounts({
@@ -547,7 +555,7 @@ const ReportCardPage = () => {
           count={testCounts.oral}
         />
         <ReportCard
-          link="/BloodTest"
+          link="/pathology-lab-test"
           icon={<SiMoneygram />}
           title="Pathology Report"
           count={testCounts.blood}
@@ -624,5 +632,3 @@ const Wrapper = styled.div`
 `;
 
 export default ReportCardPage;
-
-

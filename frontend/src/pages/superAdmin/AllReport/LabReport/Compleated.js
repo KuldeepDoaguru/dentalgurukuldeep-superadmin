@@ -21,6 +21,7 @@ const Compleated = () => {
   console.log("User State:", user);
   const branch = useSelector((state) => state.branch);
   const [loading, setLoading] = useState(false);
+  const [keyword, setkeyword] = useState("");
 
   useEffect(() => {
     const fetchPatientDetails = async () => {
@@ -55,14 +56,8 @@ const Compleated = () => {
     },
   };
 
-  const filteredPatients = patientDetails.filter((patient) => {
-    const fullName =
-      `${patient.patient_name} ${patient.assigned_doctor_name}`.toLowerCase();
-    const formattedDate = moment(patient.created_date).format("YYYY-MM-DD");
-    return (
-      fullName.includes(searchQuery.toLowerCase()) &&
-      (!dateFilter || formattedDate === dateFilter)
-    );
+  const filteredPatients = patientDetails.filter((item) => {
+    return item.test_status === "done";
   });
 
   const goBack = () => {
@@ -121,10 +116,12 @@ const Compleated = () => {
                     <div className="col-lg-2">
                       <input
                         type="text"
-                        placeholder="Search by name or doctor"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="form-control"
+                        placeholder="Search Patient Name"
+                        className="input p-1 rounded border-none"
+                        value={keyword}
+                        onChange={(e) =>
+                          setkeyword(e.target.value.toLowerCase())
+                        }
                       />
                     </div>
                     <div className="col-lg-2">
@@ -171,9 +168,29 @@ const Compleated = () => {
                         </thead>
 
                         <tbody>
-                          {patientDetails.map((patient, index) => (
-                            <>
-                              {patient.test_status === "done" && (
+                          {filteredPatients
+                            ?.filter((val) => {
+                              if (keyword === "") {
+                                return true;
+                              } else if (
+                                val.patient_name
+                                  .toLowerCase()
+                                  .includes(keyword.toLowerCase())
+                              ) {
+                                return val;
+                              }
+                            })
+                            ?.filter((i) => {
+                              if (dateFilter === "") {
+                                return true;
+                              } else if (
+                                i.created_date?.split("T")[0] === dateFilter
+                              ) {
+                                return i;
+                              }
+                            })
+                            .map((patient, index) => (
+                              <>
                                 <tr key={patient.testid}>
                                   <td>{index + 1}</td>
                                   <td>{patient.patient_uhid}</td>
@@ -202,10 +219,9 @@ const Compleated = () => {
                                     </td>
                                   )}
                                 </tr>
-                              )}
-                            </>
-                            // Wrap the entire row inside a conditional statement based on test status
-                          ))}
+                              </>
+                              // Wrap the entire row inside a conditional statement based on test status
+                            ))}
                         </tbody>
                       </table>
                     </div>

@@ -21,6 +21,7 @@ const OralTest = () => {
   console.log("User State:", user);
   const branch = useSelector((state) => state.branch);
   const [loading, setLoading] = useState(false);
+  const [keyword, setkeyword] = useState("");
 
   useEffect(() => {
     const fetchPatientDetails = async () => {
@@ -90,6 +91,8 @@ const OralTest = () => {
     link.click();
     window.URL.revokeObjectURL(link.href);
   };
+
+  console.log(dateFilter);
   return (
     <Wrapper>
       <Container>
@@ -120,10 +123,12 @@ const OralTest = () => {
                     <div className="col-lg-2">
                       <input
                         type="text"
-                        placeholder="Search by name or doctor"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="form-control"
+                        placeholder="Search Patient Name"
+                        className="input"
+                        value={keyword}
+                        onChange={(e) =>
+                          setkeyword(e.target.value.toLowerCase())
+                        }
                       />
                     </div>
                     <div className="col-lg-2">
@@ -167,9 +172,29 @@ const OralTest = () => {
                       </thead>
 
                       <tbody>
-                        {filteredPatients.map((patient, index) => (
-                          <>
-                            {patient.lab_name === "oral" && (
+                        {filteredPatients
+                          ?.filter((val) => {
+                            if (keyword === "") {
+                              return true;
+                            } else if (
+                              val.patient_name
+                                .toLowerCase()
+                                .includes(keyword.toLowerCase())
+                            ) {
+                              return val;
+                            }
+                          })
+                          ?.filter((i) => {
+                            if (dateFilter === "") {
+                              return true;
+                            } else if (
+                              i.created_date?.split("T")[0] === dateFilter
+                            ) {
+                              return i;
+                            }
+                          })
+                          .map((patient, index) => (
+                            <>
                               <tr key={patient.testid}>
                                 <td>{index + 1}</td>
                                 <td>{patient.patient_uhid}</td>
@@ -202,10 +227,9 @@ const OralTest = () => {
                                   </td>
                                 )}
                               </tr>
-                            )}
-                          </>
-                          // Wrap the entire row inside a conditional statement based on test status
-                        ))}
+                            </>
+                            // Wrap the entire row inside a conditional statement based on test status
+                          ))}
                       </tbody>
                     </table>
                   </div>

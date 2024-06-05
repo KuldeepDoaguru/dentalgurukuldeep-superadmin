@@ -225,16 +225,13 @@ const TreatmentSetting = () => {
                         <div className="col-xxl-11 col-xl-11 col-lg-11 col-md-11 col-sm-12 col-12">
                           <input
                             type="text"
-                            placeholder="Search by Treatment Name"
+                            placeholder="Search by Treatment Name or treatment procedure"
                             className="inputser"
                             value={keyword}
                             onChange={(e) =>
                               setkeyword(e.target.value.toLowerCase())
                             }
                           />
-                          <button className="mx-2 btn btn-info btnback">
-                            <FaSearch size={20} />
-                          </button>
                         </div>
                         {/* <div className="col-xxl-1 col-xl-1 col-lg-1 col-md-1 col-sm-12 col-12">
                           <button
@@ -292,7 +289,7 @@ const TreatmentSetting = () => {
                                     val.treatment_name
                                       .toLowerCase()
                                       .includes(keyword) ||
-                                    val.treatment_name
+                                    val.treat_procedure_name
                                       .toLowerCase()
                                       .includes(keyword)
                                   ) {
@@ -540,7 +537,7 @@ const Container = styled.div`
   .inputser {
     border-radius: 1.5rem;
     padding: 0.5rem;
-    width: 30%;
+    width: 50%;
   }
 
   input::placeholder {

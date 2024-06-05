@@ -267,7 +267,7 @@ const App = () => {
         />
 
         <Route
-          path="/BloodTest"
+          path="/pathology-lab-test"
           element={user.id === null ? <UniversalLogin /> : <BloodTest />}
         />
 

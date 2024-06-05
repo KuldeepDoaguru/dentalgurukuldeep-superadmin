@@ -21,6 +21,7 @@ const LabPatientReport = () => {
   console.log(`User Name: ${user.name}, User ID: ${user.id}`);
   const branch = useSelector((state) => state.branch);
   console.log("User State:", user);
+  const [keyword, setkeyword] = useState("");
 
   const goBack = () => {
     window.history.go(-1);
@@ -171,15 +172,25 @@ const LabPatientReport = () => {
                           </h2>
                           <div className="mb-3">
                             <div className="row">
-                              <div className="col-lg-4">
+                              <div className="col-lg-2">
                                 <input
                                   type="text"
-                                  placeholder="Search by Patient Name"
-                                  value={searchQuery}
+                                  placeholder="Search Patient Name"
+                                  className="input p-1 rounded border-none"
+                                  value={keyword}
                                   onChange={(e) =>
-                                    setSearchQuery(e.target.value)
+                                    setkeyword(e.target.value.toLowerCase())
                                   }
-                                  className="form-control mb-lg-0  mb-md-2 rounded p-2"
+                                />
+                              </div>
+                              <div className="col-lg-2">
+                                <input
+                                  type="date"
+                                  value={dateFilter}
+                                  onChange={(e) =>
+                                    setDateFilter(e.target.value)
+                                  }
+                                  className="form-control"
                                 />
                               </div>
                             </div>
@@ -214,46 +225,68 @@ const LabPatientReport = () => {
                                   </thead>
 
                                   <tbody>
-                                    {filteredPatients.map((patient, index) => (
-                                      <>
-                                        <tr key={patient.testid}>
-                                          <td>{patient.testid}</td>
-                                          <td>{patient.patient_uhid}</td>
-                                          <td>{patient.patient_name}</td>
-                                          <td>{patient.age}</td>
-                                          <td>{patient.gender}</td>
-                                          <td>{patient.branch_name}</td>
+                                    {patientDetails
+                                      ?.filter((val) => {
+                                        if (keyword === "") {
+                                          return true;
+                                        } else if (
+                                          val.patient_name
+                                            .toLowerCase()
+                                            .includes(keyword.toLowerCase())
+                                        ) {
+                                          return val;
+                                        }
+                                      })
+                                      ?.filter((i) => {
+                                        if (dateFilter === "") {
+                                          return true;
+                                        } else if (
+                                          i.created_date?.split("T")[0] ===
+                                          dateFilter
+                                        ) {
+                                          return i;
+                                        }
+                                      })
+                                      .map((patient, index) => (
+                                        <>
+                                          <tr key={patient.testid}>
+                                            <td>{patient.testid}</td>
+                                            <td>{patient.patient_uhid}</td>
+                                            <td>{patient.patient_name}</td>
+                                            <td>{patient.age}</td>
+                                            <td>{patient.gender}</td>
+                                            <td>{patient.branch_name}</td>
 
-                                          <td>
-                                            {patient.assigned_doctor_name}
-                                          </td>
-                                          <td>{patient.lab_name}</td>
-                                          <td>
-                                            {moment(
-                                              patient.created_date
-                                            ).format("DD/MM/YYYY")}
-                                          </td>
-                                          <td>{patient.test}</td>
-                                          {patient.test_status === "done" && (
                                             <td>
-                                              <h6 className="text-capitalize text-success fw-bold">
-                                                {patient.test_status}
-                                              </h6>
+                                              {patient.assigned_doctor_name}
                                             </td>
-                                          )}
+                                            <td>{patient.lab_name}</td>
+                                            <td>
+                                              {moment(
+                                                patient.created_date
+                                              ).format("DD/MM/YYYY")}
+                                            </td>
+                                            <td>{patient.test}</td>
+                                            {patient.test_status === "done" && (
+                                              <td>
+                                                <h6 className="text-capitalize text-success fw-bold">
+                                                  {patient.test_status}
+                                                </h6>
+                                              </td>
+                                            )}
 
-                                          {patient.test_status ===
-                                            "pending" && (
-                                            <td>
-                                              <h6 className="text-capitalize text-danger fw-bold">
-                                                {patient.test_status}
-                                              </h6>
-                                            </td>
-                                          )}
-                                        </tr>
-                                      </>
-                                      // Wrap the entire row inside a conditional statement based on test status
-                                    ))}
+                                            {patient.test_status ===
+                                              "pending" && (
+                                              <td>
+                                                <h6 className="text-capitalize text-danger fw-bold">
+                                                  {patient.test_status}
+                                                </h6>
+                                              </td>
+                                            )}
+                                          </tr>
+                                        </>
+                                        // Wrap the entire row inside a conditional statement based on test status
+                                      ))}
                                   </tbody>
                                 </table>
                               </div>

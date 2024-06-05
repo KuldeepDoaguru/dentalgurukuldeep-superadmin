@@ -155,7 +155,7 @@ const TreatBills = () => {
     getBillDetailsByBid();
   }, [selectedItem]);
 
-  console.log(listBills);
+  console.log(listBills[0]?.payment_date_time);
   console.log(selectedItem);
   console.log(placehold);
 
@@ -242,7 +242,7 @@ const TreatBills = () => {
                         <th className="table-small">Total Amount</th>
                         <th>Paid Amount</th>
                         <th>Payment Status</th>
-                        <th>Payment Date & Time</th>
+                        <th>Payment Date</th>
                         <th>Pending Amount</th>
                       </tr>
                     </thead>
@@ -269,14 +269,7 @@ const TreatBills = () => {
                             <td className="table-small">{item.total_amount}</td>
                             <td className="table-small">{item.paid_amount}</td>
                             <td>{item.payment_status}</td>
-                            <td>
-                              {item?.payment_date_time
-                                ? moment(
-                                    item?.payment_date_time,
-                                    "YYYY-MM-DDTHH:mm"
-                                  ).format("DD/MM/YYYY hh:mm A")
-                                : "--"}
-                            </td>
+                            <td>{item?.payment_date_time}</td>
                             <td>
                               <td>{item.total_amount - item.paid_amount}</td>
                             </td>

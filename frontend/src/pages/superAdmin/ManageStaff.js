@@ -238,7 +238,7 @@ const ManageStaff = () => {
       closeUpdatePopup();
     } catch (error) {
       console.log(error);
-      // cogoToast.error(error?.response?.data?.error);
+      // cogoToast.error(error?.response?.data?.error || "Something went wrong");
       alert(error?.response?.data?.error || "Something went wrong");
     }
   };

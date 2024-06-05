@@ -21,6 +21,7 @@ const BloodTest = () => {
   console.log("User State:", user);
   const branch = useSelector((state) => state.branch);
   const [loading, setLoading] = useState(false);
+  const [keyword, setkeyword] = useState("");
 
   useEffect(() => {
     const fetchPatientDetails = async () => {
@@ -112,16 +113,18 @@ const BloodTest = () => {
               </div>
 
               <div className="container-fluid mt-4">
-                <h2>List of Blood Test</h2>
+                <h2>List of Pathology Test</h2>
                 <div className="mb-3">
                   <div className="row">
                     <div className="col-lg-2">
                       <input
                         type="text"
-                        placeholder="Search by name or doctor"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="form-control"
+                        placeholder="Search Patient Name"
+                        className="input p-1 rounded border-none"
+                        value={keyword}
+                        onChange={(e) =>
+                          setkeyword(e.target.value.toLowerCase())
+                        }
                       />
                     </div>
                     <div className="col-lg-2">
@@ -164,9 +167,29 @@ const BloodTest = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {patientDetails.map((patient, index) => (
-                            <React.Fragment key={patient.testid}>
-                              {patient.lab_name === "pathology" && (
+                          {filteredPatients
+                            ?.filter((val) => {
+                              if (keyword === "") {
+                                return true;
+                              } else if (
+                                val.patient_name
+                                  .toLowerCase()
+                                  .includes(keyword.toLowerCase())
+                              ) {
+                                return val;
+                              }
+                            })
+                            ?.filter((i) => {
+                              if (dateFilter === "") {
+                                return true;
+                              } else if (
+                                i.created_date?.split("T")[0] === dateFilter
+                              ) {
+                                return i;
+                              }
+                            })
+                            .map((patient, index) => (
+                              <React.Fragment key={patient.testid}>
                                 <tr>
                                   <td>{index + 1}</td>
                                   <td>{patient.patient_uhid}</td>
@@ -198,9 +221,8 @@ const BloodTest = () => {
                                     </td>
                                   )}
                                 </tr>
-                              )}
-                            </React.Fragment>
-                          ))}
+                              </React.Fragment>
+                            ))}
                         </tbody>
                       </table>
                     </div>
