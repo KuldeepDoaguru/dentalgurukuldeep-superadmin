@@ -72,6 +72,7 @@ const ManageStaff = () => {
 
   const handleInputChange = (event) => {
     const { name, value, type, checked } = event.target;
+
     if (type === "checkbox") {
       setInEmpData((prevEmpData) => ({
         ...prevEmpData,
@@ -79,6 +80,14 @@ const ManageStaff = () => {
           ? [...prevEmpData[name], value]
           : prevEmpData[name].filter((item) => item !== value),
       }));
+    } else if (name === "empMobile") {
+      // Specific handling for mobile number field
+      if (/^\d*$/.test(value) && value.length <= 10) {
+        setInEmpData((prevEmpData) => ({
+          ...prevEmpData,
+          [name]: value,
+        }));
+      }
     } else {
       setInEmpData((prevEmpData) => ({
         ...prevEmpData,
@@ -268,6 +277,9 @@ const ManageStaff = () => {
       console.log(`error employee TimeLine ${error}`);
     }
   };
+
+  console.log(inEmpData);
+
   return (
     <>
       <Container>
@@ -605,82 +617,6 @@ const ManageStaff = () => {
                         </select>
                       </div>
                     </div>
-                    {/* <div className="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
-                      <div class="mb-3">
-                        <label
-                          for="exampleFormControlInput1"
-                          class="form-label"
-                        >
-                          Morning Shift Start Time
-                        </label>
-                        <input
-                          type="time"
-                          class="form-control"
-                          id="exampleFormControlInput1"
-                          placeholder="Employee Mobile"
-                          name="morningShiftStartTime"
-                          value={inEmpData.morningShiftStartTime}
-                          onChange={handleInputChange}
-                        />
-                      </div>
-                    </div>
-                    <div className="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
-                      <div class="mb-3">
-                        <label
-                          for="exampleFormControlInput1"
-                          class="form-label"
-                        >
-                          Morning Shift End Time
-                        </label>
-                        <input
-                          type="time"
-                          class="form-control"
-                          id="exampleFormControlInput1"
-                          placeholder="Employee Mobile"
-                          name="morningShiftEndTime"
-                          value={inEmpData.morningShiftEndTime}
-                          onChange={handleInputChange}
-                        />
-                      </div>
-                    </div>
-                    <div className="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
-                      <div class="mb-3">
-                        <label
-                          for="exampleFormControlInput1"
-                          class="form-label"
-                        >
-                          Evening Shift Start Time
-                        </label>
-                        <input
-                          type="time"
-                          class="form-control"
-                          id="exampleFormControlInput1"
-                          placeholder="Employee Mobile"
-                          name="eveningShiftStartTime"
-                          value={inEmpData.eveningShiftStartTime}
-                          onChange={handleInputChange}
-                        />
-                      </div>
-                    </div>
-                    <div className="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
-                      <div class="mb-3">
-                        <label
-                          for="exampleFormControlInput1"
-                          class="form-label"
-                        >
-                          Evening Shift End Time
-                        </label>
-                        <input
-                          type="time"
-                          class="form-control"
-                          id="exampleFormControlInput1"
-                          placeholder="Employee Mobile"
-                          name="eveningShiftEndTime"
-                          value={inEmpData.eveningShiftEndTime}
-                          onChange={handleInputChange}
-                        />
-                      </div>
-                    </div> */}
                     {inEmpData.empDesignation !== "doctor" && (
                       <>
                         <div className="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">

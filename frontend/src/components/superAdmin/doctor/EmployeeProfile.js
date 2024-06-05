@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef} from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import Header from "../../Header";
 import Sider from "../../Sider";
@@ -49,7 +49,7 @@ const EmployeeProfile = () => {
     experience: "",
     language: "",
     speciality: "",
-    employee_education: ""
+    employee_education: "",
   });
 
   const handleEmpProfilePicture = (e) => {
@@ -73,6 +73,7 @@ const EmployeeProfile = () => {
 
   const handleInputChange = (event) => {
     const { name, value, type, checked } = event.target;
+
     if (type === "checkbox") {
       setInEmpData((prevEmpData) => ({
         ...prevEmpData,
@@ -80,6 +81,14 @@ const EmployeeProfile = () => {
           ? [...prevEmpData[name], value]
           : prevEmpData[name].filter((item) => item !== value),
       }));
+    } else if (name === "empMobile") {
+      // Specific handling for mobile number field
+      if (/^\d*$/.test(value) && value.length <= 10) {
+        setInEmpData((prevEmpData) => ({
+          ...prevEmpData,
+          [name]: value,
+        }));
+      }
     } else {
       setInEmpData((prevEmpData) => ({
         ...prevEmpData,
@@ -125,7 +134,7 @@ const EmployeeProfile = () => {
       morningShiftEndTime: formatTime(empData[0]?.morning_shift_end_time),
       eveningShiftStartTime: formatTime(empData[0]?.evening_shift_start_time),
       eveningShiftEndTime: formatTime(empData[0]?.evening_shift_end_time),
-      allDayShiftStartTime:formatTime(empData[0]?.allday_shift_start_time) ,
+      allDayShiftStartTime: formatTime(empData[0]?.allday_shift_start_time),
       allDayShiftEndTime: formatTime(empData[0]?.allday_shift_end_time),
       working_days: empData[0]?.working_days,
       // password: "",
@@ -219,7 +228,7 @@ const EmployeeProfile = () => {
       morningShiftEndTime: formatTime(empData[0]?.morning_shift_end_time),
       eveningShiftStartTime: formatTime(empData[0]?.evening_shift_start_time),
       eveningShiftEndTime: formatTime(empData[0]?.evening_shift_end_time),
-      allDayShiftStartTime:formatTime(empData[0]?.allday_shift_start_time) ,
+      allDayShiftStartTime: formatTime(empData[0]?.allday_shift_start_time),
       allDayShiftEndTime: formatTime(empData[0]?.allday_shift_end_time),
       working_days: empData[0]?.working_days,
       // password: "",
@@ -279,7 +288,7 @@ const EmployeeProfile = () => {
                     </div>
                   </div>
                   {empData[0]?.employee_designation === "doctor" ? (
-                    <>{<DoctorProfile eid={eid} refresh={refresh}/>}</>
+                    <>{<DoctorProfile eid={eid} refresh={refresh} />}</>
                   ) : (
                     <>
                       <div className="row">
