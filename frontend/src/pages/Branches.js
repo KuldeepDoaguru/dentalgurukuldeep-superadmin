@@ -19,6 +19,8 @@ const Branches = () => {
   const [loading, setLoading] = useState(true);
   const user = useSelector((state) => state.user);
   const [branchList, setBranchList] = useState([]);
+  const [headError, setHeadError] = useState("");
+  const [footError, setFootError] = useState("");
   const [upData, setUpData] = useState({
     name: selectedItem.branch_name,
     address: selectedItem.branch_address,
@@ -40,10 +42,20 @@ const Branches = () => {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setUpData({
-      ...upData,
-      [name]: value,
-    });
+
+    if (name === "contact") {
+      if (/^\d*$/.test(value) && value.length <= 10) {
+        setUpData((prevEmpData) => ({
+          ...prevEmpData,
+          [name]: value,
+        }));
+      }
+    } else {
+      setUpData({
+        ...upData,
+        [name]: value,
+      });
+    }
   };
 
   const defaultOptions = {
@@ -76,8 +88,8 @@ const Branches = () => {
         formData.append(key, upData[key]);
       }
 
-      formData.append("head_img", branchHeadImg.file);
-      formData.append("foot_img", branchFootImg.file);
+      formData.append("head_img", branchHeadImg?.file);
+      formData.append("foot_img", branchFootImg?.file);
 
       console.log(upData, branchHeadImg, branchFootImg);
 
@@ -140,14 +152,28 @@ const Branches = () => {
     const selectedFile = e.target.files[0];
     console.log(selectedFile);
     if (selectedFile) {
-      // Read the selected file as data URL
       const reader = new FileReader();
       reader.readAsDataURL(selectedFile);
       reader.onloadend = () => {
-        setBranchHeadImg({
-          file: selectedFile,
-          imageUrl: reader.result,
-        });
+        const image = new Image();
+        image.src = reader.result;
+        image.onload = () => {
+          if (
+            (image.width === 5900 && image.height === 1844) ||
+            (image.width === 1920 && image.height === 601)
+          ) {
+            setBranchHeadImg({
+              file: selectedFile,
+              imageUrl: reader.result,
+            });
+            setHeadError("");
+          } else {
+            setHeadError(
+              "Invalid image resolution. Please select an image with resolution 5900×1844 or 1920×601."
+            );
+            branchHeadImgRef.current.value = ""; // Reset the input field
+          }
+        };
       };
     }
   };
@@ -158,14 +184,28 @@ const Branches = () => {
     const selectedFile = e.target.files[0];
     console.log(selectedFile);
     if (selectedFile) {
-      // Read the selected file as data URL
       const reader = new FileReader();
       reader.readAsDataURL(selectedFile);
       reader.onloadend = () => {
-        setBranchFootImg({
-          file: selectedFile,
-          imageUrl: reader.result,
-        });
+        const image = new Image();
+        image.src = reader.result;
+        image.onload = () => {
+          if (
+            (image.width === 5900 && image.height === 1844) ||
+            (image.width === 1920 && image.height === 601)
+          ) {
+            branchFootImg({
+              file: selectedFile,
+              imageUrl: reader.result,
+            });
+            setFootError("");
+          } else {
+            setFootError(
+              "Invalid image resolution. Please select an image with resolution 5900×1844 or 1920×601."
+            );
+            branchFootImgRef.current.value = ""; // Reset the input field
+          }
+        };
       };
     }
   };
@@ -232,6 +272,9 @@ const Branches = () => {
                             <label for="exampleInputEmail1" class="form-label">
                               Branch Contact
                             </label>
+                            <small className="mx-1">
+                              (Add contact without country code)
+                            </small>
                             <input
                               type="text"
                               className="form-control"
@@ -249,8 +292,12 @@ const Branches = () => {
                                 for="exampleFormControlInput1"
                                 class="form-label"
                               >
-                                Upload Header Picture
+                                Upload Header Picture{" "}
                               </label>
+                              <small className="fw-bold mx-1">
+                                (Please select an image with resolution
+                                5900×1844 or 1920×601)
+                              </small>
                               <input
                                 type="file"
                                 class="p-1 w-100 rounded"
@@ -259,8 +306,11 @@ const Branches = () => {
                                 name="branchHeadImg"
                                 ref={branchHeadImgRef} // Attach ref to file input
                                 onChange={handleBranchHeadPicture}
-                                required
                               />
+
+                              {headError && (
+                                <p style={{ color: "red" }}>{headError}</p>
+                              )}
                             </div>
                             <div className="mx-2">
                               {branchHeadImg && (
@@ -281,6 +331,10 @@ const Branches = () => {
                               >
                                 Upload Footer Picture
                               </label>
+                              <small className="fw-bold mx-1">
+                                (Please select an image with resolution
+                                5900×1844 or 1920×601)
+                              </small>
                               <input
                                 type="file"
                                 class="p-1 w-100 rounded"
@@ -289,8 +343,10 @@ const Branches = () => {
                                 name="branchFootImg"
                                 onChange={handleBranchFootPicture}
                                 ref={branchFootImgRef} // Attach ref to file input
-                                required
                               />
+                              {footError && (
+                                <p style={{ color: "red" }}>{footError}</p>
+                              )}
                             </div>
                             <div className="mx-2">
                               {branchFootImg && (

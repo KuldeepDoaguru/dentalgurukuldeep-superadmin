@@ -17,7 +17,7 @@ const ClinicExamin = () => {
   const getExamineDetails = async () => {
     try {
       const { data } = await axios.get(
-        `https://dentalgurusuperadmin.doaguru.com/api/v1/super-admin/getExaminationViaUhid/${branch.name}/${pid}` ,
+        `https://dentalgurusuperadmin.doaguru.com/api/v1/super-admin/getExaminationViaUhid/${branch.name}/${pid}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -33,7 +33,7 @@ const ClinicExamin = () => {
 
   useEffect(() => {
     getExamineDetails();
-  }, []);
+  });
   return (
     <Wrapper>
       <div className="table cont-box">

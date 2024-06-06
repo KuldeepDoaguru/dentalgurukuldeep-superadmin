@@ -155,7 +155,8 @@ const TreatBills = () => {
     getBillDetailsByBid();
   }, [selectedItem]);
 
-  console.log(listBills[0]?.payment_date_time);
+  console.log(typeof listBills[0]?.patient_mobile);
+  console.log(keyword);
   console.log(selectedItem);
   console.log(placehold);
 
@@ -177,9 +178,14 @@ const TreatBills = () => {
     setCurrentPage(0);
   }, []);
 
-  const searchFilter = listBills.filter((lab) =>
-    lab.patient_name.toLowerCase().includes(keyword.toLowerCase())
-  );
+  const searchFilter = listBills.filter((lab) => {
+    return (
+      lab.patient_name.toLowerCase().includes(keyword.toLowerCase()) ||
+      lab.patient_mobile.includes(keyword)
+    );
+  });
+
+  console.log(searchFilter);
 
   const totalPages = Math.ceil(searchFilter.length / complaintsPerPage);
 
@@ -198,11 +204,11 @@ const TreatBills = () => {
     <>
       <Container>
         <div className="d-flex justify-content-between">
-          <div>
+          <div className="w-50">
             {/* <label>Patient Name :</label> */}
             <input
               type="text"
-              placeholder="Search Patient Name"
+              placeholder="Search Patient Name or Contact Number"
               className=""
               value={keyword}
               onChange={(e) => setkeyword(e.target.value.toLowerCase())}

@@ -86,12 +86,12 @@ const Header = () => {
     };
   }, []);
 
-  console.log(notifyList);
+  // console.log(notifyList);
 
   const filterForRead = notifyList?.filter((item) => {
     return item.status !== "read";
   });
-  console.log(filterForRead);
+  // console.log(filterForRead);
 
   return (
     <Wrapper>

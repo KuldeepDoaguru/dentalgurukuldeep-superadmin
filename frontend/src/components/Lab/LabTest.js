@@ -16,6 +16,7 @@ const LabTest = () => {
   const user = useSelector((state) => state.user);
   const { refreshTable } = useSelector((state) => state.user);
   const [selectedItem, setSelectedItem] = useState([]);
+  const branch = useSelector((state) => state.branch);
   const [labList, setLabList] = useState([]);
   const complaintsPerPage = 5; // Number of complaints per page
   const [currentPage, setCurrentPage] = useState(0); // Start from the first page
@@ -109,7 +110,7 @@ const LabTest = () => {
   const getListLabDetails = async () => {
     try {
       const { data } = await axios.get(
-        `https://dentalgurusuperadmin.doaguru.com/api/v1/super-admin/getLabList`,
+        `https://dentalgurusuperadmin.doaguru.com/api/v1/super-admin/getLabList/${branch.name}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -132,7 +133,13 @@ const LabTest = () => {
       const isConfirmed = window.confirm("Are you sure you want to delete?");
       if (isConfirmed) {
         const response = await axios.delete(
-          `https://dentalgurusuperadmin.doaguru.com/api/v1/super-admin/labTestDelete/${id}`
+          `https://dentalgurusuperadmin.doaguru.com/api/v1/super-admin/labTestDelete/${id}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
         );
         cogoToast.success("lab test deleted successfully");
         getLabtestDetails();
@@ -141,6 +148,8 @@ const LabTest = () => {
       console.log(error);
     }
   };
+
+  console.log(labList);
 
   const totalPages = Math.ceil(labTestList.length / complaintsPerPage);
 
@@ -164,6 +173,7 @@ const LabTest = () => {
   };
 
   const displayedAppointments = filterAppointDataByMonth();
+  console.log(displayedAppointments);
 
   return (
     <>

@@ -10,7 +10,7 @@ const BranchSelector = () => {
   // console.log(`User Name: ${user.name}, User ID: ${user.id}`);
   // console.log("User State:", user);
   const branch = useSelector((state) => state.branch);
-  // console.log(`User Name: ${branch.name}`);
+  console.log(`User Name: ${branch.name}`);
   const [branchList, setBranchList] = useState();
   const [selectedBranch, setSelectedBranch] = useState();
 
@@ -31,6 +31,7 @@ const BranchSelector = () => {
       selectedBranch ||
       (branchList?.length > 0 ? branchList[0].branch_name : ""),
   };
+  console.log(branchData);
   localStorage.setItem("branchName", JSON.stringify(branchData));
   dispatch(setBranch(branchData));
   // const allBranches = Object.keys(branchList);

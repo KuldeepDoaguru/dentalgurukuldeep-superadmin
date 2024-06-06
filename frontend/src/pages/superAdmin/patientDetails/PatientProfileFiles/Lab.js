@@ -13,7 +13,7 @@ const Lab = () => {
   const getLabTest = async () => {
     try {
       const { data } = await axios.get(
-        `https://dentalgurusuperadmin.doaguru.com/api/v1/super-admin/getPatientLabTestByPatientId/${pid}` , 
+        `https://dentalgurusuperadmin.doaguru.com/api/v1/super-admin/getPatientLabTestByPatientId/${pid}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -30,7 +30,7 @@ const Lab = () => {
   console.log(testData);
   useEffect(() => {
     getLabTest();
-  }, []);
+  });
   return (
     <Wrapper>
       <div className="table">

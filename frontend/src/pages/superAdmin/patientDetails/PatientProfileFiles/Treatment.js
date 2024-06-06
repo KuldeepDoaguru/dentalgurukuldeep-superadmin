@@ -8,6 +8,7 @@ import styled from "styled-components";
 const Treatment = () => {
   const dispatch = useDispatch();
   const { pid } = useParams();
+  console.log(pid);
   const user = useSelector((state) => state.user);
   console.log(`User Name: ${user.name}, User ID: ${user.id}`);
   console.log("User State:", user);
@@ -35,7 +36,7 @@ const Treatment = () => {
 
   useEffect(() => {
     getAppointDetailsPat();
-  }, []);
+  });
 
   console.log(patAppointDetails);
 
@@ -53,7 +54,6 @@ const Treatment = () => {
                     <th>Treatment</th>
                     <th>Total Sitting</th>
                     <th>Current Sitting</th>
-                    <th>Current Sitting Status</th>
                     <th>Treatment Status</th>
                   </tr>
                 </thead>
@@ -66,7 +66,6 @@ const Treatment = () => {
                         <td>{item.treatment_name}</td>
                         <td>{item.total_sitting}</td>
                         <td>{item.current_sitting}</td>
-                        <td>{item.current_sitting_status}</td>
                         <td>{item.treatment_status}</td>
                       </tr>
                     </>

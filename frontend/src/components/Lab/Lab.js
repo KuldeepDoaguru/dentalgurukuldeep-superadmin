@@ -24,7 +24,7 @@ const Lab = () => {
   const [upLabField, setUpLabField] = useState({
     branch: "",
     name: "",
-    type: "",
+    type: "internal",
     contact: "",
     email: "",
     address: "",
@@ -256,12 +256,12 @@ const Lab = () => {
                           >
                             <TbEdit size={22} />
                           </button>
-                          <button
+                          {/* <button
                             className="btn btn-danger mx-1"
                             onClick={() => deleteLabData(item.lab_id)}
                           >
                             <AiFillDelete size={22} />
-                          </button>
+                          </button> */}
                         </td>
                       </tr>
                     </>
@@ -336,10 +336,11 @@ const Lab = () => {
                             name="type"
                             value={upLabField.type}
                             onChange={handleAddLabChange}
+                            readonly
                           >
-                            <option value="">-select-</option>
+                            {/* <option value="">-select-</option> */}
                             <option value="internal">Internal</option>
-                            <option value="external">External</option>
+                            {/* <option value="external">External</option> */}
                           </select>
                         </div>
                       </div>

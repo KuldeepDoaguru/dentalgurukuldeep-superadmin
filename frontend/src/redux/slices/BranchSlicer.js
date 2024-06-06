@@ -10,7 +10,7 @@ const branchSlice = createSlice({
   },
 });
 
-// console.log(setUser);
+// console.log(setBranch);
 
 export const { setBranch } = branchSlice.actions;
 export default branchSlice.reducer;

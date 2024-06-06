@@ -15,6 +15,7 @@ const Apointment = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [loading, setLoading] = useState(true);
   const branch = useSelector((state) => state.branch);
+  console.log(branch);
   const complaintsPerPage = 10; // Number of complaints per page
   const [currentPage, setCurrentPage] = useState(0); // Start from the first page
   const user = useSelector((state) => state.user);
@@ -140,7 +141,7 @@ const Apointment = () => {
                         {/* <label>Employee Name :</label> */}
                         <input
                           type="text"
-                          placeholder="Search Employee Name"
+                          placeholder="Search Patient Name"
                           className="input"
                           value={keyword}
                           onChange={(e) =>

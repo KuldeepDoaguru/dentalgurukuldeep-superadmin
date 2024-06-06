@@ -68,6 +68,8 @@ const CalenderSetting = () => {
     }
   };
 
+  console.log(brData);
+
   const ConvertToIST = (utcDateString) => {
     // Convert the date string to a Date object
     const utcDate = new Date(utcDateString);
@@ -401,6 +403,9 @@ const CalenderSetting = () => {
                     <h6 className="text-center mt-2 fw-bold text-success">
                       Current Appointment Slot :{" "}
                       <span>{brData[0]?.appoint_slot_duration}</span>
+                    </h6>
+                    <h6 className="text-center mt-2 fw-bold text-success">
+                      Current Week-off Day : <span>{brData[0]?.week_off}</span>
                     </h6>
                   </div>
                   <form onSubmit={updateBranchDetails}>

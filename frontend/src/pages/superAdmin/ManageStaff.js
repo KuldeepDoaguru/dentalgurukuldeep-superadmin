@@ -25,6 +25,8 @@ const ManageStaff = () => {
   const [doctorList, setDoctorList] = useState([]);
   const [keyword, setkeyword] = useState("");
   const [empProfilePicture, setEmpProfilePicture] = useState(null);
+  const [error, setError] = useState(false);
+  const [morningError, setMorningError] = useState("");
   const [inEmpData, setInEmpData] = useState({
     branch: branch.name,
     empName: "",
@@ -94,6 +96,63 @@ const ManageStaff = () => {
         [name]: value,
       }));
     }
+
+    validateShiftTimes(name, value);
+  };
+
+  const validateShiftTimes = (name, value) => {
+    let startTime = inEmpData.morningShiftStartTime;
+    let endTime = inEmpData.morningShiftEndTime;
+    let eveningStartTime = inEmpData.eveningShiftStartTime;
+    let eveningEndTime = inEmpData.eveningShiftEndTime;
+
+    if (name === "morningShiftStartTime") {
+      startTime = value;
+    } else if (name === "morningShiftEndTime") {
+      endTime = value;
+    } else if (name === "eveningShiftStartTime") {
+      eveningStartTime = value;
+    } else if (name === "eveningShiftEndTime") {
+      eveningEndTime = value;
+    }
+
+    const startHour = parseInt(startTime.split(":")[0], 10);
+    const endHour = parseInt(endTime.split(":")[0], 10);
+    const eveningStartHour = parseInt(eveningStartTime.split(":")[0], 10);
+    const eveningEndHour = parseInt(eveningEndTime.split(":")[0], 10);
+
+    if (startHour >= 12) {
+      setMorningError("Morning shift start time should be in the AM.");
+      alert("Morning shift start time should be in the AM.");
+      setInEmpData((prevEmpData) => ({
+        ...prevEmpData,
+        morningShiftStartTime: "",
+      }));
+    } else if (
+      endHour > 14 ||
+      (endHour === 14 && parseInt(endTime.split(":")[1], 10) > 0)
+    ) {
+      setMorningError("Morning shift end time cannot be later than 2 PM.");
+      alert("Morning shift end time cannot be later than 2 PM.");
+      setInEmpData((prevEmpData) => ({
+        ...prevEmpData,
+        morningShiftEndTime: "",
+      }));
+    } else if (
+      eveningStartHour < 14 ||
+      (eveningStartHour === 14 &&
+        parseInt(eveningStartTime.split(":")[1], 10) === 0)
+    ) {
+      setError("Evening shift start time should be after 2 PM.");
+      alert("Evening shift start time should be after 2 PM.");
+      setInEmpData((prevEmpData) => ({
+        ...prevEmpData,
+        eveningShiftStartTime: "",
+        eveningShiftEndTime: "",
+      }));
+    } else {
+      setMorningError("");
+    }
   };
 
   const handleCheckChange = (event) => {
@@ -106,6 +165,87 @@ const ManageStaff = () => {
         : prevEmpData.empRole.filter((role) => role !== name),
     }));
   };
+
+  const errorShift = () => {
+    const {
+      morningShiftStartTime,
+      morningShiftEndTime,
+      allDayShiftStartTime,
+      allDayShiftEndTime,
+      eveningShiftStartTime,
+      eveningShiftEndTime,
+    } = inEmpData;
+
+    // Assuming times are in 'HH:MM' format, convert them to Date objects for comparison
+    const [morningStartHour, morningStartMinute] = morningShiftStartTime
+      .split(":")
+      .map(Number);
+    const [morningEndHour, morningEndMinute] = morningShiftEndTime
+      .split(":")
+      .map(Number);
+    const [allDayStartHour, allDayStartMinute] = allDayShiftStartTime
+      .split(":")
+      .map(Number);
+    const [allDayEndHour, allDayEndMinute] = allDayShiftEndTime
+      .split(":")
+      .map(Number);
+    const [eveningStartHour, eveningStartMinute] = eveningShiftStartTime
+      .split(":")
+      .map(Number);
+    const [eveningEndHour, eveningEndMinute] = eveningShiftEndTime
+      .split(":")
+      .map(Number);
+
+    const morningStart = new Date(
+      0,
+      0,
+      0,
+      morningStartHour,
+      morningStartMinute
+    );
+    const morningEnd = new Date(0, 0, 0, morningEndHour, morningEndMinute);
+    const allDayStart = new Date(0, 0, 0, allDayStartHour, allDayStartMinute);
+    const allDayEnd = new Date(0, 0, 0, allDayEndHour, allDayEndMinute);
+    const eveningStart = new Date(
+      0,
+      0,
+      0,
+      eveningStartHour,
+      eveningStartMinute
+    );
+    const eveningEnd = new Date(0, 0, 0, eveningEndHour, eveningEndMinute);
+
+    if (
+      morningStart >= morningEnd ||
+      allDayStart >= allDayEnd ||
+      eveningStart >= eveningEnd
+    ) {
+      setError(true);
+      alert("Shift start time cannot be greater than or equal to end time");
+      setInEmpData((prevEmpData) => ({
+        ...prevEmpData,
+        morningShiftStartTime: "",
+        morningShiftEndTime: "",
+        allDayShiftStartTime: "",
+        allDayShiftEndTime: "",
+        eveningShiftStartTime: "",
+        eveningShiftEndTime: "",
+      }));
+    } else {
+      setError(false);
+    }
+  };
+
+  useEffect(() => {
+    errorShift();
+  }, [
+    inEmpData.morningShiftStartTime,
+    inEmpData.morningShiftEndTime,
+    inEmpData.allDayShiftStartTime,
+    inEmpData.allDayShiftEndTime,
+    inEmpData.eveningShiftStartTime,
+    inEmpData.eveningShiftEndTime,
+  ]);
 
   const getDocDetailsList = async () => {
     setLoading(true);

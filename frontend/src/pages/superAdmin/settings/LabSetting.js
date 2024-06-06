@@ -256,10 +256,9 @@ const LabSetting = () => {
                         required
                         value={addLabField.type}
                         onChange={handleAddLabChange}
+                        readonly
                       >
-                        <option value="">-select-</option>
                         <option value="internal">Internal</option>
-                        <option value="external">External</option>
                       </select>
                     </div>
                   </div>

@@ -69,8 +69,10 @@ const LabBills = () => {
   }, []);
 
   console.log(appointmentList);
-  const searchFilter = appointmentList.filter((lab) =>
-    lab.patient_name.toLowerCase().includes(keyword.toLowerCase())
+  const searchFilter = appointmentList.filter(
+    (lab) =>
+      lab.patient_name.toLowerCase().includes(keyword.toLowerCase()) ||
+      lab.tpid.toString().includes(keyword)
   );
 
   const billPerPage = 10;
@@ -93,13 +95,13 @@ const LabBills = () => {
     <>
       <Container>
         <div className="d-flex justify-content-between">
-          <div>
+          <div className="w-50">
             <input
               type="text"
-              placeholder="Search Patient Name"
+              placeholder="Search Patient Name or Patient TPID"
               className=""
               value={keyword}
-              onChange={(e) => setkeyword(e.target.value.toLowerCase())}
+              onChange={(e) => setkeyword(e.target.value)}
             />
           </div>
         </div>

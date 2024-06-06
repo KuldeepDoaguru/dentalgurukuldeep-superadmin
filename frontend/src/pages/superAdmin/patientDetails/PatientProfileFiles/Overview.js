@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 
-
 const Overview = () => {
   const dispatch = useDispatch();
   const { pid } = useParams();
@@ -46,7 +45,7 @@ const Overview = () => {
   const getPendingBillDetails = async () => {
     try {
       const { data } = await axios.get(
-        `https://dentalgurusuperadmin.doaguru.com/api/v1/super-admin/getPatientBillByBranchAndId/${branch.name}/${pid}` , 
+        `https://dentalgurusuperadmin.doaguru.com/api/v1/super-admin/getPatientBillByBranchAndId/${branch.name}/${pid}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -66,7 +65,7 @@ const Overview = () => {
   const getAppointDetailsPat = async () => {
     try {
       const { data } = await axios.get(
-        `https://dentalgurusuperadmin.doaguru.com/api/v1/super-admin/getAppointmentByBranchAndId/${pid}` , 
+        `https://dentalgurusuperadmin.doaguru.com/api/v1/super-admin/getAppointmentByBranchAndId/${pid}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -84,7 +83,7 @@ const Overview = () => {
   const getExamineDetails = async () => {
     try {
       const { data } = await axios.get(
-        `https://dentalgurusuperadmin.doaguru.com/api/v1/super-admin/getExaminationViaUhid/${branch.name}/${pid}` ,
+        `https://dentalgurusuperadmin.doaguru.com/api/v1/super-admin/getExaminationViaUhid/${branch.name}/${pid}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -113,7 +112,7 @@ const Overview = () => {
   const fetchLatestTreatPatientData = async () => {
     try {
       const { data } = await axios.get(
-        `https://dentalgurusuperadmin.doaguru.com/api/v1/super-admin/getTreatmentViaUhid/${branch.name}/${pid}` ,
+        `https://dentalgurusuperadmin.doaguru.com/api/v1/super-admin/getTreatmentViaUhid/${branch.name}/${pid}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -205,7 +204,7 @@ const Overview = () => {
   const getPatBills = async () => {
     try {
       const { data } = await axios.get(
-        `https://dentalgurusuperadmin.doaguru.com/api/v1/super-admin/get-patientBill-data/${pid}` , 
+        `https://dentalgurusuperadmin.doaguru.com/api/v1/super-admin/get-patientBill-data/${pid}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -222,6 +221,9 @@ const Overview = () => {
   useEffect(() => {
     getPatBills();
   }, [branch.name]);
+
+  console.log(sortedAppointments);
+  console.log(presData);
 
   return (
     <>
