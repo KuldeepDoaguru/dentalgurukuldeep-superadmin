@@ -532,6 +532,43 @@ const downloadOPDReportByTime = (req, res) => {
   }
 };
 
+const getProcedureList = (req, res) => {
+  try {
+    const selectQuery = "SELECT * FROM treat_procedure_list";
+    db.query(selectQuery, (err, result) => {
+      if (err) {
+        res.status(400).json({ success: false, message: err.message });
+      }
+      res.status(200).send(result);
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
+const getTreatmentViaId = (req, res) => {
+  try {
+    const tid = req.params.tid;
+    const selectQuery =
+      "SELECT * FROM treatment_list_copy WHERE treatment_id = ?";
+    db.query(selectQuery, tid, (err, result) => {
+      if (err) {
+        res.status(400).json({ success: false, message: err.message });
+      }
+      res.status(200).send(result);
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
+const getSuperAdminDetails = (req, res) => {
+  try {
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
 module.exports = {
   getTreatSuggest,
   getTreatmentViaUhid,
@@ -553,4 +590,6 @@ module.exports = {
   getLabData,
   downloadLabReportByTime,
   downloadOPDReportByTime,
+  getProcedureList,
+  getTreatmentViaId,
 };

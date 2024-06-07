@@ -69,10 +69,18 @@ const LabBills = () => {
   }, []);
 
   console.log(appointmentList);
+
+  const handleKeywordChange = (e) => {
+    setkeyword(e.target.value);
+  };
+
+  const trimmedKeyword = keyword.trim().toLowerCase();
+  console.log(trimmedKeyword);
+
   const searchFilter = appointmentList.filter(
     (lab) =>
-      lab.patient_name.toLowerCase().includes(keyword.toLowerCase()) ||
-      lab.tpid.toString().includes(keyword)
+      lab.patient_name.toLowerCase().includes(trimmedKeyword) ||
+      lab.patient_uhid.toLowerCase().includes(trimmedKeyword)
   );
 
   const billPerPage = 10;
@@ -98,10 +106,10 @@ const LabBills = () => {
           <div className="w-50">
             <input
               type="text"
-              placeholder="Search Patient Name or Patient TPID"
+              placeholder="Search Patient Name or UHID"
               className=""
               value={keyword}
-              onChange={(e) => setkeyword(e.target.value)}
+              onChange={handleKeywordChange}
             />
           </div>
         </div>

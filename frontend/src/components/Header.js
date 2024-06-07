@@ -20,6 +20,20 @@ const Header = () => {
   // console.log(`User Name: ${branch.name}`);
   const [notifyList, setNotifyList] = useState([]);
 
+  const logoutHandler = () => {
+    const isConfirmed = window.confirm("Are you sure you want to Logout?");
+    if (isConfirmed) {
+      dispatch(clearUser());
+      navigate("/");
+    }
+  };
+
+  const logoutHandleByToken = () => {
+    alert("Token Expired! You have been logged out");
+    dispatch(clearUser());
+    navigate("/");
+  };
+
   const getNotifyDetails = async () => {
     try {
       const { data } = await axios.get(
@@ -33,7 +47,16 @@ const Header = () => {
       );
       setNotifyList(data);
     } catch (error) {
-      console.log(error);
+      if (error.response && error.response.status === 401) {
+        const errorMessage = error.response.data.message;
+        if (errorMessage === "Unauthorized - Token expired") {
+          logoutHandleByToken();
+        } else {
+          console.log("Unauthorized access:", errorMessage);
+        }
+      } else {
+        console.log("An error occurred:", error.message);
+      }
     }
   };
 
@@ -64,14 +87,6 @@ const Header = () => {
   //     // console.log(error);
   //   }
   // };
-
-  const logoutHandler = () => {
-    const isConfirmed = window.confirm("Are you sure you want to Logout?");
-    if (isConfirmed) {
-      dispatch(clearUser());
-      navigate("/");
-    }
-  };
 
   useEffect(() => {
     getNotifyDetails();

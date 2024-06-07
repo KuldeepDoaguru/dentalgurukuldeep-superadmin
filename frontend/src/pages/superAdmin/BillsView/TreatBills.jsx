@@ -178,10 +178,18 @@ const TreatBills = () => {
     setCurrentPage(0);
   }, []);
 
+  const handleKeywordChange = (e) => {
+    setkeyword(e.target.value);
+  };
+
+  const trimmedKeyword = keyword.trim().toLowerCase();
+  console.log(trimmedKeyword);
+
   const searchFilter = listBills.filter((lab) => {
     return (
-      lab.patient_name.toLowerCase().includes(keyword.toLowerCase()) ||
-      lab.patient_mobile.includes(keyword)
+      lab.patient_name.toLowerCase().includes(trimmedKeyword) ||
+      lab.patient_mobile.includes(trimmedKeyword) ||
+      lab.uhid.toLowerCase().includes(trimmedKeyword)
     );
   });
 
@@ -208,10 +216,10 @@ const TreatBills = () => {
             {/* <label>Patient Name :</label> */}
             <input
               type="text"
-              placeholder="Search Patient Name or Contact Number"
+              placeholder="Search Patient Name or Contact Number or UHID"
               className=""
               value={keyword}
-              onChange={(e) => setkeyword(e.target.value.toLowerCase())}
+              onChange={handleKeywordChange}
             />
           </div>
           <div>

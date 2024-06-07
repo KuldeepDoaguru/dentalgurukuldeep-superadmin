@@ -420,6 +420,20 @@ const ManageStaff = () => {
 
   console.log(inEmpData);
 
+  // const handleKeywordChange = (e) => {
+  //   setkeyword(e.target.value);
+  // };
+
+  const trimmedKeyword = keyword.trim().toLowerCase();
+  console.log(trimmedKeyword);
+
+  // const searchFilter = doctorList.filter(
+  //   (lab) =>
+  //     lab.patient_name.toLowerCase().includes(trimmedKeyword) ||
+  //     lab.uhid.toLowerCase().includes(trimmedKeyword) ||
+  //     lab.mobileno.includes(trimmedKeyword)
+  // );
+
   return (
     <>
       <Container>
@@ -439,11 +453,11 @@ const ManageStaff = () => {
                 <div className="container-fluid mt-3">
                   <h2 className="text-center">Manage Employee</h2>
                   <div className="d-flex justify-content-between">
-                    <div>
+                    <div className="w-50">
                       {/* <label>Employee Name :</label> */}
                       <input
                         type="text"
-                        placeholder="Search Employee Name"
+                        placeholder="Search employee name or mobile number or designation or employee ID"
                         className="input"
                         value={keyword}
                         onChange={(e) =>
@@ -499,7 +513,16 @@ const ManageStaff = () => {
                                 } else if (
                                   val.employee_name
                                     .toLowerCase()
-                                    .includes(keyword.toLowerCase())
+                                    .includes(trimmedKeyword) ||
+                                  val.employee_designation
+                                    .toLowerCase()
+                                    .includes(trimmedKeyword) ||
+                                  val.employee_mobile.includes(
+                                    trimmedKeyword
+                                  ) ||
+                                  val.employee_ID
+                                    .toLowerCase()
+                                    .includes(trimmedKeyword)
                                 ) {
                                   return val;
                                 }

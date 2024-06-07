@@ -159,8 +159,14 @@ const Lab = () => {
     setSearchTerm(e.target.value);
   };
 
-  const searchFilter = labList.filter((lab) =>
-    lab.lab_name.toLowerCase().includes(searchTerm.toLowerCase())
+  const trimmedKeyword = searchTerm.trim().toLowerCase();
+  console.log(trimmedKeyword);
+
+  const searchFilter = labList.filter(
+    (lab) =>
+      lab.lab_name.toLowerCase().includes(trimmedKeyword) ||
+      lab.lab_email.toLowerCase().includes(trimmedKeyword) ||
+      lab.lab_contact.includes(trimmedKeyword)
   );
 
   const totalPages = Math.ceil(searchFilter.length / complaintsPerPage);
@@ -206,7 +212,7 @@ const Lab = () => {
             <div className="col-xxl-9 col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
               <input
                 type="text"
-                placeholder="search here"
+                placeholder="search by lab name or contact or email address"
                 className="inputser"
                 value={searchTerm}
                 onChange={handleSearchChange}

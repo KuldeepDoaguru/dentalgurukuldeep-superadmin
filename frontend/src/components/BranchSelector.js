@@ -10,8 +10,8 @@ const BranchSelector = () => {
   // console.log(`User Name: ${user.name}, User ID: ${user.id}`);
   // console.log("User State:", user);
   const branch = useSelector((state) => state.branch);
-  console.log(`User Name: ${branch.name}`);
-  const [branchList, setBranchList] = useState();
+  // console.log(`User Name: ${branch.name}`);
+  const [branchList, setBranchList] = useState([]);
   const [selectedBranch, setSelectedBranch] = useState();
 
   const getBranchList = async () => {
@@ -59,8 +59,8 @@ const BranchSelector = () => {
                 value={selectedBranch}
                 onChange={(e) => setSelectedBranch(e.target.value)}
               >
-                {/* <option value="select-branch" className="fw-bold">
-                  select-branch
+                {/* <option value={branch.name} className="fw-bold">
+                  {branch.name}
                 </option> */}
                 {branchList?.map((branch) => (
                   <option key={branch.branch_name} value={branch.branch_name}>

@@ -96,8 +96,17 @@ const Apointment = () => {
   const date = String(todayDate.getDate()).padStart(2, "0");
   const formattedDate = `${year}-${month}-${date}`;
 
-  const searchFilter = appointmentList.filter((lab) =>
-    lab.patient_name.toLowerCase().includes(keyword.toLowerCase())
+  const handleKeywordChange = (e) => {
+    setkeyword(e.target.value);
+  };
+
+  const trimmedKeyword = keyword.trim().toLowerCase();
+  console.log(trimmedKeyword);
+
+  const searchFilter = appointmentList.filter(
+    (lab) =>
+      lab.patient_name.toLowerCase().includes(trimmedKeyword) ||
+      lab.patient_uhid.toLowerCase().includes(trimmedKeyword)
   );
 
   // const filterforOneMonth = searchFilter?.filter((item) => {
@@ -141,12 +150,10 @@ const Apointment = () => {
                         {/* <label>Employee Name :</label> */}
                         <input
                           type="text"
-                          placeholder="Search Patient Name"
+                          placeholder="Search Patient Name or Patient UHID"
                           className="input"
                           value={keyword}
-                          onChange={(e) =>
-                            setkeyword(e.target.value.toLowerCase())
-                          }
+                          onChange={handleKeywordChange}
                         />
                       </div>
                       {loading ? (

@@ -106,8 +106,17 @@ const StaffLeave = () => {
     setCurrentPage(0);
   }, [keyword]);
 
-  const searchFilter = leaveData.filter((lab) =>
-    lab.employee_name.toLowerCase().includes(keyword.toLowerCase())
+  const handleKeywordChange = (e) => {
+    setkeyword(e.target.value);
+  };
+
+  const trimmedKeyword = keyword.trim().toLowerCase();
+  console.log(trimmedKeyword);
+  console.log(leaveData);
+  const searchFilter = leaveData.filter(
+    (lab) =>
+      lab.employee_name.toLowerCase().includes(trimmedKeyword) ||
+      lab.employee_ID.toLowerCase().includes(trimmedKeyword)
   );
 
   const totalPages = Math.ceil(searchFilter.length / complaintsPerPage);
@@ -149,18 +158,19 @@ const StaffLeave = () => {
                     <BranchSelector />
                   </div>
                 </div>
-                <div className="container mt-3">
-                  <div className="container-fluid">
-                    <h3>Employee Leave Management</h3>
-                    {/* <label>Employee Name :</label> */}
+                <div className="container-fluid mt-3">
+                  <h3 className="text-center">Employee Leave Management</h3>
+                  {/* <label>Employee Name :</label> */}
+                  <div className="w-50">
                     <input
                       type="text"
-                      placeholder="search employee name"
-                      className="mx-3 p-1 rounded"
+                      placeholder="Search employee name or employee ID"
+                      className="mx-3 p-2 rounded"
                       value={keyword}
-                      onChange={(e) => setkeyword(e.target.value.toLowerCase())}
+                      onChange={handleKeywordChange}
                     />
-
+                  </div>
+                  <div className="container-fluid">
                     {loading ? (
                       <Lottie
                         options={defaultOptions}
@@ -314,7 +324,7 @@ const Container = styled.div`
   }
 
   input {
-    /* width: 100%; */
+    width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
     display: inline-block;
@@ -323,13 +333,13 @@ const Container = styled.div`
     box-sizing: border-box;
     transition: border-color 0.3s ease;
     @media (min-width: 1280px) and (max-width: 2000px) {
-      width: 18%;
+      width: 100%;
     }
     @media (min-width: 1024px) and (max-width: 1279px) {
-      width: 30%;
+      width: 100%;
     }
     @media (min-width: 768px) and (max-width: 1023px) {
-      width: 38%;
+      width: 100%;
     }
   }
 

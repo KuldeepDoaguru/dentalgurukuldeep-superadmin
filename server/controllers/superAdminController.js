@@ -729,38 +729,71 @@ const getAvailableEmp = (req, res) => {
 
 const addTreatment = (req, res) => {
   try {
-    const { treatName, treatCost, treatDiscount } = req.body;
-    const requiredFields = [treatName, treatCost, treatDiscount];
+    const {
+      treat_procedure_id,
+      treat_procedure_name,
+      treatment_name,
+      treatment_cost,
+      treatment_discount,
+      value,
+      label,
+    } = req.body;
+    const requiredFields = [
+      treat_procedure_id,
+      treat_procedure_name,
+      treatment_name,
+      treatment_cost,
+      value,
+      label,
+    ];
     if (requiredFields.some((field) => !field)) {
+      logger.registrationLogger.log("error", "All fields are required");
       return res.status(400).json({ error: "All fields are required" });
     }
 
-    const selectQuery = "SELECT * FROM treatment_list WHERE treatment_name = ?";
-    db.query(selectQuery, [treatName], (err, result) => {
+    const selectQuery =
+      "SELECT * FROM treatment_list_copy WHERE treatment_name = ?";
+    db.query(selectQuery, [treatment_name], (err, result) => {
       if (err) {
+        // logger.registrationLogger.log("error", "treatment name not found");
         return res.status(500).json({ success: false, error: err.message });
       }
       if (result.length > 0) {
+        // logger.registrationLogger.log("error", "treatment already exist");
         return res.status(400).send("Treatment already exists");
       }
 
-      const insertQuery = `INSERT INTO treatment_list (treatment_name, treatment_cost, treatment_discount) VALUES (?, ?, ?)`;
-      const insertUserParams = [treatName, treatCost, treatDiscount];
+      const insertQuery = `INSERT INTO treatment_list_copy (treat_procedure_id, treat_procedure_name, treatment_name, treatment_cost, treatment_discount, value, label) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+      const insertUserParams = [
+        treat_procedure_id,
+        treat_procedure_name,
+        treatment_name,
+        treatment_cost,
+        treatment_discount,
+        value,
+        label,
+      ];
 
       db.query(insertQuery, insertUserParams, (errInsert, resultInsert) => {
         if (errInsert) {
+          // logger.registrationLogger.log(
+          //   "error",
+          //   "Error while inserting treatment"
+          // );
           return res.status(500).json({
             success: false,
             message: "Error while inserting treatment",
             error: errInsert.message,
           });
         }
+        // logger.registrationLogger.log("info", "Treatment added successfully");
         res
           .status(200)
           .json({ success: true, message: "Treatment added successfully" });
       });
     });
   } catch (error) {
+    // logger.registrationLogger.log("error", "internal server error");
     console.error(error);
     res.status(500).json({ success: false, message: "Internal server error" });
   }
@@ -785,33 +818,64 @@ const getTreatmentList = (req, res) => {
 const updateTreatmentDetails = (req, res) => {
   try {
     const treatID = req.params.id;
-    const { treatName, treatCost, treatDiscount } = req.body;
-
-    const selectQuery = "SELECT * FROM treatment_list WHERE treatment_id = ?";
+    const {
+      treat_procedure_id,
+      treat_procedure_name,
+      treatment_name,
+      treatment_cost,
+      treatment_discount,
+      value,
+      label,
+    } = req.body;
+    // console.log();
+    const selectQuery =
+      "SELECT * FROM treatment_list_copy WHERE treatment_id = ?";
     db.query(selectQuery, [treatID], (err, result) => {
       if (err) {
-        res.status(400).send(err);
+        res.status(400).json({ success: false, message: err.message });
       } else {
         if (result && result.length > 0) {
           const updateFields = [];
           const updateValues = [];
 
-          if (treatName) {
+          if (treat_procedure_id && treat_procedure_name) {
+            updateFields.push(
+              "treat_procedure_id = ? AND treat_procedure_name = ?"
+            );
+            updateValues.push(treat_procedure_id, treat_procedure_name);
+          }
+
+          // if (treat_procedure_name) {
+          //   updateFields.push("treat_procedure_name = ?");
+          //   updateValues.push(treat_procedure_name);
+          // }
+
+          if (treatment_name) {
             updateFields.push("treatment_name = ?");
-            updateValues.push(treatName);
+            updateValues.push(treatment_name);
           }
 
-          if (treatCost) {
+          if (treatment_cost) {
             updateFields.push("treatment_cost = ?");
-            updateValues.push(treatCost);
+            updateValues.push(treatment_cost);
           }
 
-          if (treatDiscount) {
+          if (treatment_discount) {
             updateFields.push("treatment_discount = ?");
-            updateValues.push(treatDiscount);
+            updateValues.push(treatment_discount);
           }
 
-          const updateQuery = `UPDATE treatment_list SET ${updateFields.join(
+          if (value) {
+            updateFields.push("value = ?");
+            updateValues.push(value);
+          }
+
+          if (label) {
+            updateFields.push("label = ?");
+            updateValues.push(label);
+          }
+
+          const updateQuery = `UPDATE treatment_list_copy SET ${updateFields.join(
             ", "
           )} WHERE treatment_id = ?`;
 

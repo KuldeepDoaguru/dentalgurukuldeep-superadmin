@@ -17,6 +17,7 @@ const LabTest = () => {
   const { refreshTable } = useSelector((state) => state.user);
   const [selectedItem, setSelectedItem] = useState([]);
   const branch = useSelector((state) => state.branch);
+  const [keyword, setkeyword] = useState("");
   const [labList, setLabList] = useState([]);
   const complaintsPerPage = 5; // Number of complaints per page
   const [currentPage, setCurrentPage] = useState(0); // Start from the first page
@@ -151,12 +152,25 @@ const LabTest = () => {
 
   console.log(labList);
 
-  const totalPages = Math.ceil(labTestList.length / complaintsPerPage);
+  const handleKeywordChange = (e) => {
+    setkeyword(e.target.value);
+  };
+
+  const trimmedKeyword = keyword.trim().toLowerCase();
+  console.log(trimmedKeyword);
+
+  const searchFilter = labTestList.filter(
+    (lab) =>
+      lab.test_name.toLowerCase().includes(trimmedKeyword) ||
+      lab.test_code.toLowerCase().includes(trimmedKeyword)
+  );
+
+  const totalPages = Math.ceil(searchFilter.length / complaintsPerPage);
 
   const filterAppointDataByMonth = () => {
     const startIndex = currentPage * complaintsPerPage;
     const endIndex = startIndex + complaintsPerPage;
-    return labTestList?.slice(startIndex, endIndex);
+    return searchFilter?.slice(startIndex, endIndex);
   };
 
   const defaultOptions = {
@@ -178,6 +192,15 @@ const LabTest = () => {
   return (
     <>
       <Container>
+        <div>
+          <input
+            type="text"
+            placeholder="search by lab name or contact or email address"
+            className="inputser"
+            value={keyword}
+            onChange={handleKeywordChange}
+          />
+        </div>
         {loading ? (
           <Lottie
             options={defaultOptions}

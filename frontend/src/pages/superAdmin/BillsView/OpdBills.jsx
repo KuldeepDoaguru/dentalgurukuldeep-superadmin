@@ -73,8 +73,17 @@ const OpdBills = () => {
     return item.treatment_provided === "OPD";
   });
 
-  const searchFilter = filterOpd.filter((lab) =>
-    lab.patient_name.toLowerCase().includes(keyword.toLowerCase())
+  const handleKeywordChange = (e) => {
+    setkeyword(e.target.value);
+  };
+
+  const trimmedKeyword = keyword.trim().toLowerCase();
+  console.log(trimmedKeyword);
+
+  const searchFilter = filterOpd.filter(
+    (lab) =>
+      lab.patient_name.toLowerCase().includes(trimmedKeyword) ||
+      lab.patient_uhid.toLowerCase().includes(trimmedKeyword)
   );
 
   const billPerPage = 10;
@@ -97,13 +106,13 @@ const OpdBills = () => {
     <>
       <Container>
         <div className="d-flex justify-content-between">
-          <div>
+          <div className="w-50">
             <input
               type="text"
-              placeholder="Search Patient Name"
+              placeholder="Search Patient Name or UHID"
               className=""
               value={keyword}
-              onChange={(e) => setkeyword(e.target.value.toLowerCase())}
+              onChange={handleKeywordChange}
             />
           </div>
         </div>

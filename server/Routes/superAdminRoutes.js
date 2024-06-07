@@ -104,6 +104,8 @@ const {
   getLabData,
   downloadLabReportByTime,
   downloadOPDReportByTime,
+  getProcedureList,
+  getTreatmentViaId,
 } = require("../controllers/superTreatController");
 // const multer = require("multer");
 
@@ -295,5 +297,7 @@ router.get("/getPatientLabTestByPatientId/:pid", getPatientLabTestByPatientId);
 router.get("/getLabData/:branch", getLabData);
 router.post("/downloadLabReportByTime/:branch", downloadLabReportByTime);
 router.post("/downloadOPDReportByTime/:branch", downloadOPDReportByTime);
+router.get("/getProcedureList", getProcedureList);
+router.get("/getTreatmentViaId/:tid", getTreatmentViaId);
 
 module.exports = router;

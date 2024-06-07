@@ -222,4 +222,9 @@ const Container = styled.div`
     height: 30rem;
     overflow: auto;
   }
+
+  hr {
+    color: #e9e1e1 !important;
+    box-shadow: 1px 5px 5px #000 !important;
+  }
 `;

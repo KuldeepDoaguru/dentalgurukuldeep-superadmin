@@ -14,6 +14,7 @@ import { GrAdd } from "react-icons/gr";
 import ReactPaginate from "react-paginate";
 import Lottie from "react-lottie";
 import animationData from "../../../animation/loading-effect.json";
+import { MdDelete } from "react-icons/md";
 
 const TreatmentSetting = () => {
   const location = useLocation();
@@ -26,23 +27,98 @@ const TreatmentSetting = () => {
   const [keyword, setkeyword] = useState("");
   const [treatList, setTreatList] = useState([]);
   const [trID, setTrID] = useState();
-  const complaintsPerPage = 7; // Number of complaints per page
-  const [currentPage, setCurrentPage] = useState(0); // Start from the first page
+  const complaintsPerPage = 7;
+  const [currentPage, setCurrentPage] = useState(0);
+  const [proceList, setProceList] = useState([]);
   const [treatData, setTreatData] = useState({
-    treatName: "",
-    treatCost: "",
-    treatDiscount: "",
+    treat_procedure_id: "",
+    treat_procedure_name: "",
+    treatment_name: "",
+    treatment_cost: "",
+    treatment_discount: "",
+    value: "",
+    label: "",
+  });
+
+  const [upTreatData, setUpTreatData] = useState({
+    treat_procedure_id: "",
+    treat_procedure_name: "",
+    treatment_name: "",
+    treatment_cost: "",
+    treatment_discount: "",
+    value: "",
+    label: "",
   });
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-
-    // Use spread syntax to update only the changed field
     setTreatData({
       ...treatData,
       [name]: value,
     });
   };
+
+  const handleUpdateInputChange = (event) => {
+    const { name, value } = event.target;
+    setUpTreatData((prevData) => {
+      const updatedData = [...prevData];
+      updatedData[0] = {
+        ...updatedData[0],
+        [name]: value,
+      };
+      return updatedData;
+    });
+  };
+
+  const updateTreatVal = upTreatData[0];
+  console.log(updateTreatVal);
+
+  const filterForProcId = () => {
+    const matchedProcedure = proceList?.find(
+      (item) => item.treat_procedure_name === treatData.treat_procedure_name
+    );
+
+    // Only update the state if the ID has changed
+    if (
+      matchedProcedure &&
+      matchedProcedure.treat_procedure_id !== treatData.treat_procedure_id
+    ) {
+      setTreatData((prevState) => ({
+        ...prevState,
+        treat_procedure_id: matchedProcedure.treat_procedure_id,
+      }));
+    }
+  };
+
+  useEffect(() => {
+    filterForProcId();
+  }, [treatData.treat_procedure_name]);
+
+  const updateFilterForProcId = () => {
+    const matchedProcedure = proceList?.find(
+      (item) =>
+        item.treat_procedure_name === upTreatData[0]?.treat_procedure_name
+    );
+
+    // Only update the state if the ID has changed
+    if (
+      matchedProcedure &&
+      matchedProcedure.treat_procedure_id !== upTreatData[0]?.treat_procedure_id
+    ) {
+      setUpTreatData((prevState) => {
+        const updatedData = [...prevState];
+        updatedData[0] = {
+          ...updatedData[0],
+          treat_procedure_id: matchedProcedure.treat_procedure_id,
+        };
+        return updatedData;
+      });
+    }
+  };
+
+  useEffect(() => {
+    updateFilterForProcId();
+  }, [upTreatData[0]?.treat_procedure_name]);
 
   console.log(treatData);
   console.log(treatList);
@@ -66,6 +142,48 @@ const TreatmentSetting = () => {
     setShowEditTreatments(false);
   };
 
+  const getTreatmentDataViaId = async () => {
+    try {
+      const { data } = await axios.get(
+        `https://dentalgurusuperadmin.doaguru.com/api/v1/super-admin/getTreatmentViaId/${trID}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+      setUpTreatData(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  console.log(upTreatData);
+
+  useEffect(() => {
+    getTreatmentDataViaId();
+  }, [trID]);
+
+  const getProcedure = async () => {
+    try {
+      const { data } = await axios.get(
+        `https://dentalgurusuperadmin.doaguru.com/api/v1/super-admin/getProcedureList`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+      setProceList(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  console.log(proceList);
+
   const addTreatments = async (e) => {
     e.preventDefault();
     try {
@@ -83,9 +201,13 @@ const TreatmentSetting = () => {
       cogoToast.success("Treatment Addded Successfully");
       closeUpdatePopup();
       getTreatmentList();
-      treatData.treatName = "";
-      treatData.treatCost = "";
-      treatData.treatDiscount = "";
+      treatData.treat_procedure_id = "";
+      treatData.treat_procedure_name = "";
+      treatData.treatment_name = "";
+      treatData.treatment_cost = "";
+      treatData.treatment_discount = "";
+      treatData.value = "";
+      treatData.label = "";
     } catch (error) {
       console.log(error);
     }
@@ -117,7 +239,7 @@ const TreatmentSetting = () => {
     try {
       const response = await axios.put(
         `https://dentalgurusuperadmin.doaguru.com/api/v1/super-admin/updateTreatmentDetails/${id}`,
-        treatData,
+        updateTreatVal,
         {
           headers: {
             "Content-Type": "application/json",
@@ -135,19 +257,25 @@ const TreatmentSetting = () => {
     }
   };
 
+  // console.log();
+
   const deleteTreatment = async (id) => {
     try {
-      const response = await axios.delete(
-        `https://dentalgurusuperadmin.doaguru.com/api/v1/super-admin/deleteTreatment/${id}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${user.token}`,
-          },
-        }
-      );
-      getTreatmentList();
-      cogoToast.success("Treatment deleted successfully");
+      const isConfirmed = window.confirm("Are you sure you want to delete?");
+
+      if (isConfirmed) {
+        const response = await axios.delete(
+          `https://dentalgurusuperadmin.doaguru.com/api/v1/super-admin/deleteTreatment/${id}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        );
+        getTreatmentList();
+        cogoToast.success("Treatment deleted successfully");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -155,6 +283,7 @@ const TreatmentSetting = () => {
 
   useEffect(() => {
     getTreatmentList();
+    getProcedure();
   }, []);
 
   const defaultOptions = {
@@ -174,9 +303,22 @@ const TreatmentSetting = () => {
 
   const totalCount = treatList.length;
 
-  const searchFilter = treatList.filter((lab) =>
-    lab.treatment_name.toLowerCase().includes(keyword.toLowerCase())
+  console.log(treatList);
+
+  const handleKeywordChange = (e) => {
+    setkeyword(e.target.value);
+  };
+
+  const trimmedKeyword = keyword.trim().toLowerCase();
+  console.log(trimmedKeyword);
+
+  const searchFilter = treatList.filter(
+    (lab) =>
+      lab.treatment_name.toLowerCase().includes(trimmedKeyword) ||
+      lab.treat_procedure_name?.toLowerCase()?.includes(trimmedKeyword)
   );
+
+  console.log(searchFilter);
 
   const totalPages = Math.ceil(searchFilter.length / complaintsPerPage);
 
@@ -191,6 +333,7 @@ const TreatmentSetting = () => {
   };
 
   const displayedAppointments = filterAppointDataByMonth();
+  console.log(displayedAppointments);
 
   return (
     <Container>
@@ -222,25 +365,25 @@ const TreatmentSetting = () => {
                     </div>
                     <div className="container-fluid">
                       <div className="row mt-5">
-                        <div className="col-xxl-11 col-xl-11 col-lg-11 col-md-11 col-sm-12 col-12">
+                        <div className="col-xxl-10 col-xl-10 col-lg-10 col-md-10 col-sm-12 col-12">
                           <input
                             type="text"
                             placeholder="Search by Treatment Name or treatment procedure"
                             className="inputser"
                             value={keyword}
-                            onChange={(e) =>
-                              setkeyword(e.target.value.toLowerCase())
-                            }
+                            onChange={handleKeywordChange}
                           />
                         </div>
-                        {/* <div className="col-xxl-1 col-xl-1 col-lg-1 col-md-1 col-sm-12 col-12">
-                          <button
-                            className="btn btn-info btnback"
-                            onClick={() => openAddTreatmentsPopup()}
-                          >
-                            <GrAdd size={22}/>
-                          </button>
-                        </div> */}
+                        <div className="col-xxl-2 col-xl-2 col-lg-2 col-md-2 col-sm-12 col-12">
+                          <div className="d-flex justify-content-center align-items-center">
+                            <button
+                              className="btn btn-info btnback p-3"
+                              onClick={() => openAddTreatmentsPopup()}
+                            >
+                              <GrAdd size={22} /> Add Treatment
+                            </button>
+                          </div>
+                        </div>
                         {/* Add Treatment Comment Out */}
                       </div>
                     </div>
@@ -277,71 +420,52 @@ const TreatmentSetting = () => {
                                 <th className="table-small">
                                   Maximum Discount To give
                                 </th>
-                                {/* <th className="table-small">Actions</th> */}
+                                <th className="table-small">Actions</th>
                               </tr>
                             </thead>
                             <tbody>
-                              {displayedAppointments
-                                ?.filter((val) => {
-                                  if (keyword === "") {
-                                    return true;
-                                  } else if (
-                                    val.treatment_name
-                                      .toLowerCase()
-                                      .includes(keyword) ||
-                                    val.treat_procedure_name
-                                      .toLowerCase()
-                                      .includes(keyword)
-                                  ) {
-                                    return val;
-                                  }
-                                })
-                                .map((item) => (
-                                  <>
-                                    <tr className="table-row">
-                                      <td className="table-sno">
-                                        {item.treatment_id}
-                                      </td>
-                                      <td className="table-small">
-                                        {item.treat_procedure_name}
-                                      </td>
-                                      <td className="table-small">
-                                        {item.treatment_name}
-                                      </td>
-                                      <td className="table-small">
-                                        {item.treatment_cost}
-                                      </td>
-                                      <td className="table-small">
-                                        {item.treatment_discount}
-                                      </td>
-                                      {/* <td>
-                                    <button
-                                      className="btn btn-warning text-light"
-                                      onClick={() =>
-                                        openEditTreatmentsPopup(
-                                          item.treatment_id
-                                        )
-                                      }
-                                    >
-                                      <TbEdit size={22}/>
-                                    </button>
+                              {displayedAppointments?.map((item) => (
+                                <>
+                                  <tr className="table-row">
+                                    <td className="table-sno">
+                                      {item.treatment_id}
+                                    </td>
+                                    <td className="table-small">
+                                      {item.treat_procedure_name}
+                                    </td>
+                                    <td className="table-small">
+                                      {item.treatment_name}
+                                    </td>
+                                    <td className="table-small">
+                                      {item.treatment_cost}
+                                    </td>
+                                    <td className="table-small">
+                                      {item.treatment_discount}
+                                    </td>
+                                    <td>
+                                      <button
+                                        className="btn btn-warning text-light"
+                                        onClick={() =>
+                                          openEditTreatmentsPopup(
+                                            item.treatment_id
+                                          )
+                                        }
+                                      >
+                                        <TbEdit size={22} />
+                                      </button>
 
-                                    // Delete Comment out haa
-
-                                    {/* <button
-                                      type="button"
-                                      class="btn btn-danger mx-2"
-                                      data-bs-toggle="modal"
-                                      data-bs-target="#exampleModal"
-                                    >
-                                      Delete
-                                    </button> 
-
-                                    // Delete Comment out haa
-
-                                  </td> */}
-                                    </tr>
-                                    <div
+                                      <button
+                                        type="button"
+                                        class="btn btn-danger mx-2"
+                                        onClick={() =>
+                                          deleteTreatment(item.treatment_id)
+                                        }
+                                      >
+                                        <MdDelete />
+                                      </button>
+                                    </td>
+                                  </tr>
+                                  {/* <div
                                       class="modal fade rounded"
                                       id="exampleModal"
                                       tabindex="-1"
@@ -383,9 +507,9 @@ const TreatmentSetting = () => {
                                           </div>
                                         </div>
                                       </div>
-                                    </div>
-                                  </>
-                                ))}
+                                    </div> */}
+                                </>
+                              ))}
                             </tbody>
                           </table>
 
@@ -422,41 +546,95 @@ const TreatmentSetting = () => {
               className="d-flex flex-column"
               // onSubmit={handleNoticeSubmit}
             >
-              <input
-                type="text"
-                placeholder="Add Treatment Name"
-                className="rounded p-2"
-                name="treatName"
-                value={treatData.treatName}
-                onChange={handleInputChange}
-              />
-              <br />
-              <input
-                type="text"
-                placeholder="Add Cost"
-                className="rounded p-2"
-                name="treatCost"
-                value={treatData.treatCost}
-                onChange={handleInputChange}
-              />
-              <br />
-              <input
-                type="text"
-                placeholder="Max Discount to give"
-                className="rounded p-2"
-                name="treatDiscount"
-                value={treatData.treatDiscount}
-                onChange={handleInputChange}
-              />
-              <br />
+              <div className="">
+                <div className="row">
+                  <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                    <div class="mb-3">
+                      <label class="form-label fw-bold">Procedure Name*</label>
+                      <select
+                        name="treat_procedure_name"
+                        class="form-control mt-2 p-2"
+                        value={treatData.treat_procedure_name}
+                        onChange={handleInputChange}
+                        id=""
+                        required
+                      >
+                        <option value="">-select procedure-</option>
+                        {proceList?.map((item) => (
+                          <option value={item.treat_procedure_name}>
+                            {item.treat_procedure_name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                  <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                    <label class="form-label fw-bold">Treatment Name*</label>
+                    <input
+                      type="text"
+                      placeholder="Add Treatment Name"
+                      class="form-control"
+                      name="treatment_name"
+                      value={treatData.treatment_name}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </div>
+                  <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                    <label class="form-label fw-bold">Treatment Cost*</label>
+                    <input
+                      type="number"
+                      placeholder="Add Treatment Cost"
+                      class="form-control"
+                      name="treatment_cost"
+                      value={treatData.treatment_cost}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </div>
+                  <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                    <label class="form-label fw-bold">Treatment Discount</label>
+                    <input
+                      type="number"
+                      placeholder="Add Treatment Discount"
+                      class="form-control"
+                      name="treatment_discount"
+                      value={treatData.treatment_discount}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                  <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                    <label class="form-label fw-bold">Value</label>
+                    <input
+                      type="text"
+                      placeholder="Add Value"
+                      class="form-control"
+                      name="value"
+                      value={treatData.value}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                  <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                    <label class="form-label fw-bold">Label</label>
+                    <input
+                      type="text"
+                      placeholder="Add Value"
+                      class="form-control"
+                      name="label"
+                      value={treatData.label}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                </div>
+              </div>
 
-              <div className="d-flex justify-content-evenly">
+              <div className="d-flex justify-content-left">
                 <button type="submit" className="btn btn-success mt-2">
                   Save
                 </button>
                 <button
                   type="button"
-                  className="btn btn-danger mt-2"
+                  className="btn btn-danger mt-2 mx-2"
                   onClick={closeUpdatePopup}
                 >
                   Cancel
@@ -476,46 +654,101 @@ const TreatmentSetting = () => {
           className={`popup-container${showEditTreatments ? " active" : ""}`}
         >
           <div className="popup">
-            <h4 className="text-center">Edit Drugs Details</h4>
+            <h4 className="text-center mb-2">Edit Treatment Details</h4>
+            <hr />
             <form
               className="d-flex flex-column"
               onSubmit={(e) => updateTreatmentDetails(e, trID)}
             >
-              <input
-                type="text"
-                placeholder="Add Treatment Name"
-                className="rounded p-2"
-                name="treatName"
-                value={treatData.treatName}
-                onChange={handleInputChange}
-              />
-              <br />
-              <input
-                type="text"
-                placeholder="Add Cost"
-                className="rounded p-2"
-                name="treatCost"
-                value={treatData.treatCost}
-                onChange={handleInputChange}
-              />
-              <br />
-              <input
-                type="text"
-                placeholder="Max Discount to give"
-                className="rounded p-2"
-                name="treatDiscount"
-                value={treatData.treatDiscount}
-                onChange={handleInputChange}
-              />
-              <br />
+              <div className="">
+                <div className="row">
+                  <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                    <div class="mb-3">
+                      <label class="form-label fw-bold">Procedure Name</label>
+                      <select
+                        name="treat_procedure_name"
+                        class="form-control mt-2 p-2"
+                        value={updateTreatVal?.treat_procedure_name}
+                        onChange={handleUpdateInputChange}
+                        id=""
+                        required
+                      >
+                        <option value="">-select procedure-</option>
+                        {proceList?.map((item) => (
+                          <option value={item.treat_procedure_name}>
+                            {item.treat_procedure_name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                  <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                    <label class="form-label fw-bold">Treatment Name</label>
+                    <input
+                      type="text"
+                      placeholder="Add Treatment Name"
+                      class="form-control"
+                      name="treatment_name"
+                      value={updateTreatVal?.treatment_name}
+                      onChange={handleUpdateInputChange}
+                      required
+                    />
+                  </div>
+                  <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                    <label class="form-label fw-bold">Treatment Cost</label>
+                    <input
+                      type="number"
+                      placeholder="Add Treatment Cost"
+                      class="form-control"
+                      name="treatment_cost"
+                      value={updateTreatVal?.treatment_cost}
+                      onChange={handleUpdateInputChange}
+                      required
+                    />
+                  </div>
+                  <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                    <label class="form-label fw-bold">Treatment Discount</label>
+                    <input
+                      type="number"
+                      placeholder="Add Treatment Discount"
+                      class="form-control"
+                      name="treatment_discount"
+                      value={updateTreatVal?.treatment_discount}
+                      onChange={handleUpdateInputChange}
+                    />
+                  </div>
+                  <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                    <label class="form-label fw-bold">Value</label>
+                    <input
+                      type="text"
+                      placeholder="Add Value"
+                      class="form-control"
+                      name="value"
+                      value={updateTreatVal?.value}
+                      onChange={handleUpdateInputChange}
+                    />
+                  </div>
+                  <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                    <label class="form-label fw-bold">Label</label>
+                    <input
+                      type="text"
+                      placeholder="Add Value"
+                      class="form-control"
+                      name="label"
+                      value={updateTreatVal?.label}
+                      onChange={handleUpdateInputChange}
+                    />
+                  </div>
+                </div>
+              </div>
 
-              <div className="d-flex justify-content-evenly">
+              <div className="d-flex justify-content-left">
                 <button type="submit" className="btn btn-success mt-2">
                   Save
                 </button>
                 <button
                   type="button"
-                  className="btn btn-danger mt-2"
+                  className="btn btn-danger mt-2 mx-2"
                   onClick={closeUpdatePopup}
                 >
                   Cancel
@@ -600,6 +833,7 @@ const Container = styled.div`
   .popup {
     background-color: white;
     padding: 20px;
+    width: 80%;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   }
@@ -607,6 +841,10 @@ const Container = styled.div`
   .btnback {
     background: #004aad;
     color: white;
+    width: 100%;
+    &:hover {
+      background: #000;
+    }
   }
 `;
 const PaginationContainer = styled.div`
@@ -644,5 +882,10 @@ const PaginationContainer = styled.div`
 
   .pagination li a:hover:not(.active) {
     background-color: #ddd;
+  }
+
+  hr {
+    color: #dbd4d4;
+    box-shadow: 0px 4px 3px black;
   }
 `;

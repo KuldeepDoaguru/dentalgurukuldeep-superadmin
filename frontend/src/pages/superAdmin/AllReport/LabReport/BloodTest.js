@@ -92,6 +92,13 @@ const BloodTest = () => {
     window.URL.revokeObjectURL(link.href);
   };
 
+  const handleKeywordChange = (e) => {
+    setkeyword(e.target.value);
+  };
+
+  const trimmedKeyword = keyword.trim().toLowerCase();
+  console.log(trimmedKeyword);
+
   return (
     <Wrapper>
       <Container>
@@ -116,15 +123,13 @@ const BloodTest = () => {
                 <h2>List of Pathology Test</h2>
                 <div className="mb-3">
                   <div className="row">
-                    <div className="col-lg-2">
+                    <div className="col-lg-4">
                       <input
                         type="text"
-                        placeholder="Search Patient Name"
-                        className="input p-1 rounded border-none"
+                        placeholder="Search Patient Name or UHID"
+                        className="input p-2 w-100 rounded"
                         value={keyword}
-                        onChange={(e) =>
-                          setkeyword(e.target.value.toLowerCase())
-                        }
+                        onChange={handleKeywordChange}
                       />
                     </div>
                     <div className="col-lg-2">
@@ -174,7 +179,10 @@ const BloodTest = () => {
                               } else if (
                                 val.patient_name
                                   .toLowerCase()
-                                  .includes(keyword.toLowerCase())
+                                  .includes(trimmedKeyword) ||
+                                val.patient_uhid
+                                  .toLowerCase()
+                                  .includes(trimmedKeyword)
                               ) {
                                 return val;
                               }

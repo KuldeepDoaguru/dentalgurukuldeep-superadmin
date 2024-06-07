@@ -18,9 +18,9 @@ const LabPatientReport = () => {
   const [dateFilter, setDateFilter] = useState("");
   const [loading, setLoading] = useState(false);
   const user = useSelector((state) => state.user);
-  console.log(`User Name: ${user.name}, User ID: ${user.id}`);
+  // console.log(`User Name: ${user.name}, User ID: ${user.id}`);
   const branch = useSelector((state) => state.branch);
-  console.log("User State:", user);
+  // console.log("User State:", user);
   const [keyword, setkeyword] = useState("");
 
   const goBack = () => {
@@ -133,6 +133,14 @@ const LabPatientReport = () => {
     });
     setSorted(newArr);
   };
+
+  const handleKeywordChange = (e) => {
+    setkeyword(e.target.value);
+  };
+
+  const trimmedKeyword = keyword.trim().toLowerCase();
+  console.log(trimmedKeyword);
+
   return (
     <>
       <Container>
@@ -175,12 +183,10 @@ const LabPatientReport = () => {
                               <div className="col-lg-2">
                                 <input
                                   type="text"
-                                  placeholder="Search Patient Name"
+                                  placeholder="Search Patient Name or UHID"
                                   className="input p-1 rounded border-none"
                                   value={keyword}
-                                  onChange={(e) =>
-                                    setkeyword(e.target.value.toLowerCase())
-                                  }
+                                  onChange={handleKeywordChange}
                                 />
                               </div>
                               <div className="col-lg-2">
@@ -232,7 +238,10 @@ const LabPatientReport = () => {
                                         } else if (
                                           val.patient_name
                                             .toLowerCase()
-                                            .includes(keyword.toLowerCase())
+                                            .includes(trimmedKeyword) ||
+                                          val.patient_uhid
+                                            .toLowerCase()
+                                            .includes(trimmedKeyword)
                                         ) {
                                           return val;
                                         }

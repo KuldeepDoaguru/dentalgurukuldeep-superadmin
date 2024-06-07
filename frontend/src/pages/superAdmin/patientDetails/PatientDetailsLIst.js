@@ -63,8 +63,18 @@ const PatientDetailsLIst = () => {
     setCurrentPage(0);
   }, [keyword]);
 
-  const searchFilter = patList.filter((lab) =>
-    lab.patient_name.toLowerCase().includes(keyword.toLowerCase())
+  const handleKeywordChange = (e) => {
+    setkeyword(e.target.value);
+  };
+
+  const trimmedKeyword = keyword.trim().toLowerCase();
+  console.log(trimmedKeyword);
+
+  const searchFilter = patList.filter(
+    (lab) =>
+      lab.patient_name.toLowerCase().includes(trimmedKeyword) ||
+      lab.uhid.toLowerCase().includes(trimmedKeyword) ||
+      lab.mobileno.includes(trimmedKeyword)
   );
 
   const totalPages = Math.ceil(searchFilter.length / complaintsPerPage);
@@ -100,16 +110,14 @@ const PatientDetailsLIst = () => {
                 <div className="container-fluid mt-3">
                   <h2 className="text-center">Patient Details List</h2>
                   <div className="d-flex justify-content-between">
-                    <div>
+                    <div className="w-50">
                       {/* <label>Patient Name :</label> */}
                       <input
                         type="text"
-                        placeholder="Search Patient Name"
+                        placeholder="Search Patient Name or UHID or mobile number"
                         className=""
                         value={keyword}
-                        onChange={(e) =>
-                          setkeyword(e.target.value.toLowerCase())
-                        }
+                        onChange={handleKeywordChange}
                       />
                     </div>
                     <div>
