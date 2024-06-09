@@ -55,15 +55,39 @@ const EmployeeProfile = () => {
   const handleEmpProfilePicture = (e) => {
     const selectedFile = e.target.files[0];
     console.log(selectedFile);
+
     if (selectedFile) {
-      // Read the selected file as data URL
+      const allowedSizes = [
+        { width: 2286, height: 2858 },
+        { width: 1920, height: 2400 },
+        { width: 1280, height: 1600 },
+        { width: 512, height: 640 },
+      ];
+
       const reader = new FileReader();
       reader.readAsDataURL(selectedFile);
       reader.onloadend = () => {
-        setEmpProfilePicture({
-          file: selectedFile,
-          imageUrl: reader.result,
-        });
+        const image = new Image();
+        image.src = reader.result;
+
+        image.onload = () => {
+          const isValidSize = allowedSizes.some(
+            (size) => size.width === image.width && size.height === image.height
+          );
+
+          if (isValidSize) {
+            setEmpProfilePicture({
+              file: selectedFile,
+              imageUrl: reader.result,
+            });
+          } else {
+            alert(
+              `Invalid image size (${image.width}x${image.height}). Allowed sizes are: 2286×2858, 1920×2400, 1280×1600, 512×640.`
+            );
+            // Reset the file input
+            e.target.value = "";
+          }
+        };
       };
     }
   };
@@ -1088,6 +1112,10 @@ const EmployeeProfile = () => {
                       onChange={handleEmpProfilePicture}
                       ref={fileinput}
                     />
+                    <small className="text-danger">
+                      Allowed sizes are: 2286×2858, 1920×2400, 1280×1600,
+                      512×640.
+                    </small>
                   </div>
                   <div className="mb-3 mx-2">
                     {empProfilePicture ? (

@@ -79,16 +79,16 @@ const App = () => {
       <Routes>
         <Route
           path="/"
-          element={user.id !== null ? <ErrorPage /> : <UniversalLogin />}
+          element={user.id !== null ? <Dashboard /> : <UniversalLogin />}
         />
         {/* ************************************************************************************ */}
         {/* super admin routes start  */}
 
         <Route path="/receptionist_login" element={<Login />} />
-        <Route
+        {/* <Route
           path="/receptionist_registration"
           element={user.id === null ? <UniversalLogin /> : <Registration />}
-        />
+        /> */}
         <Route
           path="/superadmin-dashboard"
           element={user.id === null ? <UniversalLogin /> : <Dashboard />}

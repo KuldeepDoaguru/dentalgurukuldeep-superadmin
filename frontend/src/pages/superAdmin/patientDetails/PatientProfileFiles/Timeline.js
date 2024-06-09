@@ -17,7 +17,7 @@ const Timeline = () => {
   const getTimelineDetails = async () => {
     try {
       const { data } = await axios.get(
-        `https://dentalgurusuperadmin.doaguru.com/api/v1/super-admin/getPatientTimeline/${pid}`, 
+        `https://dentalgurusuperadmin.doaguru.com/api/v1/super-admin/getPatientTimeline/${pid}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -57,7 +57,7 @@ const Timeline = () => {
                   <>
                     <tr>
                       <td>{item.event_date?.split("T")[0]}</td>
-                      <td>{item.event_time.split(".")[0]}</td>
+                      <td>{item.event_time?.split(".")[0]}</td>
                       <td>{item.event_type}</td>
                       <td>{item.event_description}</td>
                     </tr>

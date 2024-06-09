@@ -146,7 +146,7 @@ const Apointment = () => {
 
                     <div className="container-fluid mt-3">
                       <h2 className="text-center"> Appointment Details </h2>
-                      <div>
+                      <div className="">
                         {/* <label>Employee Name :</label> */}
                         <input
                           type="text"
@@ -392,13 +392,13 @@ const Container = styled.div`
     box-sizing: border-box;
     transition: border-color 0.3s ease;
     @media (min-width: 1280px) and (max-width: 2000px) {
-      width: 18%;
+      width: 50%;
     }
     @media (min-width: 1024px) and (max-width: 1279px) {
-      width: 30%;
+      width: 50%;
     }
     @media (min-width: 768px) and (max-width: 1023px) {
-      width: 38%;
+      width: 50%;
     }
   }
 

@@ -11,7 +11,7 @@ const UniversalLogin = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const [show, setShow] = useState(false);
+  // const [show, setShow] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [popupVisible, setPopupVisible] = useState(false);
@@ -195,7 +195,7 @@ const UniversalLogin = () => {
                         <div className="input-container">
                           <input
                             name="password"
-                            type={show ? "text" : "password"}
+                            type="password"
                             id="password"
                             value={password}
                             required
@@ -203,13 +203,13 @@ const UniversalLogin = () => {
                             className="form-control relative"
                             placeholder="password"
                           />
-                          <div className="eye-icon">
+                          {/* <div className="eye-icon">
                             {show ? (
                               <IoEye onClick={() => setShow(false)} />
                             ) : (
                               <IoEyeOffOutline onClick={() => setShow(true)} />
                             )}
-                          </div>
+                          </div> */}
                         </div>
                       </div>
                     </div>

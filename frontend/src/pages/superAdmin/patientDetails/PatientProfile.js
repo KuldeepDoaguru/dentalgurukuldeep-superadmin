@@ -123,6 +123,18 @@ const PatientProfile = () => {
                       <div>
                         <div className="row">
                           <div className="col-xl-5 col-lg-5 col-md-6 col-12">
+                            <strong>Mobile :</strong>
+                          </div>
+                          <div className="col-xl-7 col-lg-7 col-md-6 col-12">
+                            <span className="">{patientData[0]?.mobileno}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div>
+                        <div className="row">
+                          <div className="col-xl-5 col-lg-5 col-md-6 col-12">
                             <strong>Email :</strong>
                           </div>
                           <div className="col-xl-7 col-lg-7 col-md-6 col-12">
@@ -147,6 +159,18 @@ const PatientProfile = () => {
                       <div>
                         <div className="row">
                           <div className="col-xl-5 col-lg-5 col-md-6 col-12">
+                            <strong>Age :</strong>
+                          </div>
+                          <div className="col-xl-7 col-lg-7 col-md-6 col-12">
+                            <span className="">{patientData[0]?.age}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div>
+                        <div className="row">
+                          <div className="col-xl-5 col-lg-5 col-md-6 col-12">
                             <strong>Address :</strong>
                           </div>
                           <div className="col-xl-7 col-lg-7 col-md-6 col-12">
@@ -159,15 +183,17 @@ const PatientProfile = () => {
                       <div>
                         <div className="row">
                           <div className="col-xl-5 col-lg-5 col-md-6 col-12">
-                            <strong>Adhaar Number :</strong>
+                            <strong>Aadhaar No. :</strong>
                           </div>
                           <div className="col-xl-7 col-lg-7 col-md-6 col-12">
-                            <span className="">{patientData[0]?.adharno}</span>
+                            <span className="">
+                              {patientData[0]?.aadhaar_no}
+                            </span>
                           </div>
                         </div>
                       </div>
                     </li>
-                    <li>
+                    {/* <li>
                       <div>
                         <div className="row">
                           <div className="col-xl-5 col-lg-5 col-md-6 col-12">
@@ -180,7 +206,7 @@ const PatientProfile = () => {
                           </div>
                         </div>
                       </div>
-                    </li>
+                    </li> */}
                     <li>
                       <div>
                         <div className="row">
@@ -199,15 +225,16 @@ const PatientProfile = () => {
                       <div>
                         <div className="row">
                           <div className="col-xl-5 col-lg-5 col-md-6 col-12">
-                            <strong>Mobile :</strong>
+                            <strong>Weight :</strong>
                           </div>
                           <div className="col-xl-7 col-lg-7 col-md-6 col-12">
-                            <span className="">{patientData[0]?.mobileno}</span>
+                            <span className="">{patientData[0]?.weight}</span>
                           </div>
                         </div>
                       </div>
                     </li>
-                    <li>
+
+                    {/* <li>
                       <div>
                         <div className="row">
                           <div className="col-xl-5 col-lg-5 col-md-6 col-12">
@@ -248,7 +275,7 @@ const PatientProfile = () => {
                           </div>
                         </div>
                       </div>
-                    </li>
+                    </li> */}
                     <li>
                       <div>
                         <div className="row">
@@ -267,7 +294,59 @@ const PatientProfile = () => {
                       <div>
                         <div className="row">
                           <div className="col-xl-5 col-lg-5 col-md-6 col-12">
-                            <strong>Registration Branch :</strong>
+                            <strong>Contact Person :</strong>
+                          </div>
+                          <div className="col-xl-7 col-lg-7 col-md-6 col-12">
+                            <span className="">
+                              {patientData[0]?.contact_person}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div>
+                        <div className="row">
+                          <div className="col-xl-5 col-lg-5 col-md-6 col-12">
+                            <strong>Contact Person Name :</strong>
+                          </div>
+                          <div className="col-xl-7 col-lg-7 col-md-6 col-12">
+                            <span className="">
+                              {patientData[0]?.contact_person_name}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div>
+                        <div className="row">
+                          <div className="col-xl-5 col-lg-5 col-md-6 col-12">
+                            <strong>Allergy :</strong>
+                          </div>
+                          <div className="col-xl-7 col-lg-7 col-md-6 col-12">
+                            <span className="">{patientData[0]?.allergy}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div>
+                        <div className="row">
+                          <div className="col-xl-5 col-lg-5 col-md-6 col-12">
+                            <strong>Disease :</strong>
+                          </div>
+                          <div className="col-xl-7 col-lg-7 col-md-6 col-12">
+                            <span className="">{patientData[0]?.disease}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div>
+                        <div className="row">
+                          <div className="col-xl-5 col-lg-5 col-md-6 col-12">
+                            <strong>Branch :</strong>
                           </div>
                           <div className="col-xl-7 col-lg-7 col-md-6 col-12">
                             <span className="">

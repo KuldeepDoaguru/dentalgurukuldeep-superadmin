@@ -52,9 +52,19 @@ const TreatmentSetting = () => {
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setTreatData({
-      ...treatData,
-      [name]: value,
+
+    setTreatData((prevData) => {
+      const updatedData = {
+        ...prevData,
+        [name]: value,
+      };
+
+      if (name === "treatment_name") {
+        updatedData.value = value;
+        updatedData.label = value;
+      }
+
+      return updatedData;
     });
   };
 
@@ -66,6 +76,11 @@ const TreatmentSetting = () => {
         ...updatedData[0],
         [name]: value,
       };
+
+      if (name === "treatment_name") {
+        updatedData[0].value = value;
+        updatedData[0].label = value;
+      }
       return updatedData;
     });
   };
@@ -548,7 +563,7 @@ const TreatmentSetting = () => {
             >
               <div className="">
                 <div className="row">
-                  <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                  <div className="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                     <div class="mb-3">
                       <label class="form-label fw-bold">Procedure Name*</label>
                       <select
@@ -568,7 +583,7 @@ const TreatmentSetting = () => {
                       </select>
                     </div>
                   </div>
-                  <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                  <div className="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                     <label class="form-label fw-bold">Treatment Name*</label>
                     <input
                       type="text"
@@ -580,8 +595,10 @@ const TreatmentSetting = () => {
                       required
                     />
                   </div>
-                  <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
-                    <label class="form-label fw-bold">Treatment Cost*</label>
+                  <div className="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <label class="form-label fw-bold">
+                      Treatment Cost(INR)*
+                    </label>
                     <input
                       type="number"
                       placeholder="Add Treatment Cost"
@@ -592,8 +609,10 @@ const TreatmentSetting = () => {
                       required
                     />
                   </div>
-                  <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
-                    <label class="form-label fw-bold">Treatment Discount</label>
+                  <div className="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <label class="form-label fw-bold">
+                      Treatment Discount %
+                    </label>
                     <input
                       type="number"
                       placeholder="Add Treatment Discount"
@@ -603,7 +622,7 @@ const TreatmentSetting = () => {
                       onChange={handleInputChange}
                     />
                   </div>
-                  <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                  {/* <div className="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                     <label class="form-label fw-bold">Value</label>
                     <input
                       type="text"
@@ -614,7 +633,7 @@ const TreatmentSetting = () => {
                       onChange={handleInputChange}
                     />
                   </div>
-                  <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                  <div className="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                     <label class="form-label fw-bold">Label</label>
                     <input
                       type="text"
@@ -624,7 +643,7 @@ const TreatmentSetting = () => {
                       value={treatData.label}
                       onChange={handleInputChange}
                     />
-                  </div>
+                  </div> */}
                 </div>
               </div>
 
@@ -662,7 +681,7 @@ const TreatmentSetting = () => {
             >
               <div className="">
                 <div className="row">
-                  <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                  <div className="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                     <div class="mb-3">
                       <label class="form-label fw-bold">Procedure Name</label>
                       <select
@@ -682,7 +701,7 @@ const TreatmentSetting = () => {
                       </select>
                     </div>
                   </div>
-                  <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                  <div className="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                     <label class="form-label fw-bold">Treatment Name</label>
                     <input
                       type="text"
@@ -694,8 +713,10 @@ const TreatmentSetting = () => {
                       required
                     />
                   </div>
-                  <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
-                    <label class="form-label fw-bold">Treatment Cost</label>
+                  <div className="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <label class="form-label fw-bold">
+                      Treatment Cost (INR)
+                    </label>
                     <input
                       type="number"
                       placeholder="Add Treatment Cost"
@@ -706,8 +727,10 @@ const TreatmentSetting = () => {
                       required
                     />
                   </div>
-                  <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
-                    <label class="form-label fw-bold">Treatment Discount</label>
+                  <div className="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <label class="form-label fw-bold">
+                      Treatment Discount %
+                    </label>
                     <input
                       type="number"
                       placeholder="Add Treatment Discount"
@@ -717,7 +740,7 @@ const TreatmentSetting = () => {
                       onChange={handleUpdateInputChange}
                     />
                   </div>
-                  <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                  {/* <div className="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                     <label class="form-label fw-bold">Value</label>
                     <input
                       type="text"
@@ -728,7 +751,7 @@ const TreatmentSetting = () => {
                       onChange={handleUpdateInputChange}
                     />
                   </div>
-                  <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                  <div className="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                     <label class="form-label fw-bold">Label</label>
                     <input
                       type="text"
@@ -738,7 +761,7 @@ const TreatmentSetting = () => {
                       value={updateTreatVal?.label}
                       onChange={handleUpdateInputChange}
                     />
-                  </div>
+                  </div> */}
                 </div>
               </div>
 

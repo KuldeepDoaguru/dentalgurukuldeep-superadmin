@@ -29,7 +29,7 @@ const Header = () => {
   };
 
   const logoutHandleByToken = () => {
-    alert("Token Expired! You have been logged out");
+    // alert("Token Expired! You have been logged out");
     dispatch(clearUser());
     navigate("/");
   };
