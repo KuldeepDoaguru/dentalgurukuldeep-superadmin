@@ -98,9 +98,9 @@ const Card = () => {
   const formateForDay = `${year}-${month}-${day}`;
   // console.log(formateForDay);
 
-  console.log(
-    appointmentList[0]?.appointment_dateTime?.split("T")[0].slice(0, 7)
-  );
+  // console.log(
+  //   appointmentList[0]?.appointment_dateTime?.split("T")[0].slice(0, 7)
+  // );
 
   //filterForPatAppointToday
   const filterForOpdEarnToday = appointmentList?.filter(
@@ -126,7 +126,7 @@ const Card = () => {
 
   const totalOpdValue = totalPrice();
 
-  console.log(availableEmp);
+  // console.log(availableEmp);
   // console.log(formateForDay);
   //filter for employee availability
   const filterForEmpAVToday = availableEmp?.filter(

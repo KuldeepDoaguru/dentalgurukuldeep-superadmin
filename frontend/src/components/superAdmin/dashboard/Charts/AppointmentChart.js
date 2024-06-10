@@ -63,6 +63,8 @@ const AppointmentChart = () => {
     getAppointList();
   }, [branch.name]);
 
+  console.log(appointmentList);
+
   const defaultOptions = {
     loop: true,
     autoplay: true,
@@ -85,15 +87,30 @@ const AppointmentChart = () => {
     return acc;
   }, {});
 
+  console.log(dailyAppointments);
+  const processedAppointments = {};
+
+  Object.entries(dailyAppointments).forEach(([key, value]) => {
+    const date = key.split(" ")[0];
+    if (processedAppointments[date]) {
+      processedAppointments[date] += value;
+    } else {
+      processedAppointments[date] = value;
+    }
+  });
+
+  console.log("Processed Appointments:", processedAppointments);
   // Create an array containing data for all days of the month
   const data = Array.from({ length: lastDay }, (_, index) => {
     const day = String(index + 1).padStart(2, "0");
     const date = `${formattedDate}-${day}`;
     return {
       date,
-      patients: dailyAppointments[date] || 0,
+      patients: processedAppointments[date] || 0,
     };
   });
+
+  console.log("Final data array:", data);
 
   return (
     <>

@@ -112,6 +112,7 @@ const LabChart = () => {
   const data = Array.from({ length: lastDay }, (_, index) => {
     const day = String(index + 1).padStart(2, "0");
     const date = `${formattedDate}-${day}`;
+    console.log(date);
     return {
       date,
       patients: dailyAppointments[date] || 0,

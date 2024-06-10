@@ -1,15 +1,17 @@
 import axios from "axios";
 import cogoToast from "cogo-toast";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { AiFillDelete } from "react-icons/ai";
 import { TbEdit } from "react-icons/tb";
 import ReactPaginate from "react-paginate";
 import Lottie from "react-lottie";
 import animationData from "../../animation/loading-effect.json";
+import { toggleTableRefresh } from "../../redux/slices/UserSlicer";
 
 const LabTest = () => {
+  const dispatch = useDispatch();
   const [showPopup, setShowPopup] = useState(false);
   const [labTestList, setLabTestList] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -20,7 +22,8 @@ const LabTest = () => {
   const [keyword, setkeyword] = useState("");
   const [labList, setLabList] = useState([]);
   const complaintsPerPage = 5; // Number of complaints per page
-  const [currentPage, setCurrentPage] = useState(0); // Start from the first page
+  const [currentPage, setCurrentPage] = useState(0);
+  const [showAddLabTest, setShowAddLabTest] = useState(false); // Start from the first page
   const [upLabTestField, setUpLabTestField] = useState({
     test_name: "",
     test_code: "",
@@ -30,9 +33,26 @@ const LabTest = () => {
     test_cost: "",
   });
 
-  const handleAddLabTestChange = (event) => {
+  const [addLabTestField, setAddLabTestField] = useState({
+    test_name: "",
+    test_code: "",
+    waiting_days: "",
+    default_lab: "",
+    test_date: "",
+    test_cost: "",
+  });
+
+  const handleUpLabTestChange = (event) => {
     const { name, value } = event.target;
     setUpLabTestField((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleAddLabTestChange = (event) => {
+    const { name, value } = event.target;
+    setAddLabTestField((prevData) => ({
       ...prevData,
       [name]: value,
     }));
@@ -58,6 +78,7 @@ const LabTest = () => {
 
   const closeUpdatePopup = () => {
     setShowPopup(false);
+    setShowAddLabTest(false);
   };
 
   console.log(showPopup);
@@ -185,13 +206,62 @@ const LabTest = () => {
   const handlePageChange = ({ selected }) => {
     setCurrentPage(selected);
   };
+  const openAddLabTestPopup = (index, item) => {
+    // setSelectedItem(item);
+    console.log("open pop up");
+    setShowAddLabTest(true);
+  };
 
   const displayedAppointments = filterAppointDataByMonth();
   console.log(displayedAppointments);
 
+  const insertLabTestClinic = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        "https://dentalgurusuperadmin.doaguru.com/api/v1/super-admin/addLabTest",
+        addLabTestField,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+      cogoToast.success("Lab Test Added Successfully");
+      dispatch(toggleTableRefresh());
+      closeUpdatePopup();
+      setAddLabTestField({
+        test_name: "",
+        test_code: "",
+        waiting_days: "",
+        default_lab: "",
+        test_date: "",
+        test_cost: "",
+      });
+    } catch (error) {
+      console.log(error);
+      cogoToast.error("Test Code Already Exist");
+    }
+  };
+
   return (
     <>
       <Container>
+        <div className="mid-box mb-2">
+          <div className="row mt-5 background">
+            <div className="col-xxl-1 col-xl-1 col-lg-1 col-md-1 col-sm-12 col-12 m-md-3">
+              <div className="">
+                <button
+                  className="btn btn-info lab-actbtn"
+                  onClick={() => openAddLabTestPopup()}
+                >
+                  Add Lab Test
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
         <div>
           <input
             type="text"
@@ -283,7 +353,7 @@ const LabTest = () => {
                               className="rounded p-2"
                               name="test_name"
                               value={upLabTestField.test_name}
-                              onChange={handleAddLabTestChange}
+                              onChange={handleUpLabTestChange}
                             />
                           </div>
                         </div>
@@ -296,7 +366,7 @@ const LabTest = () => {
                               className="rounded p-2"
                               name="test_code"
                               value={upLabTestField.test_code}
-                              onChange={handleAddLabTestChange}
+                              onChange={handleUpLabTestChange}
                             />
                           </div>
                         </div>
@@ -309,7 +379,7 @@ const LabTest = () => {
                               className="rounded p-2"
                               name="waiting_days"
                               value={upLabTestField.waiting_days}
-                              onChange={handleAddLabTestChange}
+                              onChange={handleUpLabTestChange}
                             />
                           </div>
                         </div>
@@ -320,7 +390,7 @@ const LabTest = () => {
                               className="rounded p-2"
                               name="default_lab"
                               value={upLabTestField.default_lab}
-                              onChange={handleAddLabTestChange}
+                              onChange={handleUpLabTestChange}
                             >
                               <option value="">-select-</option>
                               {labList?.map((item) => (
@@ -342,7 +412,7 @@ const LabTest = () => {
                               className="rounded p-2"
                               name="test_date"
                               value={upLabTestField.test_date}
-                              onChange={handleAddLabTestChange}
+                              onChange={handleUpLabTestChange}
                             />
                           </div>
                         </div>
@@ -355,7 +425,7 @@ const LabTest = () => {
                               className="rounded p-2"
                               name="test_cost"
                               value={upLabTestField.test_cost}
-                              onChange={handleAddLabTestChange}
+                              onChange={handleUpLabTestChange}
                             />
                           </div>
                         </div>
@@ -381,6 +451,124 @@ const LabTest = () => {
             </div>
           </>
         )}
+
+        {/* pop-up for adding lab */}
+        <div className={`popup-container${showAddLabTest ? " active" : ""}`}>
+          <div className="popup">
+            <h4 className="text-center">Add Lab Test</h4>
+            <form className="d-flex flex-column" onSubmit={insertLabTestClinic}>
+              <div className="container">
+                <div className="row">
+                  <div className="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <div className="d-flex flex-column w-100">
+                      <label htmlFor="">Test Name</label>
+                      <input
+                        type="text"
+                        placeholder="Lab Test Name"
+                        className="rounded p-2"
+                        name="test_name"
+                        required
+                        value={addLabTestField.test_name}
+                        onChange={handleAddLabTestChange}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <div className="d-flex flex-column w-100">
+                      <label htmlFor="">Test Code</label>
+                      <input
+                        type="text"
+                        placeholder="Lab Test Code"
+                        className="rounded p-2"
+                        name="test_code"
+                        required
+                        value={addLabTestField.test_code}
+                        onChange={handleAddLabTestChange}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <div className="d-flex flex-column w-100">
+                      <label htmlFor="">Waiting for Report Days</label>
+                      <input
+                        type="text"
+                        placeholder="waiting days"
+                        className="rounded p-2"
+                        name="waiting_days"
+                        required
+                        value={addLabTestField.waiting_days}
+                        onChange={handleAddLabTestChange}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <div className="d-flex flex-column w-100">
+                      <label htmlFor="">Lab Name</label>
+                      <select
+                        className="rounded p-2"
+                        name="default_lab"
+                        required
+                        value={addLabTestField.default_lab}
+                        onChange={handleAddLabTestChange}
+                      >
+                        <option value="">-select-</option>
+                        {labList?.map((item) => (
+                          <>
+                            <option value={item.lab_name}>
+                              {item.lab_name}
+                            </option>
+                          </>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                  {/* <div className="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                      <div className="d-flex flex-column w-100">
+                        <label htmlFor="">Test Date</label>
+                        <input
+                          type="date"
+                          placeholder="Lab Test Date"
+                          className="rounded p-2"
+                          name="test_date"
+                          required
+                          value={addLabTestField.test_date}
+                          onChange={handleAddLabTestChange}
+                        />
+                      </div>
+                    </div> */}
+                  <div className="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <div className="d-flex flex-column w-100">
+                      <label htmlFor="">Test Cost</label>
+                      <input
+                        type="text"
+                        placeholder="Lab Test Cost"
+                        className="rounded p-2"
+                        name="test_cost"
+                        required
+                        value={addLabTestField.test_cost}
+                        onChange={handleAddLabTestChange}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="d-flex justify-content-center">
+                <button type="submit" className="btn btn-success mt-2">
+                  Save
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-danger mt-2 ms-2"
+                  onClick={closeUpdatePopup}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        {/* pop-up for adding lab */}
       </Container>
     </>
   );

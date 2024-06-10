@@ -54,12 +54,14 @@ const StaffLeave = () => {
     getLeaveList();
   }, [branch.name]);
 
-  const handleLeaveApprove = async (id) => {
+  const handleLeaveApprove = async (id, dates) => {
     try {
       const response = await axios.put(
         `https://dentalgurusuperadmin.doaguru.com/api/v1/super-admin/approveLeave/${id}`,
         {
           status: "Approved",
+          email: user.email,
+          date: dates,
         },
         {
           headers: {
@@ -76,12 +78,14 @@ const StaffLeave = () => {
     }
   };
 
-  const handleLeaveReject = async (id) => {
+  const handleLeaveReject = async (id, dates) => {
     try {
       const response = await axios.put(
         `https://dentalgurusuperadmin.doaguru.com/api/v1/super-admin/rejectLeave/${id}`,
         {
           status: "Rejected",
+          email: user.email,
+          date: dates,
         },
         {
           headers: {
@@ -242,7 +246,10 @@ const StaffLeave = () => {
                                             <button
                                               className="btn btn-success"
                                               onClick={() =>
-                                                handleLeaveApprove(item.id)
+                                                handleLeaveApprove(
+                                                  item.id,
+                                                  item.leave_dates
+                                                )
                                               }
                                             >
                                               Approve
@@ -250,7 +257,10 @@ const StaffLeave = () => {
                                             <button
                                               className="btn btn-danger ms-2"
                                               onClick={() =>
-                                                handleLeaveReject(item.id)
+                                                handleLeaveReject(
+                                                  item.id,
+                                                  item.leave_dates
+                                                )
                                               }
                                             >
                                               Reject

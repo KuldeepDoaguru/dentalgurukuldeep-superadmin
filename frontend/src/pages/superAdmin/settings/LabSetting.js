@@ -180,7 +180,7 @@ const LabSetting = () => {
                 </div>
                 <div className="container-fluid mt-3">
                   <h2 className="text-center">Lab Settings</h2>
-                  <div className="mid-box">
+                  {/* <div className="mid-box">
                     <div className="row mt-5 background">
                       <div className="col-xxl-1 col-xl-1 col-lg-1 col-md-1 col-sm-12 col-12 m-md-3">
                         <div className="">
@@ -193,7 +193,7 @@ const LabSetting = () => {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                   {/* nav-items-start */}
                   <div className="container-fluid mt-5 navsect background">
                     <Nav

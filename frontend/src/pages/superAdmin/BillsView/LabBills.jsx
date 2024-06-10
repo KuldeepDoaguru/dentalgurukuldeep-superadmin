@@ -99,6 +99,8 @@ const LabBills = () => {
 
   const displayedAppointments = filterAppointDataByMonth();
 
+  console.log(displayedAppointments);
+
   return (
     <>
       <Container>
@@ -131,14 +133,15 @@ const LabBills = () => {
                       <tr>
                         <th className="table-sno">Test ID</th>
                         <th>Test Date</th>
+                        <th>Test Name</th>
                         <th className="table-small">Patient UHID</th>
-                        <th className="table-small">Treatment Package ID</th>
+                        {/* <th className="table-small">Treatment Package ID</th> */}
                         <th className="table-small">Patient Name</th>
-                        <th className="table-small">Total Amount</th>
+                        {/* <th className="table-small">Total Amount</th> */}
                         <th>Paid Amount</th>
                         <th>Payment Status</th>
                         <th>Payment Date & Time</th>
-                        <th>Pending Amount</th>
+                        {/* <th>Pending Amount</th> */}
                       </tr>
                     </thead>
                     <tbody>
@@ -149,6 +152,7 @@ const LabBills = () => {
                             <td className="table-small">
                               {item.authenticate_date?.split("T")[0]}
                             </td>
+                            <td>{item.test}</td>
                             <td className="table-small">
                               <Link
                                 to={`/patient-profile/${item.patient_uhid}`}
@@ -157,23 +161,21 @@ const LabBills = () => {
                                 {item.patient_uhid}
                               </Link>
                             </td>
-                            <td className="table-small">{item.tpid}</td>
+                            {/* <td className="table-small">{item.tpid}</td> */}
                             <td className="table-small">{item.patient_name}</td>
-                            <td className="table-small">{item.cost}</td>
+                            {/* <td className="table-small">{item.cost}</td> */}
                             <td className="table-small">{item.payment}</td>
                             <td>{item.payment_status}</td>
                             <td>
-                              {item?.collection_date
+                              {item?.created_date
                                 ? moment(
-                                    item?.collection_date,
+                                    item?.created_date,
                                     "YYYY-MM-DDTHH:mm"
                                   ).format("DD/MM/YYYY hh:mm A")
                                 : "--"}
                             </td>
 
-                            <td>
-                              <td>{item.cost - item.payment}</td>
-                            </td>
+                            {/* <td>{item.payment !== null ? 0 : item.payment}</td> */}
                           </tr>
                         </>
                       ))}
