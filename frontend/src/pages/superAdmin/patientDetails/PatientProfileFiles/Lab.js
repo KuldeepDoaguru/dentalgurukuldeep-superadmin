@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 const Lab = () => {
   const { pid } = useParams();
-  console.log(pid);
+  // console.log(pid);
   const [testData, setTestData] = useState([]);
   const user = useSelector((state) => state.user);
 
@@ -27,7 +27,7 @@ const Lab = () => {
     }
   };
 
-  console.log(testData);
+  // console.log(testData);
   useEffect(() => {
     getLabTest();
   });

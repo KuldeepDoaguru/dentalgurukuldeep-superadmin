@@ -439,7 +439,7 @@ const ClinicActivity = () => {
                           </h5>
                         </div>
                         <div>
-                          {item.appointment_created_at.split("T")[0] ===
+                          {/* {item.appointment_created_at.split("T")[0] ===
                           formattedDate ? (
                             <>
                               <p className="fw-bold">
@@ -459,23 +459,10 @@ const ClinicActivity = () => {
                             <>
                               <p>{item.appointment_created_at.split("T")[0]}</p>
                             </>
-                          )}
-                          {/* {item.created_at.split("T")[0] ===
-                          formattedDate ? (
-                            <p className="fw-bold">
-                              {formattedTime >=
-                              item.created_at
-                                .split("T")[1]
-                                ?.split(":")[0]
-                                ? getFormattedTimeDifference(
-                                    item.created_at
-                                  )
-                                : "0"}{" "}
-                              Hours ago
-                            </p>
-                          ) : (
-                            <p>{ConvertToIST(item.created_at)}</p>
                           )} */}
+                          {moment(item.appointment_created_at).format(
+                            "YYYY-MM-DD HH:mm:ss"
+                          )}
                         </div>
                       </div>
                     </li>

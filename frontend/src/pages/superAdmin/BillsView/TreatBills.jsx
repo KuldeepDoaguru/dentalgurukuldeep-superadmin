@@ -208,6 +208,7 @@ const TreatBills = () => {
   };
 
   const displayedAppointments = filterAppointDataByMonth();
+  console.log(displayedAppointments);
   return (
     <>
       <Container>
@@ -255,6 +256,7 @@ const TreatBills = () => {
                         <th className="table-small">Patient Email</th>
                         <th className="table-small">Total Amount</th>
                         <th>Paid Amount</th>
+                        <th>Paid by Security Amount</th>
                         <th>Payment Status</th>
                         <th>Payment Date</th>
                         <th>Pending Amount</th>
@@ -282,10 +284,17 @@ const TreatBills = () => {
                             <td>{item.patient_email}</td>
                             <td className="table-small">{item.total_amount}</td>
                             <td className="table-small">{item.paid_amount}</td>
+                            <td>{item.pay_by_sec_amt}</td>
                             <td>{item.payment_status}</td>
                             <td>{item?.payment_date_time}</td>
                             <td>
-                              <td>{item.total_amount - item.paid_amount}</td>
+                              <td>
+                                {item.paid_amount + item.pay_by_sec_amt >=
+                                item.total_amount
+                                  ? 0
+                                  : item.total_amount -
+                                    (item.paid_amount + item.pay_by_sec_amt)}
+                              </td>
                             </td>
                           </tr>
                         </>

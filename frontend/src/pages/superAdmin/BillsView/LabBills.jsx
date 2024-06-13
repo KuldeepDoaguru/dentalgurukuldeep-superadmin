@@ -140,6 +140,7 @@ const LabBills = () => {
                         {/* <th className="table-small">Total Amount</th> */}
                         <th>Paid Amount</th>
                         <th>Payment Status</th>
+                        <th>Test Status</th>
                         <th>Payment Date & Time</th>
                         {/* <th>Pending Amount</th> */}
                       </tr>
@@ -166,6 +167,7 @@ const LabBills = () => {
                             {/* <td className="table-small">{item.cost}</td> */}
                             <td className="table-small">{item.payment}</td>
                             <td>{item.payment_status}</td>
+                            <td>{item.test === null ? "Pending" : "Done"}</td>
                             <td>
                               {item?.created_date
                                 ? moment(

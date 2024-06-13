@@ -8,10 +8,10 @@ const ClinicExamin = () => {
   const dispatch = useDispatch();
   const { pid } = useParams();
   const user = useSelector((state) => state.user);
-  console.log(`User Name: ${user.name}, User ID: ${user.id}`);
-  console.log("User State:", user);
+  // console.log(`User Name: ${user.name}, User ID: ${user.id}`);
+  // console.log("User State:", user);
   const branch = useSelector((state) => state.branch);
-  console.log(`User Name: ${branch.name}`);
+  // console.log(`User Name: ${branch.name}`);
   const [exmData, setExmData] = useState([]);
 
   const getExamineDetails = async () => {
