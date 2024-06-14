@@ -194,7 +194,7 @@ const Branches = () => {
             (image.width === 5900 && image.height === 1844) ||
             (image.width === 1920 && image.height === 601)
           ) {
-            branchFootImg({
+            setBranchFootImg({
               file: selectedFile,
               imageUrl: reader.result,
             });

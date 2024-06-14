@@ -174,9 +174,45 @@ const EmpAttendanceRepo = () => {
   console.log(daysInMonth[0]);
   console.log(fromDate?.slice(-2));
 
+  const uniqueEntries = Object.values(
+    attendRepo.reduce((acc, item) => {
+      acc[item.employee_ID] = acc[item.employee_ID] || item;
+      return acc;
+    }, {})
+  );
+
+  console.log(uniqueEntries);
+
   const goBack = () => {
     window.history.go(-1);
   };
+
+  const exportToExcel = () => {
+    const csvRows = [];
+    const table = document.querySelector(".table");
+
+    if (!table) {
+      console.error("Table element not found");
+      return;
+    }
+
+    table.querySelectorAll("tr").forEach((row) => {
+      const rowData = [];
+      row.querySelectorAll("td, th").forEach((cell) => {
+        rowData.push(cell.innerText);
+      });
+      csvRows.push(rowData.join(","));
+    });
+
+    const csvContent = csvRows.join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const link = document.createElement("a");
+    link.href = window.URL.createObjectURL(blob);
+    link.download = "oral_test.csv";
+    link.click();
+    window.URL.revokeObjectURL(link.href);
+  };
+
   return (
     <>
       <Container>
@@ -239,7 +275,8 @@ const EmpAttendanceRepo = () => {
                                 </div>
                                 <button
                                   className="btn btn-warning mx-2"
-                                  type="submit"
+                                  type="button"
+                                  onClick={exportToExcel}
                                 >
                                   Download Report
                                 </button>
@@ -285,7 +322,7 @@ const EmpAttendanceRepo = () => {
                                     </tr>
                                   </thead>
                                   <tbody>
-                                    {attendRepo.map((attendItem) => (
+                                    {uniqueEntries.map((attendItem) => (
                                       <tr
                                         className="table-row"
                                         key={attendItem.employee_ID}

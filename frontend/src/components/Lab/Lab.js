@@ -338,7 +338,7 @@ const Lab = () => {
                         <div className="d-flex flex-column mx-2 w-100">
                           <label htmlFor="">Type</label>
                           <select
-                            className="typeset w-100"
+                            className="typeset w-100 mt-2"
                             name="type"
                             value={upLabField.type}
                             onChange={handleAddLabChange}

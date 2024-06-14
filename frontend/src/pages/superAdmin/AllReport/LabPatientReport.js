@@ -180,23 +180,23 @@ const LabPatientReport = () => {
                           </h2>
                           <div className="mb-3">
                             <div className="row">
-                              <div className="col-lg-2">
+                              <div className="col-xxl-4 col-xl-4 col-lg-4 col-sm-6 col-6">
                                 <input
                                   type="text"
                                   placeholder="Search Patient Name or UHID"
-                                  className="input p-1 rounded border-none"
+                                  className="input p-1 rounded border-none w-100"
                                   value={keyword}
                                   onChange={handleKeywordChange}
                                 />
                               </div>
-                              <div className="col-lg-2">
+                              <div className="col-xxl-2 col-xl-2 col-lg-2 col-sm-6 col-6">
                                 <input
                                   type="date"
                                   value={dateFilter}
                                   onChange={(e) =>
                                     setDateFilter(e.target.value)
                                   }
-                                  className="form-control"
+                                  className="form-control w-100"
                                 />
                               </div>
                             </div>

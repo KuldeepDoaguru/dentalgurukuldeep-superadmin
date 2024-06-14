@@ -15,7 +15,24 @@ const PORT = process.env.PORT;
 const getAttendanceDetails = (req, res) => {
   try {
     const branch = req.params.branch;
-    const selectQuery = "SELECT * FROM employee_attendance WHERE branch = ?";
+    const selectQuery = `SELECT
+    employee_ID,
+    emp_name,
+    employee_designation,
+    branch,
+    DATE_FORMAT(date, '%b %d') AS attendance_date,
+    MAX(CASE WHEN allday_shift_login_time IS NOT NULL THEN TIME_FORMAT(allday_shift_login_time, '%H:%i:%s') ELSE null END) AS allday_shift_login_time,
+    MAX(CASE WHEN allday_shift_logout_time IS NOT NULL THEN TIME_FORMAT(allday_shift_logout_time, '%H:%i:%s') ELSE null END) AS allday_shift_logout_time,
+    MAX(CASE WHEN morning_shift_login_time IS NOT NULL THEN TIME_FORMAT(morning_shift_login_time, '%H:%i:%s') ELSE null END) AS morning_shift_login_time,
+    MAX(CASE WHEN morning_shift_logout_time IS NOT NULL THEN TIME_FORMAT(morning_shift_logout_time, '%H:%i:%s') ELSE null END) AS morning_shift_logout_time,
+    MAX(CASE WHEN evening_shift_login_time IS NOT NULL THEN TIME_FORMAT(evening_shift_login_time, '%H:%i:%s') ELSE null END) AS evening_shift_login_time,
+    MAX(CASE WHEN evening_shift_logout_time IS NOT NULL THEN TIME_FORMAT(evening_shift_logout_time, '%H:%i:%s') ELSE null END) AS evening_shift_logout_time,
+    GROUP_CONCAT(DISTINCT attendance_id ORDER BY attendance_id SEPARATOR ',') AS attendance_ids,
+    GROUP_CONCAT(DISTINCT availability ORDER BY attendance_id SEPARATOR ',') AS availabilities
+FROM employee_attendance
+GROUP BY employee_ID, DATE_FORMAT(date, '%b %d')
+ORDER BY date
+`;
     db.query(selectQuery, branch, (err, results) => {
       if (err) {
         res.status(400).json({ success: false, message: err.message });

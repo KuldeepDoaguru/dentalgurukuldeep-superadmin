@@ -403,7 +403,7 @@ const LabTest = () => {
                             </select>
                           </div>
                         </div>
-                        <div className="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        {/* <div className="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                           <div className="d-flex flex-column w-100">
                             <label htmlFor="">Test Date</label>
                             <input
@@ -415,7 +415,7 @@ const LabTest = () => {
                               onChange={handleUpLabTestChange}
                             />
                           </div>
-                        </div>
+                        </div> */}
                         <div className="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                           <div className="d-flex flex-column w-100">
                             <label htmlFor="">Test Cost</label>

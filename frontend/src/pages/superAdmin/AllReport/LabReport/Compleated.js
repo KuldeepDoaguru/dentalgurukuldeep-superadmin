@@ -167,8 +167,7 @@ const Compleated = () => {
                             <th>Lab Name</th>
                             <th>Created Date</th>
                             <th>Patient Tests </th>
-                            <th>Total Payment</th>
-                            <th>Payment Status</th>
+
                             <th>Tests Status </th>
                           </tr>
                         </thead>
@@ -217,8 +216,8 @@ const Compleated = () => {
                                   </td>
                                   <td>{patient.test}</td>
 
-                                  <td>{patient.payment}</td>
-                                  <td>{patient.payment_status}</td>
+                                  {/* <td>{patient.payment}</td>
+                                  <td>{patient.payment_status}</td> */}
 
                                   {patient.test_status === "done" && (
                                     <td>

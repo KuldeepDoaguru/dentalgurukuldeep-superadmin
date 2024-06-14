@@ -251,7 +251,7 @@ const LabSetting = () => {
                     <div className="d-flex flex-column mx-2 w-100">
                       <label htmlFor="">Type</label>
                       <select
-                        className="typeset w-100"
+                        className="typeset typeInput w-100"
                         name="type"
                         required
                         value={addLabField.type}
@@ -632,5 +632,9 @@ const Container = styled.div`
     height: 3rem;
     font-weight: bold;
     white-space: nowrap;
+  }
+
+  .typeInput {
+    margin-top: 8px !important;
   }
 `;

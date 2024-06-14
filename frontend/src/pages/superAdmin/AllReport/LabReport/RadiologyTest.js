@@ -47,14 +47,8 @@ const RadiologyTest = () => {
     fetchPatientDetails();
   }, []);
 
-  const filteredPatients = patientDetails.filter((patient) => {
-    const fullName =
-      `${patient.patient_name} ${patient.assigned_doctor_name}`.toLowerCase();
-    const formattedDate = moment(patient.created_date).format("YYYY-MM-DD");
-    return (
-      fullName.includes(searchQuery.toLowerCase()) &&
-      (!dateFilter || formattedDate === dateFilter)
-    );
+  const filteredPatients = patientDetails.filter((item) => {
+    return item.lab_name === "radiology";
   });
 
   const goBack = () => {
@@ -177,7 +171,7 @@ const RadiologyTest = () => {
                         </thead>
 
                         <tbody>
-                          {patientDetails
+                          {filteredPatients
                             ?.filter((val) => {
                               if (keyword === "") {
                                 return true;
