@@ -96,19 +96,20 @@ const Card = () => {
 
   const formattedDate = `${year}-${month}`;
   const formateForDay = `${year}-${month}-${day}`;
+  const formatChange = `${day}-${month}-${year}`;
   // console.log(formateForDay);
 
-  // console.log(
-  //   appointmentList[0]?.appointment_dateTime?.split("T")[0].slice(0, 7)
-  // );
+  // console.log(appointmentList);
 
   //filterForPatAppointToday
   const filterForOpdEarnToday = appointmentList?.filter(
     (item) =>
-      item.appointment_dateTime.split("T")[0] === formateForDay &&
-      item.treatment_provided === "OPD"
+      item.appointment_created_at.split(" ")[0] === formateForDay &&
+      item.treatment_provided === "OPD" &&
+      item.appointment_status !== "Cancel"
   );
 
+  // console.log(filterForOpdEarnToday);
   // console.log(appointmentList);
   const totalPrice = () => {
     try {
@@ -161,7 +162,7 @@ const Card = () => {
   const filterForEarningToday = treatValue?.filter(
     (item) =>
       item.payment_status === "paid" &&
-      item.bill_date?.split("T")[0] === formateForDay
+      item.bill_date?.split(" ")[0] === formatChange
   );
 
   // console.log(treatValue);

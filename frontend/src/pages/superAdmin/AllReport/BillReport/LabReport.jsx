@@ -19,6 +19,7 @@ const LabReport = () => {
   console.log(`User Name: ${branch.name}`);
   const [labBills, setLabBills] = useState([]);
   const [loading, setLoading] = useState(false);
+  const { refreshTable } = useSelector((state) => state.user);
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
 
@@ -106,7 +107,7 @@ const LabReport = () => {
 
   useEffect(() => {
     getBillDetailsList();
-  }, [branch.name]);
+  }, [branch.name, refreshTable]);
 
   console.log(fromDate, toDate);
 
@@ -211,14 +212,7 @@ const LabReport = () => {
                                     </td>
                                     <td>{item.payment_status}</td>
 
-                                    <td>
-                                      {item?.created_date
-                                        ? moment(
-                                            item?.created_date,
-                                            "YYYY-MM-DDTHH:mm"
-                                          ).format("DD/MM/YYYY hh:mm A")
-                                        : "--"}
-                                    </td>
+                                    <td>{item?.authenticate_date}</td>
                                   </tr>
                                 </>
                               ))
@@ -254,11 +248,11 @@ const LabReport = () => {
                                     </td>
                                     <td>{item.payment_status}</td>
                                     <td>
-                                      {item?.created_date
+                                      {item?.authenticate_date
                                         ? moment(
-                                            item?.created_date,
-                                            "YYYY-MM-DDTHH:mm"
-                                          ).format("DD/MM/YYYY hh:mm A")
+                                            item?.authenticate_date,
+                                            "YYYY-MM-DD"
+                                          ).format("DD/MM/YYYY")
                                         : "--"}
                                     </td>
                                   </tr>

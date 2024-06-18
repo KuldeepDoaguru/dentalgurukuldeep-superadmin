@@ -10,6 +10,7 @@ import cogoToast from "cogo-toast";
 import ReactPaginate from "react-paginate";
 import Lottie from "react-lottie";
 import animationData from "../../animation/loading-effect.json";
+import moment from "moment";
 
 const Apointment = () => {
   const [showPopup, setShowPopup] = useState(false);
@@ -224,8 +225,15 @@ const Apointment = () => {
                                       {item.appointment_updated_by}
                                     </td>
                                     <td className="table-small">
-                                      {item.appointment_dateTime?.split("T")[0]}{" "}
-                                      {item.appointment_dateTime?.split("T")[1]}
+                                      {moment(
+                                        item.appointment_dateTime?.split("T")[0]
+                                      ).format("DD-MM-YYYY")}{" "}
+                                      {moment(
+                                        item.appointment_dateTime?.split(
+                                          "T"
+                                        )[1],
+                                        "HH:mm"
+                                      ).format("hh:mm A")}
                                     </td>
                                     <td>{item.appointment_status}</td>
                                     <td>{item.cancel_reason}</td>

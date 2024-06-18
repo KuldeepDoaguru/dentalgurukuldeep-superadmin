@@ -313,9 +313,15 @@ const Branches = () => {
                               )}
                             </div>
                             <div className="mx-2">
-                              {branchHeadImg && (
+                              {branchHeadImg ? (
                                 <img
                                   src={branchHeadImg.imageUrl}
+                                  alt="Header"
+                                  className="imgData"
+                                />
+                              ) : (
+                                <img
+                                  src={selectedItem.head_img}
                                   alt="Header"
                                   className="imgData"
                                 />
@@ -349,10 +355,16 @@ const Branches = () => {
                               )}
                             </div>
                             <div className="mx-2">
-                              {branchFootImg && (
+                              {branchFootImg ? (
                                 <img
                                   src={branchFootImg.imageUrl}
                                   alt="Footer"
+                                  className="imgData"
+                                />
+                              ) : (
+                                <img
+                                  src={selectedItem.foot_img}
+                                  alt="Header"
                                   className="imgData"
                                 />
                               )}

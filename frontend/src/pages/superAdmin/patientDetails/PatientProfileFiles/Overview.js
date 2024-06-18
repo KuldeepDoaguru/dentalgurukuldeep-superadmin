@@ -329,7 +329,7 @@ const Overview = () => {
                     {patFinalBills?.slice(0, 3).map((item) => (
                       <>
                         <tr>
-                          <td>{item.bill_date?.split("T")[0]}</td>
+                          <td>{item.bill_date}</td>
                           <td>{item.total_amount}</td>
                           <td>{item.paid_amount}</td>
                           <td>{item.payment_status}</td>
@@ -356,7 +356,9 @@ const Overview = () => {
                     {exmData?.slice(0, 3).map((item) => (
                       <>
                         <tr>
-                          <td>{item.date.split("T")[0]}</td>
+                          <td>
+                            {moment(item.date).format("DD-MM-YYYY hh:mm A")}
+                          </td>
                           <td>{item.disease}</td>
                           <td>{item.chief_complain}</td>
                           <td>{item.selected_teeth}</td>
@@ -384,7 +386,7 @@ const Overview = () => {
                     {presData?.slice(0, 3).map((item) => (
                       <>
                         <tr>
-                          <td>{item.date?.split("T")[0]}</td>
+                          <td>{item.date}</td>
                           <td>{item.treatment}</td>
                           <td>{item.medicine_name}</td>
                           <td>{item.duration}</td>

@@ -228,16 +228,19 @@ const ClinicActivity = () => {
 
   console.log(filterTreatment);
 
+  const formatTodayDate = moment(todayDate?.split("T")[0]).format("DD-MM-YYYY");
+  const formatCurrentDate = moment(currentDate).format("DD-MM-YYYY");
+
   //filter for day wise billing
   const filterBilling = treatValue?.filter((item) => {
     if (currentDate) {
       return (
-        item.bill_date?.split("T")[0] === currentDate &&
+        item.bill_date?.split(" ")[0] === formatCurrentDate &&
         item.payment_status === "paid"
       );
     }
     return (
-      item.bill_date?.split("T")[0] === todayDate?.split("T")[0] &&
+      item.bill_date?.split(" ")[0] === formatTodayDate &&
       item.payment_status === "paid"
     );
   });
@@ -396,20 +399,11 @@ const ClinicActivity = () => {
                           </h5>
                         </div>
                         <div>
-                          {item.appointment_created_at.split(" ")[0] ===
-                          formattedDate ? (
-                            <p className="fw-bold">
-                              {moment(item.appointment_created_at).format(
-                                "h:mm:ss A"
-                              )}
-                            </p>
-                          ) : (
-                            <p className="fw-bold">
-                              {moment(item.appointment_created_at).format(
-                                "YYYY-MM-DD -- h:mm:ss A"
-                              )}
-                            </p>
-                          )}
+                          <p className="fw-bold">
+                            {moment(item.appointment_created_at).format(
+                              "YYYY-MM-DD h:mm:ss A"
+                            )}
+                          </p>
                         </div>
                       </div>
                     </li>
@@ -439,30 +433,11 @@ const ClinicActivity = () => {
                           </h5>
                         </div>
                         <div>
-                          {/* {item.appointment_created_at.split("T")[0] ===
-                          formattedDate ? (
-                            <>
-                              <p className="fw-bold">
-                                {formattedTime >=
-                                item.appointment_created_at
-                                  .split("T")[1]
-                                  ?.split(":")[0]
-                                  ? formattedTime -
-                                    item.appointment_created_at
-                                      .split("T")[1]
-                                      ?.split(":")[0]
-                                  : "0"}{" "}
-                                Hours ago
-                              </p>
-                            </>
-                          ) : (
-                            <>
-                              <p>{item.appointment_created_at.split("T")[0]}</p>
-                            </>
-                          )} */}
-                          {moment(item.appointment_created_at).format(
-                            "YYYY-MM-DD HH:mm:ss"
-                          )}
+                          <p className="fw-bold">
+                            {moment(item.appointment_created_at).format(
+                              "YYYY-MM-DD HH:mm"
+                            )}
+                          </p>
                         </div>
                       </div>
                     </li>
@@ -491,22 +466,7 @@ const ClinicActivity = () => {
                           </h5>
                         </div>
                         <div>
-                          {item.appointment_dateTime?.split("T")[0] ===
-                          formattedDate ? (
-                            <>
-                              <p className="fw-bold">
-                                {formattedTime -
-                                  item.appointment_dateTime
-                                    .split("T")[1]
-                                    ?.split(":")[0]}{" "}
-                                Hours ago
-                              </p>
-                            </>
-                          ) : (
-                            <>
-                              <p>{item.appointment_dateTime?.split("T")[0]}</p>
-                            </>
-                          )}
+                          <p className="fw-bold">{item.bill_date}</p>
                         </div>
                       </div>
                     </li>
@@ -535,29 +495,11 @@ const ClinicActivity = () => {
                           </h5>
                         </div>
                         <div>
-                          {item?.created_at?.split("T")[0] === formattedDate ? (
-                            <>
-                              {/* <p className="fw-bold">
-                                {formattedTime -
-                                  item.created_at
-                                    ?.split("T")[1]
-                                    ?.split(":")[0]}{" "}
-                                Hours ago
-                              </p> */}
-                              <p className="fw-bold">
-                                {formattedTime >=
-                                item.created_at.split(" ")[1]?.split(":")[0]
-                                  ? formattedTime -
-                                    item.created_at.split(" ")[1]?.split(":")[0]
-                                  : "0"}{" "}
-                                Hours ago
-                              </p>
-                            </>
-                          ) : (
-                            <>
-                              <p>{item.created_at?.split(" ")[0]}</p>
-                            </>
-                          )}
+                          <p className="fw-bold">
+                            {moment(item?.created_at).format(
+                              "YYYY-MM-DD HH:mm"
+                            )}
+                          </p>
                         </div>
                       </div>
                     </li>

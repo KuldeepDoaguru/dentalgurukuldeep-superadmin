@@ -130,6 +130,8 @@ const EmployeeProfile = () => {
     let endTime = inEmpData.morningShiftEndTime;
     let eveningStartTime = inEmpData.eveningShiftStartTime;
     let eveningEndTime = inEmpData.eveningShiftEndTime;
+    let allDayShiftStartTime = inEmpData.allDayShiftStartTime;
+    let allDayShiftEndTime = inEmpData.allDayShiftEndTime;
 
     if (name === "morningShiftStartTime") {
       startTime = value;
@@ -139,12 +141,18 @@ const EmployeeProfile = () => {
       eveningStartTime = value;
     } else if (name === "eveningShiftEndTime") {
       eveningEndTime = value;
+    } else if (name === "allDayShiftStartTime") {
+      allDayShiftStartTime = value;
+    } else if (name === "allDayShiftEndTime") {
+      allDayShiftEndTime = value;
     }
 
     const startHour = parseInt(startTime.split(":")[0], 10);
     const endHour = parseInt(endTime.split(":")[0], 10);
     const eveningStartHour = parseInt(eveningStartTime.split(":")[0], 10);
     const eveningEndHour = parseInt(eveningEndTime.split(":")[0], 10);
+    const allDayStartHour = parseInt(allDayShiftStartTime.split(":")[0], 10);
+    const allDayEndHour = parseInt(allDayShiftEndTime.split(":")[0], 10);
 
     if (startHour >= 12) {
       setMorningError("Morning shift start time should be in the AM.");
@@ -175,6 +183,14 @@ const EmployeeProfile = () => {
         eveningShiftStartTime: "",
         eveningShiftEndTime: "",
       }));
+    } else if (eveningStartHour >= eveningEndHour) {
+      alert(
+        "Evening shift start time should be greater than evening shift end time."
+      );
+    } else if (allDayStartHour >= allDayEndHour) {
+      alert(
+        "All day shift start time should be greater than all day end time."
+      );
     } else {
       setMorningError("");
     }
@@ -260,17 +276,6 @@ const EmployeeProfile = () => {
       setError(false);
     }
   };
-
-  useEffect(() => {
-    errorShift();
-  }, [
-    inEmpData.morningShiftStartTime,
-    inEmpData.morningShiftEndTime,
-    inEmpData.allDayShiftStartTime,
-    inEmpData.allDayShiftEndTime,
-    inEmpData.eveningShiftStartTime,
-    inEmpData.eveningShiftEndTime,
-  ]);
 
   console.log(eid);
   const goBack = () => {

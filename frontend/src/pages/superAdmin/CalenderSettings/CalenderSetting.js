@@ -591,59 +591,81 @@ const CalenderSetting = () => {
             <div className="popup">
               <h4 className="text-center">Add Block Day</h4>
               <form className="d-flex flex-column" onSubmit={addHolidays}>
-                <input
-                  type="text"
-                  placeholder="holiday name"
-                  className="rounded p-2"
-                  name="holiday_name"
-                  value={holidays.holiday_name}
-                  onChange={handleHoliday}
-                />
-                <br />
-                <input
-                  type="date"
-                  placeholder="select date"
-                  className="rounded p-2"
-                  name="holiday_date"
-                  value={holidays.holiday_date}
-                  onChange={handleHoliday}
-                />
-                <br />
-                <input
-                  type="time"
-                  placeholder="Add start time"
-                  className="rounded p-2"
-                  name="holiday_start_time"
-                  value={holidays.holiday_start_time}
-                  onChange={handleHoliday}
-                />
-                <br />
-                <input
-                  type="time"
-                  placeholder="Add end time"
-                  className="rounded p-2"
-                  name="holiday_end_time"
-                  value={holidays.holiday_end_time}
-                  onChange={handleHoliday}
-                />
-                <br />
-                <input
-                  type="text"
-                  placeholder="Add Notes"
-                  className="rounded p-2"
-                  name="notes"
-                  value={holidays.notes}
-                  onChange={handleHoliday}
-                />
-                <br />
+                <div className="row g-2">
+                  <div className="col-xxl-4 col-xl-4 col-lg-6 col-md-12 col-sm-12 col-12">
+                    <label htmlFor="" className="form-label">
+                      Holiday Name
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="holiday name"
+                      className="form-control rounded p-2"
+                      name="holiday_name"
+                      value={holidays.holiday_name}
+                      onChange={handleHoliday}
+                    />
+                  </div>
+                  <div className="col-xxl-4 col-xl-4 col-lg-6 col-md-12 col-sm-12 col-12">
+                    <label htmlFor="" className="form-label">
+                      Holiday Date
+                    </label>
+                    <input
+                      type="date"
+                      placeholder="select date"
+                      className="form-control rounded p-2"
+                      name="holiday_date"
+                      value={holidays.holiday_date}
+                      onChange={handleHoliday}
+                    />
+                  </div>
+                  <div className="col-xxl-4 col-xl-4 col-lg-6 col-md-12 col-sm-12 col-12">
+                    <label htmlFor="" className="form-label">
+                      Holiday Start Time
+                    </label>
+                    <input
+                      type="time"
+                      placeholder="Add start time"
+                      className="form-control rounded p-2"
+                      name="holiday_start_time"
+                      value={holidays.holiday_start_time}
+                      onChange={handleHoliday}
+                    />
+                  </div>
+                  <div className="col-xxl-4 col-xl-4 col-lg-6 col-md-12 col-sm-12 col-12">
+                    <label htmlFor="" className="form-label">
+                      Holiday End Time
+                    </label>
+                    <input
+                      type="time"
+                      placeholder="Add end time"
+                      className="form-control rounded p-2"
+                      name="holiday_end_time"
+                      value={holidays.holiday_end_time}
+                      onChange={handleHoliday}
+                    />
+                  </div>
+                  <div className="col-xxl-4 col-xl-4 col-lg-6 col-md-12 col-sm-12 col-12">
+                    <label htmlFor="" className="form-label">
+                      Notes
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Add Notes"
+                      className="form-control rounded p-2"
+                      name="notes"
+                      value={holidays.notes}
+                      onChange={handleHoliday}
+                    />
+                  </div>
+                </div>
 
-                <div className="d-flex justify-content-evenly">
+                <div className="d-flex justify-content-start">
                   <button type="submit" className="btn btn-success mt-2">
                     Save
                   </button>
                   <button
                     type="button"
-                    className="btn btn-danger mt-2"
+                    className="btn btn-danger mt-2 mx-2"
                     onClick={closeUpdatePopup}
                   >
                     Cancel
@@ -665,59 +687,81 @@ const CalenderSetting = () => {
             <div className="popup">
               <h4 className="text-center">Edit Drugs Details</h4>
               <form className="d-flex flex-column" onSubmit={updateHolidetails}>
-                <input
-                  type="text"
-                  placeholder="holiday name"
-                  className="rounded p-2"
-                  name="holiday_name"
-                  value={upHolidays.holiday_name}
-                  onChange={handleHolidayUpdate}
-                />
-                <br />
-                <input
-                  type="date"
-                  placeholder="select date"
-                  className="rounded p-2"
-                  name="holiday_date"
-                  value={upHolidays.holiday_date}
-                  onChange={handleHolidayUpdate}
-                />
-                <br />
-                <input
-                  type="time"
-                  placeholder="Add start time"
-                  className="rounded p-2"
-                  name="holiday_start_time"
-                  value={upHolidays.holiday_start_time}
-                  onChange={handleHolidayUpdate}
-                />
-                <br />
-                <input
-                  type="time"
-                  placeholder="Add end time"
-                  className="rounded p-2"
-                  name="holiday_end_time"
-                  value={upHolidays.holiday_end_time}
-                  onChange={handleHolidayUpdate}
-                />
-                <br />
-                <input
-                  type="text"
-                  placeholder="Add Notes"
-                  className="rounded p-2"
-                  name="notes"
-                  value={upHolidays.notes}
-                  onChange={handleHolidayUpdate}
-                />
-                <br />
+                <div className="row g-2">
+                  <div className="col-xxl-4 col-xl-4 col-lg-6 col-md-12 col-sm-12 col-12">
+                    <label htmlFor="" className="form-label">
+                      Holiday Name
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="holiday name"
+                      className="form-control rounded p-2"
+                      name="holiday_name"
+                      value={upHolidays.holiday_name}
+                      onChange={handleHolidayUpdate}
+                    />
+                  </div>
+                  <div className="col-xxl-4 col-xl-4 col-lg-6 col-md-12 col-sm-12 col-12">
+                    <label htmlFor="" className="form-label">
+                      Holiday Date
+                    </label>
+                    <input
+                      type="date"
+                      placeholder="select date"
+                      className="form-control rounded p-2"
+                      name="holiday_date"
+                      value={upHolidays.holiday_date}
+                      onChange={handleHolidayUpdate}
+                    />
+                  </div>
+                  <div className="col-xxl-4 col-xl-4 col-lg-6 col-md-12 col-sm-12 col-12">
+                    <label htmlFor="" className="form-label">
+                      Holiday Start Time
+                    </label>
+                    <input
+                      type="time"
+                      placeholder="Add start time"
+                      className="form-control rounded p-2"
+                      name="holiday_start_time"
+                      value={upHolidays.holiday_start_time}
+                      onChange={handleHolidayUpdate}
+                    />
+                  </div>
+                  <div className="col-xxl-4 col-xl-4 col-lg-6 col-md-12 col-sm-12 col-12">
+                    <label htmlFor="" className="form-label">
+                      Holiday End Time
+                    </label>
+                    <input
+                      type="time"
+                      placeholder="Add end time"
+                      className="form-control rounded p-2"
+                      name="holiday_end_time"
+                      value={upHolidays.holiday_end_time}
+                      onChange={handleHolidayUpdate}
+                    />
+                  </div>
+                  <div className="col-xxl-4 col-xl-4 col-lg-6 col-md-12 col-sm-12 col-12">
+                    <label htmlFor="" className="form-label">
+                      Notes
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Add Notes"
+                      className="form-control rounded p-2"
+                      name="notes"
+                      value={upHolidays.notes}
+                      onChange={handleHolidayUpdate}
+                    />
+                  </div>
+                </div>
 
-                <div className="d-flex justify-content-evenly">
+                <div className="d-flex justify-content-start">
                   <button type="submit" className="btn btn-success mt-2">
                     Save
                   </button>
                   <button
                     type="button"
-                    className="btn btn-danger mt-2"
+                    className="btn btn-danger mt-2 mx-2"
                     onClick={closeUpdatePopup}
                   >
                     Cancel

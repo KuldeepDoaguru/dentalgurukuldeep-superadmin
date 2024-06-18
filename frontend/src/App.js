@@ -59,6 +59,7 @@ import PendingTest from "./pages/superAdmin/AllReport/LabReport/PendingTest";
 import Compleated from "./pages/superAdmin/AllReport/LabReport/Compleated";
 import FinalFinancialReport from "./pages/superAdmin/FinancialReport/FinalFinancialReport";
 import axios from "axios";
+import RefundedAmountReport from "./pages/superAdmin/AllReport/RefundedAmountReport";
 
 const App = () => {
   // const storedUserData = localStorage.getItem("userData");
@@ -283,6 +284,17 @@ const App = () => {
         <Route
           path="/Compleated"
           element={user.id === null ? <UniversalLogin /> : <Compleated />}
+        />
+
+        <Route
+          path="/admin-refunded-amount-report"
+          element={
+            user.currentUser === null ? (
+              <UniversalLogin />
+            ) : (
+              <RefundedAmountReport />
+            )
+          }
         />
 
         <Route

@@ -16,6 +16,7 @@ const OpdReport = () => {
   console.log(`User Name: ${user.name}, User ID: ${user.id}`);
   console.log("User State:", user);
   const branch = useSelector((state) => state.branch);
+  const { refreshTable } = useSelector((state) => state.user);
   console.log(`User Name: ${branch.name}`);
   const [opdBills, setOpdBills] = useState([]);
   const [fromDate, setFromDate] = useState("");
@@ -113,7 +114,7 @@ const OpdReport = () => {
 
   useEffect(() => {
     getBillDetailsList();
-  }, [branch.name]);
+  }, [branch.name, refreshTable]);
 
   console.log(fromDate, toDate);
 

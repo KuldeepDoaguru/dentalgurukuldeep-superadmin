@@ -520,6 +520,7 @@ const ManageStaff = () => {
                               <th className="thead sticky">Role</th>
                               <th className="thead sticky">Salary</th>
                               <th className="thead sticky">Address</th>
+                              <th className="thead sticky">Status</th>
                               <th className="sticky">Profile Picture</th>
                               <th
                                 className="sticky"
@@ -575,6 +576,9 @@ const ManageStaff = () => {
                                     </td>
                                     <td className="thead">{item.salary}</td>
                                     <td className="thead">{item.address}</td>
+                                    <td className="thead">
+                                      {item.employee_status}
+                                    </td>
                                     <td>
                                       <div className="smallImg">
                                         <img
@@ -798,9 +802,9 @@ const ManageStaff = () => {
                           <option value="onboard">Onboard</option>
                           <option value="Approved">Approved</option>
                           <option value="pending">Pending</option>
-                          <option value="rejected">Rejected</option>
+                          {/* <option value="rejected">Rejected</option> */}
                           <option value="hold">Hold</option>
-                          <option value="leave">Leave</option>
+                          {/* <option value="leave">Leave</option> */}
                         </select>
                       </div>
                     </div>

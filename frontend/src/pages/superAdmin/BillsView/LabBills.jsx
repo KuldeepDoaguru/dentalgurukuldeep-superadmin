@@ -141,7 +141,7 @@ const LabBills = () => {
                         <th>Paid Amount</th>
                         <th>Payment Status</th>
                         <th>Test Status</th>
-                        <th>Payment Date & Time</th>
+                        <th>Payment Date</th>
                         {/* <th>Pending Amount</th> */}
                       </tr>
                     </thead>
@@ -173,7 +173,7 @@ const LabBills = () => {
                                 ? moment(
                                     item?.created_date,
                                     "YYYY-MM-DDTHH:mm"
-                                  ).format("DD/MM/YYYY hh:mm A")
+                                  ).format("DD/MM/YYYY")
                                 : "--"}
                             </td>
 
