@@ -461,8 +461,11 @@ const ClinicActivity = () => {
                         <div>
                           <h5>
                             <FaDotCircle className="mx-1" /> Patient{" "}
-                            {item.patient_name} has paid {item.paid_amount}/-
-                            for the Treatment.
+                            {item.patient_name} has paid{" "}
+                            {item.paid_amount === "0"
+                              ? item.pay_by_sec_amt
+                              : item.paid_amount}
+                            /- for the Treatment.
                           </h5>
                         </div>
                         <div>

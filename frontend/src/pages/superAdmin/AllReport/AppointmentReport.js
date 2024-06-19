@@ -199,13 +199,24 @@ const AppointmentReport = () => {
                                   />
                                 </div>
                                 <div className="d-flex flex-column">
-                                  <button
-                                    className="btn btn-warning mx-2"
-                                    type="submit"
-                                    disabled={error}
-                                  >
-                                    Download Report
-                                  </button>
+                                  {filterAppointDataByMonth.length > 0 ? (
+                                    <button
+                                      className="btn btn-warning mx-2"
+                                      type="submit"
+                                      disabled={error}
+                                    >
+                                      Download Report
+                                    </button>
+                                  ) : (
+                                    <button
+                                      className="btn btn-warning mx-2"
+                                      type="button"
+                                      disabled
+                                    >
+                                      Download Report
+                                    </button>
+                                  )}
+
                                   {error && (
                                     <>
                                       <small className="text-danger">

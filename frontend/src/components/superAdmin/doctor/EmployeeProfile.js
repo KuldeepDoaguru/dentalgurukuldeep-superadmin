@@ -26,7 +26,9 @@ const EmployeeProfile = () => {
   const [empProfilePicture, setEmpProfilePicture] = useState(null);
   const [refresh, setRefresh] = useState(false); // Add refresh state
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [morningError, setMorningError] = useState("");
+  const [branchDetails, setBranchDetails] = useState([]);
   const [inEmpData, setInEmpData] = useState({
     branch: branch.name,
     empName: "",
@@ -53,6 +55,19 @@ const EmployeeProfile = () => {
     speciality: "",
     employee_education: "",
   });
+
+  const getBranchData = async () => {
+    try {
+      const { data } = await axios.get(
+        "https://dentalgurusuperadmin.doaguru.com/api/v1/super-admin/getBranch"
+      );
+      setBranchDetails(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  console.log(branchDetails);
 
   const handleEmpProfilePicture = (e) => {
     const selectedFile = e.target.files[0];
@@ -172,7 +187,7 @@ const EmployeeProfile = () => {
         morningShiftEndTime: "",
       }));
     } else if (
-      eveningStartHour < 14 ||
+      (eveningStartHour && eveningEndHour && eveningStartHour < 14) ||
       (eveningStartHour === 14 &&
         parseInt(eveningStartTime.split(":")[1], 10) === 0)
     ) {
@@ -183,7 +198,11 @@ const EmployeeProfile = () => {
         eveningShiftStartTime: "",
         eveningShiftEndTime: "",
       }));
-    } else if (eveningStartHour >= eveningEndHour) {
+    } else if (
+      eveningStartHour &&
+      eveningEndHour &&
+      eveningStartHour >= eveningEndHour
+    ) {
       alert(
         "Evening shift start time should be greater than evening shift end time."
       );
@@ -191,6 +210,11 @@ const EmployeeProfile = () => {
       alert(
         "All day shift start time should be greater than all day end time."
       );
+      setInEmpData((prevEmpData) => ({
+        ...prevEmpData,
+        allDayShiftStartTime: "",
+        allDayShiftEndTime: "",
+      }));
     } else {
       setMorningError("");
     }
@@ -344,12 +368,14 @@ const EmployeeProfile = () => {
 
   useState(() => {
     getEmployeeData();
+    getBranchData();
   }, [branch.name]);
 
   console.log(empData);
 
   const editEmployeeData = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const formData = new FormData();
       // Append user.data fields to formData
@@ -372,10 +398,12 @@ const EmployeeProfile = () => {
       console.log(response);
       cogoToast.success("data updated successfuly");
       closeUpdatePopup();
+      setLoading(false);
       getEmployeeData();
       setRefresh(!refresh); // Toggle refresh state to re-fetch data
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
   const formatTime = (timeString) => {
@@ -671,6 +699,28 @@ const EmployeeProfile = () => {
             <form className="d-flex flex-column" onSubmit={editEmployeeData}>
               <div className="container">
                 <div className="row">
+                  {/* <div className="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                    <div class="mb-3">
+                      <label for="exampleFormControlInput1" class="form-label">
+                        Branch
+                      </label>
+                      <select
+                        name="branch"
+                        id=""
+                        class="form-control"
+                        required
+                        value={inEmpData.branch}
+                        onChange={handleInputChange}
+                      >
+                        <option value="">-select-</option>
+                        {branchDetails?.map((item) => (
+                          <option value={item.branch_name}>
+                            {item.branch_name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div> */}
                   <div className="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
                     <div class="mb-3">
                       <label for="exampleFormControlInput1" class="form-label">
@@ -1283,8 +1333,12 @@ const EmployeeProfile = () => {
               </div>
 
               <div className="d-flex justify-content-center">
-                <button type="submit" className="btn btn-success mt-2">
-                  Save
+                <button
+                  type="submit"
+                  className="btn btn-success mt-2"
+                  disabled={loading}
+                >
+                  {loading ? "Save..." : "Save"}
                 </button>
                 <button
                   type="button"

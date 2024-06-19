@@ -67,11 +67,13 @@ const App = () => {
   const user = useSelector((state) => state.user);
   console.log(user);
   const selectedBranch = localStorage.getItem("branchName");
+  console.log(selectedBranch);
   const branch = useSelector((state) => state.name);
 
   if (selectedBranch) {
-    const branch = JSON.parse(selectedBranch);
-    dispatch(setBranch(branch));
+    const branchName = JSON.parse(selectedBranch);
+    alert(JSON.stringify(branchName, null, 2));
+    dispatch(setBranch(branchName));
   }
 
   // const [role, setRole] = useState("admin");

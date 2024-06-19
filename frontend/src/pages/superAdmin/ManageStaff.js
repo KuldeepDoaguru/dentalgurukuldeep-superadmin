@@ -27,8 +27,9 @@ const ManageStaff = () => {
   const [empProfilePicture, setEmpProfilePicture] = useState(null);
   const [error, setError] = useState(false);
   const [morningError, setMorningError] = useState("");
+  const [branchDetails, setBranchDetails] = useState([]);
   const [inEmpData, setInEmpData] = useState({
-    branch: branch.name,
+    branch: "",
     empName: "",
     empMobile: "",
     empGender: "",
@@ -52,6 +53,19 @@ const ManageStaff = () => {
     language: "",
     speciality: "",
   });
+
+  const getBranchData = async () => {
+    try {
+      const { data } = await axios.get(
+        "https://dentalgurusuperadmin.doaguru.com/api/v1/super-admin/getBranch"
+      );
+      setBranchDetails(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  console.log(branchDetails);
 
   const handleEmpProfilePicture = (e) => {
     const selectedFile = e.target.files[0];
@@ -307,6 +321,7 @@ const ManageStaff = () => {
 
   useEffect(() => {
     getDocDetailsList();
+    getBranchData();
   }, [branch.name]);
 
   console.log(doctorList);
@@ -325,7 +340,7 @@ const ManageStaff = () => {
 
   const closeUpdatePopup = () => {
     setInEmpData({
-      branch: branch.name,
+      branch: "",
       empName: "",
       empMobile: "",
       empGender: "",
@@ -382,7 +397,7 @@ const ManageStaff = () => {
       addEmployeeTimeline();
       getDocDetailsList();
       setInEmpData({
-        branch: branch.name,
+        branch: "",
         empName: "",
         empMobile: "",
         empGender: "",
@@ -628,6 +643,41 @@ const ManageStaff = () => {
               >
                 <div className="container">
                   <div className="row">
+                    <div className="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                      <div class="mb-3">
+                        <label
+                          for="exampleFormControlInput1"
+                          class="form-label"
+                        >
+                          Branch
+                        </label>
+                        <select
+                          name="branch"
+                          id=""
+                          class="form-control"
+                          required
+                          value={inEmpData.branch}
+                          onChange={handleInputChange}
+                        >
+                          <option value="">-select-</option>
+                          {branchDetails?.map((item) => (
+                            <option value={item.branch_name}>
+                              {item.branch_name}
+                            </option>
+                          ))}
+                        </select>
+                        {/* <input
+                          type="text"
+                          class="form-control"
+                          id="exampleFormControlInput1"
+                          placeholder="Employee Name"
+                          name="empName"
+                          required
+                          value={inEmpData.empName}
+                          onChange={handleInputChange}
+                        /> */}
+                      </div>
+                    </div>
                     <div className="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
                       <div class="mb-3">
                         <label
