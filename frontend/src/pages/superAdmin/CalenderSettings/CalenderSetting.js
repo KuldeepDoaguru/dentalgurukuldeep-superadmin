@@ -9,6 +9,7 @@ import BranchSelector from "../../../components/BranchSelector";
 import axios from "axios";
 import cogoToast from "cogo-toast";
 import { useDispatch, useSelector } from "react-redux";
+import moment from "moment";
 
 const CalenderSetting = () => {
   const dispatch = useDispatch();
@@ -56,10 +57,16 @@ const CalenderSetting = () => {
       });
     } else if (type === "time") {
       // For time inputs
-      setUpData({
+      const updatedData = {
         ...upData,
         [name]: value,
-      });
+      };
+
+      if (name === "close_time" && value <= upData.open_time) {
+        alert("Close time must be greater than open time.");
+      } else {
+        setUpData(updatedData);
+      }
     } else {
       setUpData({
         ...upData,
@@ -97,18 +104,34 @@ const CalenderSetting = () => {
 
   const handleHoliday = (event) => {
     const { name, value } = event.target;
-    setHolidays({
-      ...holidays,
-      [name]: value,
-    });
+    if (name === "holiday_end_time" && value <= holidays.holiday_start_time) {
+      alert("Holiday end time can not be less than holiday start time");
+      setHolidays({
+        ...holidays,
+        holiday_end_time: "",
+      });
+    } else {
+      setHolidays({
+        ...holidays,
+        [name]: value,
+      });
+    }
   };
 
   const handleHolidayUpdate = (event) => {
     const { name, value } = event.target;
-    setUpHolidays({
-      ...upHolidays,
-      [name]: value,
-    });
+    if (name === "holiday_end_time" && value <= upHolidays.holiday_start_time) {
+      alert("Holiday end time can not be less than holiday start time");
+      setUpHolidays({
+        ...holidays,
+        holiday_end_time: "",
+      });
+    } else {
+      setUpHolidays({
+        ...upHolidays,
+        [name]: value,
+      });
+    }
   };
 
   console.log(holidays);
@@ -122,6 +145,13 @@ const CalenderSetting = () => {
   const openEditBlockDaysPopup = (id, item) => {
     console.log(id);
     setSelected(item);
+    setUpHolidays({
+      holiday_name: item.holiday_name,
+      holiday_date: item.holiday_date,
+      holiday_start_time: item.holiday_start_time,
+      holiday_end_time: item.holiday_end_time,
+      notes: item.notes,
+    });
     console.log("open pop up");
     setShowEditBlockDays(true);
   };
@@ -337,13 +367,13 @@ const CalenderSetting = () => {
 
   console.log(holidayList);
   const weekdays = [
-    "monday",
-    "tuesday",
-    "wednesday",
-    "thursday",
-    "friday",
-    "saturday",
-    "sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
   ];
 
   return (
@@ -385,19 +415,18 @@ const CalenderSetting = () => {
                       Current Timing :{" "}
                       <span>
                         Opening Time -{" "}
-                        {brData[0]?.open_time
-                          .split("T")[0]
-                          .split(".")[0]
-                          .slice(0, 5)}
+                        {moment(brData[0]?.open_time, "HH:mm:ss.SSSSSS").format(
+                          "hh:mm A"
+                        )}
                       </span>{" "}
                       To{" "}
                       <span>
                         {" "}
                         Closing Time -{" "}
-                        {brData[0]?.close_time
-                          .split("T")[0]
-                          .split(".")[0]
-                          .slice(0, 5)}
+                        {moment(
+                          brData[0]?.close_time,
+                          "HH:mm:ss.SSSSSS"
+                        ).format("hh:mm A")}
                       </span>
                     </h6>
                     <h6 className="text-center mt-2 fw-bold text-success">

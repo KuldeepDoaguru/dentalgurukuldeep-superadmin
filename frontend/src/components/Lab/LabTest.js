@@ -265,7 +265,7 @@ const LabTest = () => {
         <div>
           <input
             type="text"
-            placeholder="search by lab name or contact or email address"
+            placeholder="search by lab test name"
             className="inputser"
             value={keyword}
             onChange={handleKeywordChange}

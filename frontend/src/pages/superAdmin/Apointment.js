@@ -16,6 +16,7 @@ const Apointment = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [loading, setLoading] = useState(true);
   const branch = useSelector((state) => state.branch);
+  const [status, setStatus] = useState("");
   console.log(branch);
   const complaintsPerPage = 10; // Number of complaints per page
   const [currentPage, setCurrentPage] = useState(0); // Start from the first page
@@ -89,7 +90,8 @@ const Apointment = () => {
     setCurrentPage(0);
   }, [keyword]);
 
-  console.log(appointmentList);
+  console.log(appointmentList[0]?.appointment_status);
+  console.log(status);
 
   const todayDate = new Date();
   const year = todayDate.getFullYear();
@@ -104,11 +106,26 @@ const Apointment = () => {
   const trimmedKeyword = keyword.trim().toLowerCase();
   console.log(trimmedKeyword);
 
-  const searchFilter = appointmentList.filter(
-    (lab) =>
-      lab.patient_name.toLowerCase().includes(trimmedKeyword) ||
-      lab.patient_uhid.toLowerCase().includes(trimmedKeyword)
-  );
+  const searchFilter = appointmentList.filter((lab) => {
+    if (status && trimmedKeyword) {
+      return (
+        lab.appointment_status === status &&
+        (lab.patient_name.toLowerCase().includes(trimmedKeyword) ||
+          lab.patient_uhid.toLowerCase().includes(trimmedKeyword))
+      );
+    } else if (status) {
+      return lab.appointment_status === status;
+    } else if (trimmedKeyword) {
+      return (
+        lab.patient_name.toLowerCase().includes(trimmedKeyword) ||
+        lab.patient_uhid.toLowerCase().includes(trimmedKeyword)
+      );
+    } else {
+      return true; // Show all data when no filters are applied
+    }
+  });
+
+  console.log(searchFilter);
 
   // const filterforOneMonth = searchFilter?.filter((item) => {
   //   return item.appointment_dateTime?.slice(0, 7) === formattedDate.slice(0, 7);
@@ -147,16 +164,48 @@ const Apointment = () => {
 
                     <div className="container-fluid mt-3">
                       <h2 className="text-center"> Appointment Details </h2>
-                      <div className="">
-                        {/* <label>Employee Name :</label> */}
-                        <input
-                          type="text"
-                          placeholder="Search Patient Name or Patient UHID"
-                          className="input"
-                          value={keyword}
-                          onChange={handleKeywordChange}
-                        />
+                      <div>
+                        <div className="row">
+                          {/* <label>Employee Name :</label> */}
+                          <div className="col-xxl-7 col-xl-7 col-lg-7 col-md-6 col-sm-12 col-12">
+                            <input
+                              type="text"
+                              placeholder="Search Patient Name or Patient UHID"
+                              className="input w-100"
+                              value={keyword}
+                              onChange={handleKeywordChange}
+                            />
+                          </div>
+                          <div className="col-xxl-5 col-xl-5 col-lg-5 col-md-6 col-sm-12 col-12">
+                            <div className="d-flex justify-content-end align-items-center mt-3">
+                              <div>
+                                <button className="btn btn-info">
+                                  Filter by Status
+                                </button>
+                              </div>
+
+                              <div className="mx-2">
+                                <select
+                                  class="form-select"
+                                  aria-label="Default select example"
+                                  value={status}
+                                  onChange={(e) => setStatus(e.target.value)}
+                                >
+                                  <option value="">Select-Status</option>
+                                  <option value="Appoint">Appoint</option>
+                                  <option value="Complete">Complete</option>
+                                  <option value="in treatment">
+                                    In treatment
+                                  </option>
+                                  <option value="Check-In">Check-In</option>
+                                  <option value="Cancel">Cancel</option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
+
                       {loading ? (
                         <Lottie
                           options={defaultOptions}

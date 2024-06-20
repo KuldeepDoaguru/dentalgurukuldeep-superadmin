@@ -128,7 +128,7 @@ const NewRegPatient = () => {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="patients" fill="#40407a" />
+                <Bar dataKey="Patients" fill="#40407a" />
               </BarChart>
             </>
           )}

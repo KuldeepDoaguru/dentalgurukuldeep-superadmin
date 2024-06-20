@@ -151,7 +151,7 @@ const EarnTMAdmin = () => {
                 <Tooltip />
                 <Legend />
                 <Bar
-                  dataKey="patients"
+                  dataKey="Patients"
                   fill="#40407a"
                   yAxisId="left"
                   name="Patients"
