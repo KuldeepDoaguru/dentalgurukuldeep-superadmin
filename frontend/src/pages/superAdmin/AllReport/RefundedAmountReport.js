@@ -18,9 +18,10 @@ import Header from "../../../components/Header";
 import Sider from "../../../components/Sider";
 
 const RefundedAmountReport = () => {
-  const user = useSelector((state) => state.user.currentUser);
+  const user = useSelector((state) => state.user);
   const branch = useSelector((state) => state.branch);
   console.log(user);
+  console.log(branch.name);
   const [refundList, setRefundList] = useState([]);
   const location = useLocation();
   const [fromDate, setFromDate] = useState("");
@@ -51,7 +52,7 @@ const RefundedAmountReport = () => {
     setLoading(true);
     try {
       const { data } = await axios.get(
-        `https://dentalguruadmin.doaguru.com/api/v1/admin/getRefundAmountData/${branch}`,
+        `https://dentalgurusuperadmin.doaguru.com/api/v1/super-admin/getRefundAmountData/${branch.name}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -70,7 +71,7 @@ const RefundedAmountReport = () => {
 
   useEffect(() => {
     getRefundList();
-  }, []);
+  }, [branch.name]);
 
   const todayDate = new Date();
 
@@ -84,7 +85,7 @@ const RefundedAmountReport = () => {
 
   console.log(formattedDate.slice(3, 10));
 
-  console.log(refundList[0]?.refund_date?.split(" ")[0].slice(3, 10));
+  console.log(refundList);
 
   const filterAppointDataByMonth = refundList?.filter((item) => {
     return (
@@ -147,176 +148,135 @@ const RefundedAmountReport = () => {
   return (
     <>
       <Container>
-        <Header />
-        <div className="main">
-          <div className="container-fluid">
-            <div className="row flex-nowrap ">
-              <div className="col-lg-1 col-1 p-0">
-                <Sider />
-              </div>
-              <div
-                className="col-lg-11 col-11 ps-0"
-                style={{ marginTop: "0rem" }}
-              >
-                <div className="container-fluid mt-3">
-                  <div className="container-fluid">
-                    <button className="btn btn-success" onClick={goBack}>
-                      <IoMdArrowRoundBack /> Back
-                    </button>
-                    <div className="row mt-3">
-                      <div className="col-12">
-                        <nav class="navbar navbar-expand-lg bg-body-tertiary">
-                          <div class="container d-flex justify-content-center">
-                            <h2 className="">Refunded Amount Reports</h2>
-                          </div>
-                        </nav>
-                      </div>
-                      <div className="container">
-                        <div class="mt-4">
-                          <div className="d-flex justify-content-between mb-2">
-                            <form onSubmit={exportToExcel}>
-                              <div className="d-flex justify-content-between">
-                                <div>
-                                  <input
-                                    type="date"
-                                    name=""
-                                    id=""
-                                    required
-                                    className="p-2 rounded"
-                                    onChange={(e) =>
-                                      setFromDate(e.target.value)
-                                    }
-                                  />
-                                </div>
-                                <div className="mx-2">To</div>
-                                <div>
-                                  <input
-                                    type="date"
-                                    name=""
-                                    id=""
-                                    required
-                                    className="p-2 rounded"
-                                    onChange={(e) => setToDate(e.target.value)}
-                                  />
-                                </div>
-                                <button
-                                  className="btn btn-warning mx-2"
-                                  type="submit"
-                                  disabled={error}
-                                >
-                                  Download Report
-                                </button>
-                              </div>
-                            </form>
-                          </div>
-                          <div className="container-fluid mt-3">
-                            {loading ? (
-                              <Lottie
-                                options={defaultOptions}
-                                height={300}
-                                width={400}
-                              ></Lottie>
-                            ) : (
-                              <>
-                                <div class="table-responsive rounded">
-                                  <table class="table table-bordered rounded shadow">
-                                    <thead className="table-head">
-                                      <tr>
-                                        <th className="table-sno sticky">
-                                          Appointment ID
-                                        </th>
-                                        <th className="sticky">Patient UHID</th>
-                                        <th className="sticky">TPID</th>
-
-                                        <th className="table-small sticky">
-                                          Patient Name
-                                        </th>
-                                        <th className="table-small sticky">
-                                          Contact Number
-                                        </th>
-                                        <th className="table-small sticky">
-                                          Assigned Doctor
-                                        </th>
-
-                                        <th className="table-small sticky">
-                                          Refunded Amount
-                                        </th>
-                                        <th className="table-small sticky">
-                                          Refunded by
-                                        </th>
-                                        <th className="table-small sticky">
-                                          Refund Date & Time
-                                        </th>
-                                        <th className="table-small sticky">
-                                          Refund Status
-                                        </th>
-                                      </tr>
-                                    </thead>
-                                    <tbody>
-                                      {filterAppointDataByMonth
-                                        ?.filter((item) => {
-                                          const billDate =
-                                            item.refund_date?.split(" ")[0]; // Extracting the date part
-                                          if (fromDate && toDate) {
-                                            return (
-                                              billDate >=
-                                                formDateCorrectFormat &&
-                                              billDate <= toDateCorrectFormat
-                                            );
-                                          } else {
-                                            return true;
-                                          }
-                                        })
-                                        .map((item) => (
-                                          <>
-                                            <tr className="table-row">
-                                              <td className="table-sno">
-                                                {item.appointment_id}
-                                              </td>
-                                              <td className="table-small">
-                                                <Link
-                                                  to={`/patient-profile/${item.uhid}`}
-                                                  style={{
-                                                    textDecoration: "none",
-                                                  }}
-                                                >
-                                                  {item.uhid}
-                                                </Link>
-                                              </td>
-                                              <td>{item.tp_id}</td>
-                                              <td>{item.patient_name}</td>
-                                              <td className="table-small">
-                                                {item.patient_number}
-                                              </td>
-                                              <td className="table-small">
-                                                {item.assigned_doctor}
-                                              </td>
-
-                                              <td className="table-small">
-                                                {item.refund_amount}
-                                              </td>
-                                              <td className="table-small">
-                                                {item.refund_by}
-                                              </td>
-                                              <td className="table-small">
-                                                {item.refund_date}
-                                              </td>
-                                              <td>{item.payment_status}</td>
-                                            </tr>
-                                          </>
-                                        ))}
-                                    </tbody>
-                                  </table>
-                                </div>
-                              </>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+        <div className="container-fluid">
+          <div class="mt-4">
+            <div className="d-flex justify-content-between mb-2">
+              <form onSubmit={exportToExcel}>
+                <div className="d-flex justify-content-between align-items-center">
+                  <div>
+                    <input
+                      type="date"
+                      name=""
+                      id=""
+                      required
+                      className="p-2 rounded"
+                      onChange={(e) => setFromDate(e.target.value)}
+                    />
                   </div>
+                  <div className="mx-2">To</div>
+                  <div>
+                    <input
+                      type="date"
+                      name=""
+                      id=""
+                      required
+                      className="p-2 rounded"
+                      onChange={(e) => setToDate(e.target.value)}
+                    />
+                  </div>
+                  <button
+                    className="btn btn-warning mx-2"
+                    type="submit"
+                    disabled={error}
+                  >
+                    Download Report
+                  </button>
                 </div>
-              </div>
+              </form>
+            </div>
+            <div className="container-fluid">
+              {loading ? (
+                <Lottie
+                  options={defaultOptions}
+                  height={300}
+                  width={400}
+                ></Lottie>
+              ) : (
+                <>
+                  <div class="table-responsive rounded">
+                    <table class="table table-bordered rounded shadow">
+                      <thead className="table-head">
+                        <tr>
+                          <th className="table-sno sticky">Appointment ID</th>
+                          <th className="sticky">Patient UHID</th>
+                          <th className="sticky">TPID</th>
+
+                          <th className="table-small sticky">Patient Name</th>
+                          <th className="table-small sticky">Contact Number</th>
+                          <th className="table-small sticky">
+                            Assigned Doctor
+                          </th>
+
+                          <th className="table-small sticky">
+                            Refunded Amount
+                          </th>
+                          <th className="table-small sticky">Refunded by</th>
+                          <th className="table-small sticky">
+                            Refund Date & Time
+                          </th>
+                          <th className="table-small sticky">Refund Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {filterAppointDataByMonth
+                          ?.filter((item) => {
+                            const billDate = item.refund_date?.split(" ")[0]; // Extracting the date part
+                            if (fromDate && toDate) {
+                              return (
+                                billDate >= formDateCorrectFormat &&
+                                billDate <= toDateCorrectFormat
+                              );
+                            } else {
+                              return true;
+                            }
+                          })
+                          .map((item) => (
+                            <>
+                              <tr className="table-row">
+                                <td className="table-sno">
+                                  {item.appointment_id}
+                                </td>
+                                <td className="table-small">
+                                  <Link
+                                    to={`/patient-profile/${item.uhid}`}
+                                    style={{
+                                      textDecoration: "none",
+                                    }}
+                                  >
+                                    {item.uhid}
+                                  </Link>
+                                </td>
+                                <td>{item.tp_id}</td>
+                                <td>{item.patient_name}</td>
+                                <td className="table-small">
+                                  {item.patient_number}
+                                </td>
+                                <td className="table-small">
+                                  {item.assigned_doctor}
+                                </td>
+
+                                <td className="table-small">
+                                  {item.refund_amount}
+                                </td>
+                                <td className="table-small">
+                                  {item.refund_by}
+                                </td>
+                                <td className="table-small">
+                                  {item.refund_date?.split(" ")[0]}{" "}
+                                  {moment(
+                                    item.refund_date?.split(" ")[1],
+                                    "HH:mm:ss"
+                                  ).format("hh:mm A")}
+                                </td>
+                                <td>{item.payment_status}</td>
+                              </tr>
+                            </>
+                          ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -344,7 +304,7 @@ const Container = styled.div`
     white-space: nowrap;
   }
   .table-responsive {
-    height: 30rem;
+    max-height: 30rem;
   }
 
   .sticky {

@@ -11,7 +11,30 @@ const Card = () => {
   const [availableEmp, setAvailableEmp] = useState([]);
   const [billTot, setBillTot] = useState();
   const [treatValue, setTreatValue] = useState([]);
+  const [transformStyle, setTransformStyle] = useState({});
   const user = useSelector((state) => state.user);
+  const [hoveredCardIndex, setHoveredCardIndex] = useState(null);
+
+  const handleMouseMove = (index, e) => {
+    const card = e.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const deltaX = (x - centerX) / 10;
+    const deltaY = (y - centerY) / 10;
+
+    setTransformStyle({
+      transform: `rotateY(${deltaX}deg) rotateX(${-deltaY}deg)`,
+    });
+    setHoveredCardIndex(index);
+  };
+
+  const handleMouseLeave = () => {
+    setTransformStyle({});
+    setHoveredCardIndex(null);
+  };
 
   // console.log(branch.name);
   const getAppointList = async () => {
@@ -190,81 +213,57 @@ const Card = () => {
 
   // console.log(filterForTodayAppoint);
 
+  const cards = [
+    {
+      title: "Earn OPD Today",
+      text: `₹${totalOpdValue}`,
+    },
+    {
+      title: "Employees Present Today",
+      text: filterForEmpAVToday.length,
+    },
+    {
+      title: "Earn Treatment Today",
+      text: `₹${totalTreatValue}`,
+    },
+    {
+      title: "Available Doctors Today",
+      text: filterForDocAVToday.length,
+    },
+    {
+      title: "Today's Appointments",
+      text: filterForTodayAppoint.length,
+    },
+  ];
+
   return (
     <>
       <Container>
         <div className="container">
           <div className="row d-flex justify-content-around">
-            <div className="col-xxl-2 col-xl-2 col-lg-2 col-sm-8 col-8 col-md-5 my-3 p-0">
-              <div className="card">
-                <div className="card-body d-flex justify-content-center flex-column align-items-center">
-                  <div>
-                    <i className="bi bi-people-fill icon"></i>
-                  </div>
-                  <div className="cardtext">
-                    <h5 className="card-title">Earn OPD Today</h5>
-                    <p className="card-text">₹{totalOpdValue}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="col-xxl-2 col-xl-2 col-lg-2 col-sm-8 col-8 col-md-5 my-3 p-0">
-              <div className="card">
-                <div className="card-body d-flex justify-content-center flex-column align-items-center">
-                  <div>
-                    <i className="bi bi-people-fill icon"></i>
-                  </div>
-                  <div className="cardtext">
-                    <h5 className="card-title">Employees Present Today</h5>
-                    <p className="card-text">{filterForEmpAVToday.length}</p>
+            {cards.map((card, index) => (
+              <div
+                className="col-xxl-2 col-xl-2 col-lg-2 col-sm-8 col-8 col-md-5 my-3 p-0"
+                onMouseMove={(e) => handleMouseMove(index, e)}
+                onMouseLeave={handleMouseLeave}
+                key={index}
+              >
+                <div
+                  className="card"
+                  style={hoveredCardIndex === index ? transformStyle : {}}
+                >
+                  <div className="card-body d-flex justify-content-center flex-column align-items-center">
+                    <div>
+                      <i className="bi bi-people-fill icon"></i>
+                    </div>
+                    <div className="cardtext">
+                      <h5 className="card-title">{card.title}</h5>
+                      <p className="card-text">{card.text}</p>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-
-            <div className="col-xxl-2 col-xl-2 col-lg-2 col-sm-8 col-8 col-md-5 my-3 p-0">
-              <div className="card">
-                <div className="card-body d-flex justify-content-center flex-column align-items-center">
-                  <div>
-                    <i className="bi bi-people-fill icon"></i>
-                  </div>
-                  <div className="cardtext">
-                    <h5 className="card-title">Earn Treatment Today</h5>
-                    <p className="card-text">₹{totalTreatValue}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="col-xxl-2 col-xl-2 col-lg-2 col-sm-8 col-8 col-md-5 my-3 p-0">
-              <div className="card">
-                <div className="card-body d-flex justify-content-center flex-column align-items-center">
-                  <div>
-                    <i className="bi bi-people-fill icon"></i>
-                  </div>
-                  <div className="cardtext">
-                    <h5 className="card-title">Available Doctors Today</h5>
-                    <p className="card-text">{filterForDocAVToday.length}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="col-xxl-2 col-xl-2 col-lg-2 col-sm-8 col-8 col-md-5 my-3 p-0">
-              <div className="card">
-                <div className="card-body d-flex justify-content-center flex-column align-items-center">
-                  <div>
-                    <i className="bi bi-people-fill icon"></i>
-                  </div>
-
-                  <div className="cardtext">
-                    <h5 className="card-title">Today's Appointments</h5>
-                    <p className="card-text">{filterForTodayAppoint.length}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </Container>

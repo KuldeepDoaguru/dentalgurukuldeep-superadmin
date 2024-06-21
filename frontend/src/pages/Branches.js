@@ -191,7 +191,7 @@ const Branches = () => {
         image.src = reader.result;
         image.onload = () => {
           if (
-            (image.width === 5900 && image.height === 1844) ||
+            (image.width === 5900 && image.height === 1000) ||
             (image.width === 1920 && image.height === 601)
           ) {
             setBranchFootImg({
@@ -339,7 +339,7 @@ const Branches = () => {
                               </label>
                               <small className="fw-bold mx-1">
                                 (Please select an image with resolution
-                                5900×1844 or 1920×601)
+                                5900×1000 or 1920×400)
                               </small>
                               <input
                                 type="file"
@@ -370,7 +370,7 @@ const Branches = () => {
                               )}
                             </div>
                           </div>
-                          <div className="d-flex justify-content-evenly">
+                          <div className="d-flex justify-content-start">
                             <button
                               type="submit"
                               className="btn btn-success mt-2"
@@ -379,7 +379,7 @@ const Branches = () => {
                             </button>
                             <button
                               type="button"
-                              className="btn btn-danger mt-2"
+                              className="btn btn-danger mt-2 mx-2"
                               onClick={closeUpdatePopup}
                             >
                               Cancel

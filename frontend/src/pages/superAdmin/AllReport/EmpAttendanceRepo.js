@@ -451,7 +451,7 @@ const Container = styled.div`
   }
 
   .table-responsive {
-    height: 30rem;
+    max-height: 30rem;
   }
 
   .sticky {

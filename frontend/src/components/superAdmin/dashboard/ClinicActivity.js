@@ -435,8 +435,12 @@ const ClinicActivity = () => {
                         <div>
                           <p className="fw-bold">
                             {moment(item.appointment_created_at).format(
-                              "YYYY-MM-DD HH:mm"
-                            )}
+                              "YYYY-MM-DD"
+                            )}{" "}
+                            {moment(
+                              item.appointment_created_at?.split(" ")[1],
+                              "HH:mm:ss"
+                            ).format("hh:mm A")}
                           </p>
                         </div>
                       </div>
@@ -469,7 +473,13 @@ const ClinicActivity = () => {
                           </h5>
                         </div>
                         <div>
-                          <p className="fw-bold">{item.bill_date}</p>
+                          <p className="fw-bold">
+                            {item.bill_date?.split(" ")[0]}{" "}
+                            {moment(
+                              item.bill_date?.split(" ")[1],
+                              "HH:mm:ss"
+                            ).format("hh:mm A")}
+                          </p>
                         </div>
                       </div>
                     </li>
@@ -500,7 +510,7 @@ const ClinicActivity = () => {
                         <div>
                           <p className="fw-bold">
                             {moment(item?.created_at).format(
-                              "YYYY-MM-DD HH:mm"
+                              "YYYY-MM-DD hh:mm A"
                             )}
                           </p>
                         </div>
