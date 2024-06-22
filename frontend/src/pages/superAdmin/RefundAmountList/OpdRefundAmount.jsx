@@ -52,7 +52,7 @@ const OpdRefundAmount = () => {
     setLoading(true);
     try {
       const { data } = await axios.get(
-        `https://dentalgurusuperadmin.doaguru.com/api/v1/super-admin/getRefundAmountData/${branch.name}`,
+        `https://dentalgurusuperadmin.doaguru.com/api/v1/super-admin/getRefundOpdAmountData/${branch.name}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -86,12 +86,13 @@ const OpdRefundAmount = () => {
   console.log(formattedDate.slice(3, 10));
 
   console.log(refundList);
+  // const dateChange = moment(refundList[0].refund_date_time).format(
+  //   "DD-MM-YYYY"
+  // );
+  // console.log(dateChange);
 
   const filterAppointDataByMonth = refundList?.filter((item) => {
-    return (
-      item.refund_date?.split(" ")[0].slice(3, 10) ===
-      formattedDate.slice(3, 10)
-    );
+    return item.refund_date_time.slice(3, 10) === formattedDate.slice(3, 10);
   });
 
   console.log(filterAppointDataByMonth);
@@ -210,7 +211,7 @@ const OpdRefundAmount = () => {
                           <th className="table-small sticky">
                             Refunded Amount
                           </th>
-                          <th className="table-small sticky">Refunded by</th>
+                          {/* <th className="table-small sticky">Refunded by</th> */}
                           <th className="table-small sticky">
                             Refund Date & Time
                           </th>
@@ -220,7 +221,8 @@ const OpdRefundAmount = () => {
                       <tbody>
                         {filterAppointDataByMonth
                           ?.filter((item) => {
-                            const billDate = item.refund_date?.split(" ")[0]; // Extracting the date part
+                            const billDate =
+                              item.refund_date_time?.split(" ")[0];
                             if (fromDate && toDate) {
                               return (
                                 billDate >= formDateCorrectFormat &&
@@ -233,42 +235,38 @@ const OpdRefundAmount = () => {
                           .map((item) => (
                             <>
                               <tr className="table-row">
-                                <td className="table-sno">
-                                  {item.appointment_id}
-                                </td>
+                                <td className="table-sno">{item.appoint_id}</td>
                                 <td className="table-small">
                                   <Link
-                                    to={`/patient-profile/${item.uhid}`}
+                                    to={`/patient-profile/${item.patient_uhid}`}
                                     style={{
                                       textDecoration: "none",
                                     }}
                                   >
-                                    {item.uhid}
+                                    {item.patient_uhid}
                                   </Link>
                                 </td>
                                 <td>{item.tp_id}</td>
                                 <td>{item.patient_name}</td>
+                                <td className="table-small">{item.mobileno}</td>
                                 <td className="table-small">
-                                  {item.patient_number}
-                                </td>
-                                <td className="table-small">
-                                  {item.assigned_doctor}
+                                  {item.assigned_doctor_name}
                                 </td>
 
                                 <td className="table-small">
-                                  {item.refund_amount}
+                                  {item.opd_amount}
                                 </td>
-                                <td className="table-small">
+                                {/* <td className="table-small">
                                   {item.refund_by}
-                                </td>
+                                </td> */}
                                 <td className="table-small">
-                                  {item.refund_date?.split(" ")[0]}{" "}
+                                  {item.refund_date_time?.split(" ")[0]}{" "}
                                   {moment(
-                                    item.refund_date?.split(" ")[1],
+                                    item.refund_date_time?.split(" ")[1],
                                     "HH:mm:ss"
                                   ).format("hh:mm A")}
                                 </td>
-                                <td>{item.payment_status}</td>
+                                <td>{item.payment_Status}</td>
                               </tr>
                             </>
                           ))}

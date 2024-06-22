@@ -1141,7 +1141,32 @@ const ManageStaff = () => {
                     <label for="exampleFormControlInput1" class="form-label">
                       Employee Role
                     </label>
-                    <div class="form-check">
+                    {[
+                      "admin",
+                      "receptionist",
+                      "consultant",
+                      "accountant",
+                      "lab attendant",
+                      "doctor",
+                    ].map((role) => (
+                      <div className="form-check" key={role}>
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          id={`flexCheck${role}`}
+                          name={role}
+                          checked={inEmpData.empRole.includes(role)}
+                          onChange={handleCheckChange}
+                        />
+                        <label
+                          className="form-check-label"
+                          htmlFor={`flexCheck${role}`}
+                        >
+                          {role.charAt(0).toUpperCase() + role.slice(1)}
+                        </label>
+                      </div>
+                    ))}
+                    {/* <div class="form-check">
                       <input
                         class="form-check-input"
                         type="checkbox"
@@ -1218,7 +1243,7 @@ const ManageStaff = () => {
                       <label class="form-check-label" for="flexCheckDefault">
                         Doctor
                       </label>
-                    </div>
+                    </div> */}
                   </div>
                   <div className="d-flex">
                     <div className="mb-3">

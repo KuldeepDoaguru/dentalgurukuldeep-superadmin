@@ -220,7 +220,7 @@ const Header = () => {
                               </div>
                               <div className="mx-2">
                                 <button
-                                  className="btn btn-info"
+                                  className="btn btn-info shadow"
                                   onClick={() => updateMarkRead(item.event_id)}
                                 >
                                   Mark as Read
@@ -229,7 +229,7 @@ const Header = () => {
                                   to="/super-admin-notification"
                                   className="mx-2"
                                 >
-                                  <button className="btn btn-info">
+                                  <button className="btn btn-info shadow">
                                     view all
                                   </button>
                                 </Link>
@@ -313,6 +313,7 @@ const Wrapper = styled.div`
     width: 500px;
     left: -27rem;
     overflow-y: auto;
+    background: #bbeff4;
     max-height: calc(100vh - 100px);
     @media screen and (max-width: 900px) {
       width: 500px;

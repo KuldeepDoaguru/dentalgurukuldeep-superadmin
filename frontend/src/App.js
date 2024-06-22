@@ -289,7 +289,7 @@ const App = () => {
         />
 
         <Route
-          path="/admin-refunded-amount-report"
+          path="/refunded-amount-report"
           element={
             user.currentUser === null ? <UniversalLogin /> : <AllRefundList />
           }

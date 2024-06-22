@@ -995,7 +995,7 @@ const EmployeeProfile = () => {
                       />
                     </div>
                   </div>
-                  <div className="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                  {/* <div className="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
                     <div className="mb-3">
                       <label for="exampleFormControlInput1" class="form-label">
                         One Time Login Password
@@ -1010,7 +1010,7 @@ const EmployeeProfile = () => {
                         onChange={handleInputChange}
                       />
                     </div>
-                  </div>
+                  </div> */}
                   {/* doctor only */}
 
                   {inEmpData.empDesignation === "doctor" && (
