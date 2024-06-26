@@ -132,7 +132,11 @@ const EmpDetailsRepo = () => {
                         <div className="d-flex justify-content-between mb-2 mt-4">
                           <div className="d-flex justify-content-between">
                             <button
-                              className="btn btn-warning mx-2"
+                              className="btn btn-warning mx-2 text-white shadow"
+                              style={{
+                                backgroundColor: "#014cb1",
+                                borderColor: "#014cb1",
+                              }}
                               onClick={downloadEmployeeData}
                             >
                               Download Report
@@ -141,7 +145,13 @@ const EmpDetailsRepo = () => {
 
                           <div className="d-flex justify-content-between">
                             <div>
-                              <button className="btn btn-info">
+                              <button
+                                className="btn btn-info text-white shadow"
+                                style={{
+                                  backgroundColor: "#014cb1",
+                                  borderColor: "#014cb1",
+                                }}
+                              >
                                 Filter by Designation
                               </button>
                             </div>

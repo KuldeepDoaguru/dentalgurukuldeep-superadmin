@@ -37,7 +37,7 @@ const Timeline = () => {
   }, []);
   return (
     <Wrapper>
-      <div className="table cont-box">
+      <div className="cont-box">
         <div
           className="widget-area-2 proclinic-box-shadow mx-3 mt-5"
           id="tableres"
@@ -76,7 +76,7 @@ export default Timeline;
 const Wrapper = styled.div`
   .table {
     @media screen and (max-width: 768px) {
-      width: 20rem;
+      /* width: 20rem; */
       margin-left: -0.2rem;
     }
   }
@@ -86,5 +86,15 @@ const Wrapper = styled.div`
     @media screen and (max-width: 900px) {
       width: 100%;
     }
+  }
+
+  .table-responsive {
+    max-height: 30rem;
+    overflow-x: scroll;
+  }
+
+  td,
+  th {
+    white-space: nowrap;
   }
 `;

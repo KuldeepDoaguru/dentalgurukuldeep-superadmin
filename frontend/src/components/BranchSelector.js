@@ -87,7 +87,7 @@ export default BranchSelector;
 const Container = styled.div`
   .select-style {
     border: none;
-    background-color: #22a6b3;
+    background-color: #014cb1 !important;
     font-weight: bold;
     color: white;
   }

@@ -569,7 +569,7 @@ const Container = styled.div`
   }
 
   .navlink.active {
-    background-color: red;
+    background-color: #004aad;
     color: white;
     border-radius: 1rem;
   }

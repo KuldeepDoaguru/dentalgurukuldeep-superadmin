@@ -63,7 +63,7 @@ export default SuperAdProfile;
 const Container = styled.div`
   th,
   td {
-    font-size: 2rem;
+    font-size: 1rem;
     padding: 1rem;
   }
 

@@ -258,7 +258,10 @@ const Overview = () => {
           </div>
 
           <div className="row mt-5">
-            <div className="col-lg-8" id="tableresponsive">
+            <div
+              className="col-xxl-8 col-xl-8 col-lg-12 col-md-12 col-sm-12 col-12"
+              id="tableresponsive"
+            >
               <div className="table-responsive">
                 <h5>Appointment</h5>
                 <table className="table table-bordered table-striped">
@@ -398,7 +401,10 @@ const Overview = () => {
                 </table>
               </div>
             </div>
-            <div className="col-lg-4" id="tableresponsive">
+            <div
+              className="col-xxl-4 col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12"
+              id="tableresponsive"
+            >
               {/* <h5>Patient Notes</h5>
               <table className="table table-bordered table-striped">
                 <thead>
@@ -443,12 +449,12 @@ export default Overview;
 const Container = styled.div`
   #tableresponsive {
     @media screen and (max-width: 768px) {
-      width: 73%;
+      width: 100%;
     }
   }
   #tableresponsive1 {
     @media screen and (max-width: 768px) {
-      width: 70%;
+      width: 100%;
     }
   }
   #myTab {

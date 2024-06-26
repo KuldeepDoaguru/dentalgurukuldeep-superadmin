@@ -18,8 +18,8 @@ const Apointment = () => {
   const branch = useSelector((state) => state.branch);
   const [status, setStatus] = useState("");
   console.log(branch);
-  const complaintsPerPage = 10; // Number of complaints per page
-  const [currentPage, setCurrentPage] = useState(0); // Start from the first page
+  const complaintsPerPage = 10;
+  const [currentPage, setCurrentPage] = useState(0);
   const user = useSelector((state) => state.user);
   const [appointmentList, setAppointmentList] = useState([]);
   const [timeLIneData, setTimeLineData] = useState();
@@ -90,7 +90,7 @@ const Apointment = () => {
     setCurrentPage(0);
   }, [keyword]);
 
-  console.log(appointmentList[0]?.appointment_status);
+  console.log(appointmentList);
   console.log(status);
 
   const todayDate = new Date();
@@ -106,15 +106,21 @@ const Apointment = () => {
   const trimmedKeyword = keyword.trim().toLowerCase();
   console.log(trimmedKeyword);
 
+  const uniqueDoctor = [
+    ...new Set(appointmentList?.map((item) => item.assigned_doctor_name)),
+  ];
+
+  console.log(uniqueDoctor);
+
   const searchFilter = appointmentList.filter((lab) => {
     if (status && trimmedKeyword) {
       return (
-        lab.appointment_status === status &&
+        lab.assigned_doctor_name === status &&
         (lab.patient_name.toLowerCase().includes(trimmedKeyword) ||
           lab.patient_uhid.toLowerCase().includes(trimmedKeyword))
       );
     } else if (status) {
-      return lab.appointment_status === status;
+      return lab.assigned_doctor_name === status;
     } else if (trimmedKeyword) {
       return (
         lab.patient_name.toLowerCase().includes(trimmedKeyword) ||
@@ -179,8 +185,14 @@ const Apointment = () => {
                           <div className="col-xxl-5 col-xl-5 col-lg-5 col-md-6 col-sm-12 col-12">
                             <div className="d-flex justify-content-end align-items-center mt-3">
                               <div>
-                                <button className="btn btn-info">
-                                  Filter by Status
+                                <button
+                                  className="btn btn-info text-white"
+                                  style={{
+                                    backgroundColor: "#014cb1",
+                                    borderColor: "#014cb1",
+                                  }}
+                                >
+                                  Filter by Doctor
                                 </button>
                               </div>
 
@@ -191,18 +203,19 @@ const Apointment = () => {
                                   value={status}
                                   onChange={(e) => setStatus(e.target.value)}
                                 >
-                                  <option value="">Select-Status</option>
-                                  <option value="Appoint">Appoint</option>
-                                  <option value="Complete">Complete</option>
-                                  <option value="in treatment">
-                                    In treatment
-                                  </option>
-                                  <option value="Check-In">Check-In</option>
-                                  <option value="Cancel">Cancel</option>
+                                  <option value="">Select-</option>
+                                  {uniqueDoctor?.map((item) => (
+                                    <>
+                                      <option value={item}>{item}</option>
+                                    </>
+                                  ))}
                                 </select>
                               </div>
                             </div>
                           </div>
+                        </div>
+                        <div>
+                          <h4>Total Appointments : {searchFilter.length}</h4>
                         </div>
                       </div>
 
@@ -251,8 +264,12 @@ const Apointment = () => {
                                     </td>
                                     <td className="table-small">
                                       <Link
+                                        className="fw-bold"
                                         to={`/patient-profile/${item.patient_uhid}`}
-                                        style={{ textDecoration: "none" }}
+                                        style={{
+                                          textDecoration: "none",
+                                          color: "#014cb1",
+                                        }}
                                       >
                                         {item.patient_uhid}
                                       </Link>
@@ -419,12 +436,15 @@ const Container = styled.div`
   .pagination {
     display: flex;
     justify-content: flex-end;
+
     ul {
       display: flex;
       justify-content: space-between;
       gap: 15px;
+
       li {
         list-style: none;
+        background-color: #000;
       }
     }
   }
@@ -480,24 +500,34 @@ const PaginationContainer = styled.div`
   .pagination li a {
     display: block;
     padding: 8px 16px;
-    border: 1px solid black;
+    border: 1px solid #e6ecf1;
     color: #007bff;
     cursor: pointer;
+    /* background-color: #004aad0a; */
     text-decoration: none;
+    border-radius: 5px;
+    box-shadow: 0px 0px 1px #000;
   }
 
   .pagination li.active a {
-    background-color: #007bff;
+    background-color: #004aad;
     color: white;
-    border: 1px solid #007bff;
+    border: 1px solid #004aad;
+    border-radius: 5px;
   }
 
   .pagination li.disabled a {
-    color: #ddd;
+    color: white;
     cursor: not-allowed;
+    border-radius: 5px;
+    background-color: #3a4e69;
+    border: 1px solid #3a4e69;
   }
 
   .pagination li a:hover:not(.active) {
-    background-color: #ddd;
+    background-color: #004aad;
+    color: white;
+    border-radius: 5px;
+    border: 1px solid #004aad;
   }
 `;

@@ -354,12 +354,12 @@ export default Navbar;
 const Wrapper = styled.div`
   #tableresponsive {
     @media screen and (max-width: 768px) {
-      width: 73%;
+      width: 100%;
     }
   }
   #tableresponsive1 {
     @media screen and (max-width: 768px) {
-      width: 70%;
+      width: 100%;
     }
   }
   #myTab {
@@ -373,8 +373,8 @@ const Wrapper = styled.div`
   } */
 
   .nav-link {
-    background-color: #22a6b3;
-    color: #000;
+    background-color: #004aad;
+    color: #fff;
     margin-left: 1px;
   }
 `;

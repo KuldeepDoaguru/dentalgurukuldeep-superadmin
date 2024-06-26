@@ -109,7 +109,7 @@ const PatientDetailsLIst = () => {
                 </div>
                 <div className="container-fluid mt-3">
                   <h2 className="text-center">Patient Details List</h2>
-                  <div className="d-flex justify-content-between">
+                  <div className="d-flex justify-content-between align-items-center">
                     <div className="w-50">
                       {/* <label>Patient Name :</label> */}
                       <input
@@ -121,12 +121,7 @@ const PatientDetailsLIst = () => {
                       />
                     </div>
                     <div>
-                      {/* <button
-                        className="btn btn-success"
-                        // onClick={() => openAddEmployeePopup()}
-                      >
-                        Add Employee
-                      </button> */}
+                      <h4>Total : {searchFilter.length}</h4>
                     </div>
                   </div>
 
@@ -139,7 +134,7 @@ const PatientDetailsLIst = () => {
                     ></Lottie>
                   ) : (
                     <>
-                      <div class="table-responsive mt-4">
+                      <div class="table-responsive">
                         <table class="table table-bordered">
                           <thead className="table-head">
                             <tr>
@@ -167,8 +162,12 @@ const PatientDetailsLIst = () => {
                                 <tr className="table-row">
                                   <td className="thead">
                                     <Link
+                                      className="fw-bold"
                                       to={`/patient-profile/${item.uhid}`}
-                                      style={{ textDecoration: "none" }}
+                                      style={{
+                                        textDecoration: "none",
+                                        color: "#004aad",
+                                      }}
                                     >
                                       {item.uhid}
                                     </Link>
@@ -190,7 +189,13 @@ const PatientDetailsLIst = () => {
                                       <Link
                                         to={`/patient-profile/${item.uhid}`}
                                       >
-                                        <button className="btn btn-warning">
+                                        <button
+                                          className="btn btn-warning text-white shadow"
+                                          style={{
+                                            backgroundColor: "#014cb1",
+                                            borderColor: "#014cb1",
+                                          }}
+                                        >
                                           View Details
                                         </button>
                                       </Link>
@@ -305,24 +310,34 @@ const PaginationContainer = styled.div`
   .pagination li a {
     display: block;
     padding: 8px 16px;
-    border: 1px solid black;
+    border: 1px solid #e6ecf1;
     color: #007bff;
     cursor: pointer;
+    /* background-color: #004aad0a; */
     text-decoration: none;
+    border-radius: 5px;
+    box-shadow: 0px 0px 1px #000;
   }
 
   .pagination li.active a {
-    background-color: #007bff;
+    background-color: #004aad;
     color: white;
-    border: 1px solid #007bff;
+    border: 1px solid #004aad;
+    border-radius: 5px;
   }
 
   .pagination li.disabled a {
-    color: #ddd;
+    color: white;
     cursor: not-allowed;
+    border-radius: 5px;
+    background-color: #3a4e69;
+    border: 1px solid #3a4e69;
   }
 
   .pagination li a:hover:not(.active) {
-    background-color: #ddd;
+    background-color: #004aad;
+    color: white;
+    border-radius: 5px;
+    border: 1px solid #004aad;
   }
 `;

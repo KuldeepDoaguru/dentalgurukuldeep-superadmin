@@ -9,6 +9,7 @@ import cogoToast from "cogo-toast";
 import { Link, useNavigate } from "react-router-dom";
 import Lottie from "react-lottie";
 import animationData from "../../animation/loading-effect.json";
+import { IoPersonAdd } from "react-icons/io5";
 
 const ManageStaff = () => {
   const [showAddEmployee, setShowAddEmployee] = useState(false);
@@ -27,6 +28,7 @@ const ManageStaff = () => {
   const [empProfilePicture, setEmpProfilePicture] = useState(null);
   const [error, setError] = useState(false);
   const [morningError, setMorningError] = useState("");
+
   const [branchDetails, setBranchDetails] = useState([]);
   const [inEmpData, setInEmpData] = useState({
     branch: "",
@@ -326,6 +328,12 @@ const ManageStaff = () => {
 
   console.log(doctorList);
 
+  const notApprovedList = doctorList.filter((item) => {
+    return item.employee_status !== "Approved";
+  });
+
+  console.log(notApprovedList);
+
   const openAddEmployeePopup = (index, item) => {
     // setSelectedItem(item);
     console.log("open pop up");
@@ -473,6 +481,29 @@ const ManageStaff = () => {
   //     lab.mobileno.includes(trimmedKeyword)
   // );
 
+  const editEmployeeData = async (eid) => {
+    setLoading(true);
+    try {
+      const response = await axios.put(
+        `https://dentalgurusuperadmin.doaguru.com/api/v1/super-admin/editEmployeeDetails/${branch.name}/${eid}`,
+        { status: "Approved" },
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+      console.log(response);
+      cogoToast.success("Employee Approved successfuly");
+      setLoading(false);
+      getDocDetailsList();
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <Container>
@@ -489,9 +520,101 @@ const ManageStaff = () => {
                     <BranchSelector />
                   </div>
                 </div>
+                {notApprovedList.length > 0 && (
+                  <>
+                    <div className="container mt-4">
+                      <h2 className="text-center pb-2">Approve Employees</h2>
+                      <div class="table-responsive">
+                        <table class="table table-bordered">
+                          <thead className="table-head">
+                            <tr>
+                              <th className="thead sticky">Emp ID</th>
+                              <th className="thead sticky">Name</th>
+                              <th className="thead sticky">Designation</th>
+                              <th className="thead sticky">Role</th>
+                              <th className="thead sticky">Status</th>
+
+                              <th
+                                className="sticky"
+                                style={{ minWidth: "10rem" }}
+                              >
+                                Actions
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {notApprovedList
+                              ?.filter((val) => {
+                                if (keyword === "") {
+                                  return true;
+                                } else if (
+                                  val.employee_name
+                                    .toLowerCase()
+                                    .includes(trimmedKeyword) ||
+                                  val.employee_designation
+                                    .toLowerCase()
+                                    .includes(trimmedKeyword) ||
+                                  val.employee_mobile.includes(
+                                    trimmedKeyword
+                                  ) ||
+                                  val.employee_ID
+                                    .toLowerCase()
+                                    .includes(trimmedKeyword)
+                                ) {
+                                  return val;
+                                }
+                              })
+                              .map((item) => (
+                                <>
+                                  <tr className="table-row">
+                                    <td className="thead">
+                                      {item.employee_ID}
+                                    </td>
+                                    <td className="thead">
+                                      {item.employee_name}
+                                    </td>
+
+                                    <td className="thead">
+                                      {item.employee_designation}
+                                    </td>
+                                    <td className="thead">
+                                      {item.employee_role}
+                                    </td>
+
+                                    <td className="thead">
+                                      {item.employee_status}
+                                    </td>
+
+                                    <td
+                                      className=""
+                                      style={{ minWidth: "13rem" }}
+                                    >
+                                      <button
+                                        className="btn btn-warning text-white shadow"
+                                        style={{
+                                          backgroundColor: "#004aad",
+                                          borderColor: "#004aad",
+                                        }}
+                                        onClick={() =>
+                                          editEmployeeData(item.employee_ID)
+                                        }
+                                      >
+                                        Approve
+                                      </button>
+                                    </td>
+                                  </tr>
+                                </>
+                              ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </>
+                )}
+
                 <div className="container-fluid mt-3">
                   <h2 className="text-center">Manage Employee</h2>
-                  <div className="d-flex justify-content-between">
+                  <div className="d-flex justify-content-between align-items-center">
                     <div className="w-50">
                       {/* <label>Employee Name :</label> */}
                       <input
@@ -506,12 +629,19 @@ const ManageStaff = () => {
                     </div>
                     <div>
                       <button
-                        className="btn btn-success"
+                        className="btn btn-success text-white shadow"
+                        style={{
+                          backgroundColor: "#014cb1",
+                          borderColor: "#014cb1",
+                        }}
                         onClick={() => openAddEmployeePopup()}
                       >
-                        Add Employee
+                        <IoPersonAdd /> {"  "}Add Employee
                       </button>
                     </div>
+                  </div>
+                  <div>
+                    <h4>Total Employees : {doctorList.length}</h4>
                   </div>
 
                   {loading ? (
@@ -523,7 +653,7 @@ const ManageStaff = () => {
                     ></Lottie>
                   ) : (
                     <>
-                      <div class="table-responsive mt-4">
+                      <div class="table-responsive">
                         <table class="table table-bordered">
                           <thead className="table-head">
                             <tr>
@@ -609,7 +739,13 @@ const ManageStaff = () => {
                                       <Link
                                         to={`/employee-profile/${item.employee_ID}`}
                                       >
-                                        <button className="btn btn-warning">
+                                        <button
+                                          className="btn btn-warning text-white shadow"
+                                          style={{
+                                            backgroundColor: "#014cb1",
+                                            borderColor: "#014cb1",
+                                          }}
+                                        >
                                           Edit/View
                                         </button>
                                       </Link>

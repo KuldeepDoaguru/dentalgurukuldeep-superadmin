@@ -373,13 +373,17 @@ const Branches = () => {
                           <div className="d-flex justify-content-start">
                             <button
                               type="submit"
-                              className="btn btn-success mt-2"
+                              className="btn btn-success mt-2 text-white shadow"
+                              style={{
+                                backgroundColor: "#014cb1",
+                                borderColor: "#014cb1",
+                              }}
                             >
                               update
                             </button>
                             <button
                               type="button"
-                              className="btn btn-danger mt-2 mx-2"
+                              className="btn btn-danger mt-2 mx-2 text-white shadow"
                               onClick={closeUpdatePopup}
                             >
                               Cancel
@@ -511,7 +515,11 @@ const Branches = () => {
                                       style={{ width: "10%" }}
                                     >
                                       <button
-                                        className="btn btn-warning"
+                                        className="btn btn-warning text-white shadow"
+                                        style={{
+                                          backgroundColor: "#014cb1",
+                                          borderColor: "#014cb1",
+                                        }}
                                         onClick={() =>
                                           openUpdatePopup(item.branch_id, item)
                                         }

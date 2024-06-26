@@ -145,45 +145,65 @@ const RefundedAmountReport = () => {
 
   console.log(error);
 
+  const totalRefundAmount = refundList.reduce((total, item) => {
+    return total + item.refund_amount;
+  }, 0);
+
   return (
     <>
       <Container>
         <div className="container-fluid">
           <div class="mt-4">
-            <div className="d-flex justify-content-between mb-2">
-              <form onSubmit={exportToExcel}>
-                <div className="d-flex justify-content-between align-items-center">
-                  <div>
-                    <input
-                      type="date"
-                      name=""
-                      id=""
-                      required
-                      className="p-2 rounded"
-                      onChange={(e) => setFromDate(e.target.value)}
-                    />
-                  </div>
-                  <div className="mx-2">To</div>
-                  <div>
-                    <input
-                      type="date"
-                      name=""
-                      id=""
-                      required
-                      className="p-2 rounded"
-                      onChange={(e) => setToDate(e.target.value)}
-                    />
-                  </div>
-                  <button
-                    className="btn btn-warning mx-2"
-                    type="submit"
-                    disabled={error}
-                  >
-                    Download Report
-                  </button>
+            <div className="row">
+              <div className="col-xxl-7 col-xl-7 col-lg-7 col-md-12 col-sm-12 col-12">
+                <div className="d-flex justify-content-between mb-2">
+                  <form onSubmit={exportToExcel}>
+                    <div className="d-flex justify-content-between align-items-center">
+                      <div>
+                        <input
+                          type="date"
+                          name=""
+                          id=""
+                          required
+                          className="p-2 rounded"
+                          onChange={(e) => setFromDate(e.target.value)}
+                        />
+                      </div>
+                      <div className="mx-2">To</div>
+                      <div>
+                        <input
+                          type="date"
+                          name=""
+                          id=""
+                          required
+                          className="p-2 rounded"
+                          onChange={(e) => setToDate(e.target.value)}
+                        />
+                      </div>
+                      <button
+                        className="btn btn-warning mx-2 text-white shadow"
+                        style={{
+                          backgroundColor: "#014cb1",
+                          borderColor: "#014cb1",
+                        }}
+                        type="submit"
+                        disabled={error}
+                      >
+                        Download Report
+                      </button>
+                    </div>
+                  </form>
                 </div>
-              </form>
+              </div>
+              <div className="col-xxl-5 col-xl-5 col-lg-5 col-md-12 col-sm-12 col-12">
+                <div className="d-flex justify-content-end align-items-center mt-3">
+                  <div>
+                    <h4 className="">Total Refunded: {totalRefundAmount}/-</h4>
+                  </div>
+                </div>
+              </div>
             </div>
+
             <div className="container-fluid">
               {loading ? (
                 <Lottie
@@ -238,9 +258,11 @@ const RefundedAmountReport = () => {
                                 </td>
                                 <td className="table-small">
                                   <Link
+                                    className="fw-bold"
                                     to={`/patient-profile/${item.uhid}`}
                                     style={{
                                       textDecoration: "none",
+                                      color: "#004aad",
                                     }}
                                   >
                                     {item.uhid}

@@ -253,7 +253,11 @@ const LabTest = () => {
             <div className="col-xxl-1 col-xl-1 col-lg-1 col-md-1 col-sm-12 col-12 m-md-3">
               <div className="">
                 <button
-                  className="btn btn-info lab-actbtn"
+                  className="btn btn-info lab-actbtn text-white"
+                  style={{
+                    backgroundColor: "#014cb1",
+                    borderColor: "#014cb1",
+                  }}
                   onClick={() => openAddLabTestPopup()}
                 >
                   Add Lab Test
@@ -306,6 +310,10 @@ const LabTest = () => {
                         <td>
                           <button
                             className="btn btn-warning text-light"
+                            style={{
+                              backgroundColor: "#014cb1",
+                              borderColor: "#014cb1",
+                            }}
                             onClick={() => openUpdatePopup(item)}
                           >
                             <TbEdit size={22} />
@@ -617,24 +625,34 @@ const PaginationContainer = styled.div`
   .pagination li a {
     display: block;
     padding: 8px 16px;
-    border: 1px solid black;
+    border: 1px solid #e6ecf1;
     color: #007bff;
     cursor: pointer;
+    /* background-color: #004aad0a; */
     text-decoration: none;
+    border-radius: 5px;
+    box-shadow: 0px 0px 1px #000;
   }
 
   .pagination li.active a {
-    background-color: #007bff;
+    background-color: #004aad;
     color: white;
-    border: 1px solid #007bff;
+    border: 1px solid #004aad;
+    border-radius: 5px;
   }
 
   .pagination li.disabled a {
-    color: #ddd;
+    color: white;
     cursor: not-allowed;
+    border-radius: 5px;
+    background-color: #3a4e69;
+    border: 1px solid #3a4e69;
   }
 
   .pagination li a:hover:not(.active) {
-    background-color: #ddd;
+    background-color: #004aad;
+    color: white;
+    border-radius: 5px;
+    border: 1px solid #004aad;
   }
 `;

@@ -208,6 +208,7 @@ const Header = () => {
                                 <div className="right-noti">
                                   <h4>
                                     <a
+                                      className="text-white"
                                       href={item.open}
                                       target="_blank"
                                       rel="noopener noreferrer"
@@ -215,12 +216,16 @@ const Header = () => {
                                       {item.title}
                                     </a>
                                   </h4>
-                                  <p>{item.event_msg}</p>
+                                  <p className="text-white">{item.event_msg}</p>
                                 </div>
                               </div>
                               <div className="mx-2">
                                 <button
                                   className="btn btn-info shadow"
+                                  style={{
+                                    backgroundColor: "#d6e0ec",
+                                    borderColor: "#d6e0ec",
+                                  }}
                                   onClick={() => updateMarkRead(item.event_id)}
                                 >
                                   Mark as Read
@@ -229,7 +234,13 @@ const Header = () => {
                                   to="/super-admin-notification"
                                   className="mx-2"
                                 >
-                                  <button className="btn btn-info shadow">
+                                  <button
+                                    className="btn btn-info shadow"
+                                    style={{
+                                      backgroundColor: "#d6e0ec",
+                                      borderColor: "#d6e0ec",
+                                    }}
+                                  >
                                     view all
                                   </button>
                                 </Link>
@@ -313,7 +324,7 @@ const Wrapper = styled.div`
     width: 500px;
     left: -27rem;
     overflow-y: auto;
-    background: #bbeff4;
+    background: #004aad;
     max-height: calc(100vh - 100px);
     @media screen and (max-width: 900px) {
       width: 500px;

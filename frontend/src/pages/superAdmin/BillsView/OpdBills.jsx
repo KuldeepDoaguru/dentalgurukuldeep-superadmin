@@ -15,6 +15,7 @@ const OpdBills = () => {
   console.log(user);
   console.log(branch);
   const [appointmentList, setAppointmentList] = useState([]);
+  const [doctor, setDoctor] = useState("");
   const [keyword, setkeyword] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
 
@@ -73,6 +74,12 @@ const OpdBills = () => {
     return item.treatment_provided === "OPD";
   });
 
+  const uniqueDoctor = [
+    ...new Set(filterOpd?.map((item) => item.assigned_doctor_name)),
+  ];
+
+  console.log(uniqueDoctor);
+
   const handleKeywordChange = (e) => {
     setkeyword(e.target.value);
   };
@@ -80,11 +87,28 @@ const OpdBills = () => {
   const trimmedKeyword = keyword.trim().toLowerCase();
   console.log(trimmedKeyword);
 
-  const searchFilter = filterOpd.filter(
-    (lab) =>
-      lab.patient_name.toLowerCase().includes(trimmedKeyword) ||
-      lab.patient_uhid.toLowerCase().includes(trimmedKeyword)
-  );
+  const searchFilter = filterOpd.filter((lab) => {
+    if (doctor && trimmedKeyword) {
+      return (
+        lab.assigned_doctor_name === doctor &&
+        (lab.patient_name.toLowerCase().includes(trimmedKeyword) ||
+          lab.uhid.toLowerCase().includes(trimmedKeyword))
+      );
+    } else if (doctor) {
+      return lab.assigned_doctor_name === doctor;
+    } else if (trimmedKeyword) {
+      return (
+        lab.patient_name.toLowerCase().includes(trimmedKeyword) ||
+        lab.uhid.toLowerCase().includes(trimmedKeyword)
+      );
+    } else {
+      return true; // Show all data when no filters are applied
+    }
+  });
+
+  const totalOpdAmount = searchFilter.reduce((total, item) => {
+    return total + item.opd_amount;
+  }, 0);
 
   const billPerPage = 10;
 
@@ -102,18 +126,60 @@ const OpdBills = () => {
 
   const displayedAppointments = filterAppointDataByMonth();
 
+  console.log(displayedAppointments);
+
   return (
     <>
       <Container>
-        <div className="d-flex justify-content-between">
-          <div className="w-50">
-            <input
-              type="text"
-              placeholder="Search Patient Name or UHID"
-              className=""
-              value={keyword}
-              onChange={handleKeywordChange}
-            />
+        <div className="">
+          <div className="row">
+            <div className="col-xxl-7 col-xl-7 col-lg-7 col-md-6 col-sm-12 col-12">
+              <div className="">
+                {/* <label>Patient Name :</label> */}
+                <input
+                  type="text"
+                  placeholder="Search Patient Name or Contact Number or UHID"
+                  className=""
+                  value={keyword}
+                  onChange={handleKeywordChange}
+                />
+              </div>
+            </div>
+            <div className="col-xxl-5 col-xl-5 col-lg-5 col-md-6 col-sm-12 col-12">
+              <div className="d-flex justify-content-end align-items-center mt-3">
+                <div>
+                  <button
+                    className="btn btn-info text-white"
+                    style={{
+                      backgroundColor: "#014cb1",
+                      borderColor: "#014cb1",
+                    }}
+                  >
+                    Filter by Doctor
+                  </button>
+                </div>
+
+                <div className="mx-2">
+                  <select
+                    class="form-select"
+                    aria-label="Default select example"
+                    value={doctor}
+                    onChange={(e) => setDoctor(e.target.value)}
+                  >
+                    <option value="">Select-</option>
+                    {uniqueDoctor?.map((item) => (
+                      <>
+                        <option value={item}>{item}</option>
+                      </>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h4>Total OPD Amount :- {totalOpdAmount}/-</h4>
           </div>
         </div>
 
@@ -136,6 +202,7 @@ const OpdBills = () => {
                         <th>Bill Date</th>
                         <th className="table-small">Patient UHID</th>
                         <th className="table-small">Patient Name</th>
+                        <th>Assigned Doctor</th>
                         <th className="table-small">OPD Amount</th>
                         <th>Payment Status</th>
                       </tr>
@@ -150,13 +217,18 @@ const OpdBills = () => {
                             </td>
                             <td className="table-small">
                               <Link
+                                className="fw-bold"
                                 to={`/patient-profile/${item.patient_uhid}`}
-                                style={{ textDecoration: "none" }}
+                                style={{
+                                  textDecoration: "none",
+                                  color: "#004aad",
+                                }}
                               >
                                 {item.patient_uhid}
                               </Link>
                             </td>
                             <td className="table-small">{item.patient_name}</td>
+                            <td>{item.assigned_doctor_name}</td>
                             <td className="table-small">{item.opd_amount}</td>
                             <td>{item.payment_Status}</td>
                           </tr>
@@ -210,24 +282,34 @@ const PaginationContainer = styled.div`
   .pagination li a {
     display: block;
     padding: 8px 16px;
-    border: 1px solid black;
+    border: 1px solid #e6ecf1;
     color: #007bff;
     cursor: pointer;
+    /* background-color: #004aad0a; */
     text-decoration: none;
+    border-radius: 5px;
+    box-shadow: 0px 0px 1px #000;
   }
 
   .pagination li.active a {
-    background-color: #007bff;
+    background-color: #004aad;
     color: white;
-    border: 1px solid #007bff;
+    border: 1px solid #004aad;
+    border-radius: 5px;
   }
 
   .pagination li.disabled a {
-    color: #ddd;
+    color: white;
     cursor: not-allowed;
+    border-radius: 5px;
+    background-color: #3a4e69;
+    border: 1px solid #3a4e69;
   }
 
   .pagination li a:hover:not(.active) {
-    background-color: #ddd;
+    background-color: #004aad;
+    color: white;
+    border-radius: 5px;
+    border: 1px solid #004aad;
   }
 `;

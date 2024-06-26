@@ -363,17 +363,17 @@ const CalenderSetting = () => {
     getHolidayList();
   }, [branch.name]);
 
-  useEffect(() => {}, []);
+  console.log(brData[0]?.week_off);
 
   console.log(holidayList);
   const weekdays = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+    "sunday",
   ];
 
   return (

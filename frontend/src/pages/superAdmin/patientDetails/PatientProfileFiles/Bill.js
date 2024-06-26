@@ -1,7 +1,8 @@
 import axios from "axios";
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
 // import Calendar from 'react-calendar';
 // import "react-calendar/dist/Calendar.css";
@@ -53,28 +54,46 @@ const Bill = () => {
                   <tr>
                     <th>Bill Date</th>
                     <th>Bill ID</th>
-                    <th>Doctor</th>
+
                     <th>Total Amount(INR)</th>
                     <th>Direct Paid Amount(INR)</th>
                     <th>Pay By Security Amount</th>
                     <th>Payment Mode</th>
                     <th>Payment Date</th>
                     <th>Payment Status</th>
+                    <th>View Bill</th>
                   </tr>
                 </thead>
                 <tbody>
                   {billData?.map((item) => (
                     <>
                       <tr>
-                        <td>{item?.bill_date?.split("T")[0]}</td>
+                        <td>{item?.bill_date?.split(" ")[0]}</td>
                         <td>{item.bill_id}</td>
-                        <td>{item.assigned_doctor_name}</td>
+
                         <td>{item.total_amount}</td>
                         <td>{item.paid_amount}</td>
                         <td>{item.pay_by_sec_amt}</td>
                         <td>{item.payment_mode}</td>
-                        <td>{item.payment_date_time?.split("T")[0]}</td>
+                        <td>{item.payment_date_time?.split(" ")[0]} </td>
                         <td>{item.payment_status}</td>
+                        <td>
+                          <a
+                            href={`/ViewPatientTotalBill/${item.tp_id}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <button
+                              className="btn btn-success text-white"
+                              style={{
+                                backgroundColor: "#014cb1",
+                                borderColor: "#014cb1",
+                              }}
+                            >
+                              View Bill
+                            </button>{" "}
+                          </a>
+                        </td>
                       </tr>
                     </>
                   ))}
@@ -90,7 +109,7 @@ const Bill = () => {
 
 export default Bill;
 const Wrapper = styled.div`
-  #card1 {
+  /* #card1 {
     background-image: linear-gradient(#9dc5f8, #cbfdd9);
     width: 20rem;
     height: 8rem;
@@ -105,7 +124,7 @@ const Wrapper = styled.div`
     @media screen and (min-width: 1020px) and (max-width: 1600px) {
       width: 13rem;
     }
-  }
+  } */
 
   .dotrem1 {
     list-style-type: none;
@@ -123,8 +142,9 @@ const Wrapper = styled.div`
     }
   }
   #table {
+    width: 65rem;
     @media screen and (max-width: 768px) {
-      width: 22rem;
+      width: 35rem;
       margin-left: -1rem;
     }
   }
@@ -134,5 +154,10 @@ const Wrapper = styled.div`
     @media screen and (max-width: 900px) {
       width: 100%;
     }
+  }
+
+  th,
+  td {
+    white-space: nowrap;
   }
 `;

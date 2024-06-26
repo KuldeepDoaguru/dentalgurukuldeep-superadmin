@@ -90,7 +90,7 @@ const BillingReport = () => {
 export default BillingReport;
 const Container = styled.div`
   .navlink.active {
-    background-color: #f53237 !important;
+    background-color: #004aad !important;
     border-radius: 1rem;
     color: white !important;
   }

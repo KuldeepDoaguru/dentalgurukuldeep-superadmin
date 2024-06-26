@@ -274,7 +274,11 @@ const EmpAttendanceRepo = () => {
                                   />
                                 </div>
                                 <button
-                                  className="btn btn-warning mx-2"
+                                  className="btn btn-warning mx-2 text-white"
+                                  style={{
+                                    backgroundColor: "#014cb1",
+                                    borderColor: "#014cb1",
+                                  }}
                                   type="button"
                                   onClick={exportToExcel}
                                 >

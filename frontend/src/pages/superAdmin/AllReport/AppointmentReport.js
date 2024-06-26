@@ -22,6 +22,7 @@ const AppointmentReport = () => {
   const [loading, setLoading] = useState(false);
   const location = useLocation();
   const [fromDate, setFromDate] = useState("");
+  const [doctor, setDoctor] = useState("");
   const [toDate, setToDate] = useState("");
   const [error, setError] = useState(false);
 
@@ -101,44 +102,75 @@ const AppointmentReport = () => {
 
   console.log(filterAppointDataByMonth);
 
+  const uniqueDoctor = [
+    ...new Set(appointmentList?.map((item) => item.assigned_doctor_name)),
+  ];
+
+  console.log(uniqueDoctor);
+
   const goBack = () => {
     window.history.go(-1);
   };
 
-  const downloadAppointmentData = async (e) => {
+  // const downloadAppointmentData = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const { data } = await axios.post(
+  //       `https://dentalgurusuperadmin.doaguru.com/api/v1/super-admin/downloadAppointReportByTime/${branch.name}`,
+  //       { fromDate: fromDate, toDate: toDate },
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: `Bearer ${user.token}`,
+  //         },
+  //       }
+  //     );
+  //     console.log(data);
+  //     // setSelectedEarn(data);
+  //     if (Array.isArray(data)) {
+  //       // Create a new workbook
+  //       const workbook = utils.book_new();
+
+  //       // Convert the report data to worksheet format
+  //       const worksheet = utils.json_to_sheet(data);
+
+  //       utils.book_append_sheet(workbook, worksheet, `Appointment Report`);
+  //       writeFile(workbook, `${fromDate} - ${toDate}-appointment-report.xlsx`);
+  //       console.log(data);
+  //     } else {
+  //       console.error("data is not an array");
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  const exportToExcel = (e) => {
     e.preventDefault();
-    try {
-      const { data } = await axios.post(
-        `https://dentalgurusuperadmin.doaguru.com/api/v1/super-admin/downloadAppointReportByTime/${branch.name}`,
-        { fromDate: fromDate, toDate: toDate },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${user.token}`,
-          },
-        }
-      );
-      console.log(data);
-      // setSelectedEarn(data);
-      if (Array.isArray(data)) {
-        // Create a new workbook
-        const workbook = utils.book_new();
+    const csvRows = [];
+    const table = document.querySelector(".table");
 
-        // Convert the report data to worksheet format
-        const worksheet = utils.json_to_sheet(data);
-
-        utils.book_append_sheet(workbook, worksheet, `Appointment Report`);
-        writeFile(workbook, `${fromDate} - ${toDate}-appointment-report.xlsx`);
-        console.log(data);
-      } else {
-        console.error("data is not an array");
-      }
-    } catch (error) {
-      console.log(error);
+    if (!table) {
+      console.error("Table element not found");
+      return;
     }
-  };
 
-  console.log(fromDate, "-To-", toDate);
+    table.querySelectorAll("tr").forEach((row) => {
+      const rowData = [];
+      row.querySelectorAll("td, th").forEach((cell) => {
+        rowData.push(cell.innerText);
+      });
+      csvRows.push(rowData.join(","));
+    });
+
+    const csvContent = csvRows.join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const link = document.createElement("a");
+    link.href = window.URL.createObjectURL(blob);
+    link.download = "Appointment-report.csv";
+    link.click();
+    window.URL.revokeObjectURL(link.href);
+  };
   return (
     <>
       <Container>
@@ -157,7 +189,10 @@ const AppointmentReport = () => {
                 </div>
                 <div className="container-fluid mt-3">
                   <div className="container-fluid">
-                    <button className="btn btn-success" onClick={goBack}>
+                    <button
+                      className="btn btn-success text-white"
+                      onClick={goBack}
+                    >
                       <IoMdArrowRoundBack /> Back
                     </button>
                     <div className="row mt-3">
@@ -172,63 +207,114 @@ const AppointmentReport = () => {
                       </div>
                       <div className="container">
                         <div class="mt-4">
-                          <div className="d-flex justify-content-between mb-2">
-                            <form onSubmit={downloadAppointmentData}>
-                              <div className="d-flex justify-content-between">
-                                <div>
-                                  <input
-                                    type="date"
-                                    name=""
-                                    id=""
-                                    required
-                                    className="p-2 rounded"
-                                    onChange={(e) =>
-                                      setFromDate(e.target.value)
-                                    }
-                                  />
-                                </div>
-                                <div className="mx-2">To</div>
-                                <div>
-                                  <input
-                                    type="date"
-                                    name=""
-                                    id=""
-                                    required
-                                    className="p-2 rounded"
-                                    onChange={(e) => setToDate(e.target.value)}
-                                  />
-                                </div>
-                                <div className="d-flex flex-column">
-                                  {filterAppointDataByMonth.length > 0 ? (
-                                    <button
-                                      className="btn btn-warning mx-2"
-                                      type="submit"
-                                      disabled={error}
-                                    >
-                                      Download Report
-                                    </button>
-                                  ) : (
-                                    <button
-                                      className="btn btn-warning mx-2"
-                                      type="button"
-                                      disabled
-                                    >
-                                      Download Report
-                                    </button>
-                                  )}
+                          <div className="row">
+                            <div className="col-xxl-7 col-xl-7 col-lg-7 col-md-12 col-sm-12 col-12">
+                              <div className="d-flex justify-content-between mb-2">
+                                <form onSubmit={exportToExcel}>
+                                  <div className="d-flex justify-content-between">
+                                    <div>
+                                      <input
+                                        type="date"
+                                        name=""
+                                        id=""
+                                        required
+                                        className="p-2 rounded"
+                                        onChange={(e) =>
+                                          setFromDate(e.target.value)
+                                        }
+                                      />
+                                    </div>
+                                    <div className="mx-2">To</div>
+                                    <div>
+                                      <input
+                                        type="date"
+                                        name=""
+                                        id=""
+                                        required
+                                        className="p-2 rounded"
+                                        onChange={(e) =>
+                                          setToDate(e.target.value)
+                                        }
+                                      />
+                                    </div>
+                                    <div className="d-flex flex-column">
+                                      {filterAppointDataByMonth.length > 0 ? (
+                                        <button
+                                          className="btn btn-warning mx-2 text-white shadow"
+                                          style={{
+                                            backgroundColor: "#014cb1",
+                                            borderColor: "#014cb1",
+                                          }}
+                                          type="submit"
+                                          disabled={error}
+                                        >
+                                          Download Report
+                                        </button>
+                                      ) : (
+                                        <button
+                                          className="btn btn-warning mx-2 text-white shadow"
+                                          style={{
+                                            backgroundColor: "#014cb1",
+                                            borderColor: "#014cb1",
+                                          }}
+                                          type="button"
+                                          disabled
+                                        >
+                                          Download Report
+                                        </button>
+                                      )}
 
-                                  {error && (
-                                    <>
-                                      <small className="text-danger">
-                                        The difference between the dates should
-                                        be less than 30 days
-                                      </small>
-                                    </>
-                                  )}
+                                      {error && (
+                                        <>
+                                          <small className="text-danger">
+                                            The difference between the dates
+                                            should be less than 30 days
+                                          </small>
+                                        </>
+                                      )}
+                                    </div>
+                                  </div>
+                                </form>
+                              </div>
+                            </div>
+                            <div className="col-xxl-5 col-xl-5 col-lg-5 col-md-12 col-sm-12 col-12">
+                              <div className="d-flex justify-content-end align-items-center mt-3">
+                                <div>
+                                  <button
+                                    className="btn btn-info text-white"
+                                    style={{
+                                      backgroundColor: "#014cb1",
+                                      borderColor: "#014cb1",
+                                    }}
+                                  >
+                                    Filter by Doctor
+                                  </button>
+                                </div>
+
+                                <div className="mx-2">
+                                  <select
+                                    class="form-select"
+                                    aria-label="Default select example"
+                                    value={doctor}
+                                    onChange={(e) => setDoctor(e.target.value)}
+                                  >
+                                    <option value="">Select-</option>
+                                    {uniqueDoctor?.map((item) => (
+                                      <>
+                                        <option value={item}>{item}</option>
+                                      </>
+                                    ))}
+                                  </select>
                                 </div>
                               </div>
-                            </form>
+                            </div>
                           </div>
+                          <div>
+                            <h4>
+                              Total Appointments : {appointmentList.length}
+                            </h4>
+                          </div>
+
                           <div className="container-fluid mt-3">
                             {loading ? (
                               <Lottie
@@ -286,6 +372,16 @@ const AppointmentReport = () => {
                                             return (
                                               billDate >= fromDate &&
                                               billDate <= toDate
+                                            );
+                                          } else {
+                                            return true;
+                                          }
+                                        })
+                                        .filter((item) => {
+                                          if (doctor) {
+                                            return (
+                                              item.assigned_doctor_name ===
+                                              doctor
                                             );
                                           } else {
                                             return true;
@@ -369,6 +465,7 @@ const Container = styled.div`
   th {
     background-color: #004aad;
     color: white;
+    white-space: nowrap;
   }
   .sticky {
     position: sticky;

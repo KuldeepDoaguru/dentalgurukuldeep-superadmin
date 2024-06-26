@@ -258,6 +258,10 @@ const Lab = () => {
                         <td>
                           <button
                             className="btn btn-warning text-light"
+                            style={{
+                              backgroundColor: "#014cb1",
+                              borderColor: "#014cb1",
+                            }}
                             onClick={() => openUpdatePopup(item)}
                           >
                             <TbEdit size={22} />
@@ -403,13 +407,13 @@ const Lab = () => {
                       </div>
                     </div>
 
-                    <div className="d-flex justify-content-evenly">
+                    <div className="d-flex justify-content-center">
                       <button type="submit" className="btn btn-success mt-2">
                         Save
                       </button>
                       <button
                         type="button"
-                        className="btn btn-danger mt-2"
+                        className="btn btn-danger mt-2 mx-2"
                         onClick={closeUpdatePopup}
                       >
                         Cancel
@@ -496,24 +500,34 @@ const PaginationContainer = styled.div`
   .pagination li a {
     display: block;
     padding: 8px 16px;
-    border: 1px solid black;
+    border: 1px solid #e6ecf1;
     color: #007bff;
     cursor: pointer;
+    /* background-color: #004aad0a; */
     text-decoration: none;
+    border-radius: 5px;
+    box-shadow: 0px 0px 1px #000;
   }
 
   .pagination li.active a {
-    background-color: #007bff;
+    background-color: #004aad;
     color: white;
-    border: 1px solid #007bff;
+    border: 1px solid #004aad;
+    border-radius: 5px;
   }
 
   .pagination li.disabled a {
-    color: #ddd;
+    color: white;
     cursor: not-allowed;
+    border-radius: 5px;
+    background-color: #3a4e69;
+    border: 1px solid #3a4e69;
   }
 
   .pagination li a:hover:not(.active) {
-    background-color: #ddd;
+    background-color: #004aad;
+    color: white;
+    border-radius: 5px;
+    border: 1px solid #004aad;
   }
 `;

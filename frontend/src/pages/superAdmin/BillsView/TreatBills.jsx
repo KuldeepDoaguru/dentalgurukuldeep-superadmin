@@ -19,6 +19,7 @@ const TreatBills = () => {
   const [loading, setLoading] = useState(false);
   const [listBills, setListBills] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
+  const [doctor, setDoctor] = useState("");
   const [selectedItem, setSelectedItem] = useState();
   const [popupVisible, setPopupVisible] = useState(false);
   const [placehold, setPlacehold] = useState([]);
@@ -155,7 +156,7 @@ const TreatBills = () => {
     getBillDetailsByBid();
   }, [selectedItem]);
 
-  console.log(typeof listBills[0]?.patient_mobile);
+  console.log(listBills);
   console.log(keyword);
   console.log(selectedItem);
   console.log(placehold);
@@ -185,15 +186,38 @@ const TreatBills = () => {
   const trimmedKeyword = keyword.trim().toLowerCase();
   console.log(trimmedKeyword);
 
+  const uniqueDoctor = [
+    ...new Set(listBills?.map((item) => item.assigned_doctor_name)),
+  ];
+
+  console.log(uniqueDoctor);
+
   const searchFilter = listBills.filter((lab) => {
-    return (
-      lab.patient_name.toLowerCase().includes(trimmedKeyword) ||
-      lab.patient_mobile.includes(trimmedKeyword) ||
-      lab.uhid.toLowerCase().includes(trimmedKeyword)
-    );
+    if (doctor && trimmedKeyword) {
+      return (
+        lab.assigned_doctor_name === doctor &&
+        (lab.patient_name.toLowerCase().includes(trimmedKeyword) ||
+          lab.uhid.toLowerCase().includes(trimmedKeyword))
+      );
+    } else if (doctor) {
+      return lab.assigned_doctor_name === doctor;
+    } else if (trimmedKeyword) {
+      return (
+        lab.patient_name.toLowerCase().includes(trimmedKeyword) ||
+        lab.uhid.toLowerCase().includes(trimmedKeyword)
+      );
+    } else {
+      return true; // Show all data when no filters are applied
+    }
   });
 
   console.log(searchFilter);
+
+  const totalBillAmount = searchFilter.reduce((total, item) => {
+    return total + item.total_amount;
+  }, 0);
+
+  console.log(totalBillAmount);
 
   const totalPages = Math.ceil(searchFilter.length / complaintsPerPage);
 
@@ -212,17 +236,56 @@ const TreatBills = () => {
   return (
     <>
       <Container>
-        <div className="d-flex justify-content-between">
-          <div className="w-50">
-            {/* <label>Patient Name :</label> */}
-            <input
-              type="text"
-              placeholder="Search Patient Name or Contact Number or UHID"
-              className=""
-              value={keyword}
-              onChange={handleKeywordChange}
-            />
+        <div className="">
+          <div className="row">
+            <div className="col-xxl-7 col-xl-7 col-lg-7 col-md-6 col-sm-12 col-12">
+              <div className="">
+                {/* <label>Patient Name :</label> */}
+                <input
+                  type="text"
+                  placeholder="Search Patient Name or Contact Number or UHID"
+                  className=""
+                  value={keyword}
+                  onChange={handleKeywordChange}
+                />
+              </div>
+            </div>
+            <div className="col-xxl-5 col-xl-5 col-lg-5 col-md-6 col-sm-12 col-12">
+              <div className="d-flex justify-content-end align-items-center mt-3">
+                <div>
+                  <button
+                    className="btn btn-info text-white"
+                    style={{
+                      backgroundColor: "#014cb1",
+                      borderColor: "#014cb1",
+                    }}
+                  >
+                    Filter by Doctor
+                  </button>
+                </div>
+
+                <div className="mx-2">
+                  <select
+                    class="form-select"
+                    aria-label="Default select example"
+                    value={doctor}
+                    onChange={(e) => setDoctor(e.target.value)}
+                  >
+                    <option value="">Select-</option>
+                    {uniqueDoctor?.map((item) => (
+                      <>
+                        <option value={item}>{item}</option>
+                      </>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
           </div>
+          <div>
+            <h4>Total Received Amount :- {totalBillAmount}/-</h4>
+          </div>
+
           <div>
             {/* <button
                         className="btn btn-success"
@@ -254,6 +317,7 @@ const TreatBills = () => {
                         <th className="table-small">Patient Name</th>
                         <th className="table-small">Patient Mobile</th>
                         <th className="table-small">Patient Email</th>
+                        <th>Assigned Doctor</th>
                         <th className="table-small">Total Amount</th>
                         <th>Paid Amount</th>
                         <th>Paid by Security Amount</th>
@@ -265,25 +329,28 @@ const TreatBills = () => {
                     <tbody>
                       {displayedAppointments?.map((item) => (
                         <>
-                          <tr className="table-row">
-                            <td className="table-sno">{item.bill_id}</td>
-                            <td className="table-small">
-                              {item.bill_date?.split("T")[0]}
-                            </td>
-                            <td className="table-small">
+                          <tr className="">
+                            <td>{item.bill_id}</td>
+                            <td>{item.bill_date?.split("T")[0]}</td>
+                            <td>
                               <Link
+                                className="fw-bold"
                                 to={`/patient-profile/${item.uhid}`}
-                                style={{ textDecoration: "none" }}
+                                style={{
+                                  textDecoration: "none",
+                                  color: "#004aad",
+                                }}
                               >
                                 {item.uhid}
                               </Link>
                             </td>
-                            <td className="table-small">{item.tp_id}</td>
-                            <td className="table-small">{item.patient_name}</td>
+                            <td>{item.tp_id}</td>
+                            <td>{item.patient_name}</td>
                             <td>{item.patient_mobile}</td>
                             <td>{item.patient_email}</td>
-                            <td className="table-small">{item.total_amount}</td>
-                            <td className="table-small">{item.paid_amount}</td>
+                            <td>{item.assigned_doctor_name}</td>
+                            <td>{item.total_amount}</td>
+                            <td>{item.paid_amount}</td>
                             <td>{item.pay_by_sec_amt}</td>
                             <td>{item.payment_status}</td>
                             <td>{item?.payment_date_time}</td>
@@ -598,24 +665,39 @@ const PaginationContainer = styled.div`
   .pagination li a {
     display: block;
     padding: 8px 16px;
-    border: 1px solid black;
+    border: 1px solid #e6ecf1;
     color: #007bff;
     cursor: pointer;
+    /* background-color: #004aad0a; */
     text-decoration: none;
+    border-radius: 5px;
+    box-shadow: 0px 0px 1px #000;
   }
 
   .pagination li.active a {
-    background-color: #007bff;
+    background-color: #004aad;
     color: white;
-    border: 1px solid #007bff;
+    border: 1px solid #004aad;
+    border-radius: 5px;
   }
 
   .pagination li.disabled a {
-    color: #ddd;
+    color: white;
     cursor: not-allowed;
+    border-radius: 5px;
+    background-color: #3a4e69;
+    border: 1px solid #3a4e69;
   }
 
   .pagination li a:hover:not(.active) {
-    background-color: #ddd;
+    background-color: #004aad;
+    color: white;
+    border-radius: 5px;
+    border: 1px solid #004aad;
+  }
+
+  th,
+  td {
+    white-space: nowrap !important;
   }
 `;
