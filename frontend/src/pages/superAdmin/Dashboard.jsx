@@ -106,7 +106,7 @@ const Dashboard = () => {
                     <NewRegPatient />
                   </div>
                   <div className="col-xxl-4 col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
-                    <h3 className="text-center">New Patient this Month</h3>
+                    <h3 className="text-center">New patient this month</h3>
 
                     <AppointmentChart />
                   </div>

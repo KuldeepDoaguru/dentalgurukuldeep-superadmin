@@ -115,7 +115,7 @@ const LabChart = () => {
     console.log(date);
     return {
       date,
-      patients: dailyAppointments[date] || 0,
+      Patients: dailyAppointments[date] || 0,
       Amount: totalAmountPerDay[date] || 0,
     };
   });
@@ -157,7 +157,7 @@ const LabChart = () => {
                 <Tooltip />
                 <Legend />
                 <Bar
-                  dataKey="patients"
+                  dataKey="Patients"
                   fill="#40407a"
                   yAxisId="left"
                   name="Patients"

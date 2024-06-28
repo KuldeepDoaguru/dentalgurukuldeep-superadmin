@@ -441,6 +441,34 @@ const EmployeeProfile = () => {
     });
   }, [empData]);
   console.log(formatTime(empData[0]?.allday_shift_end_time));
+
+  const roles = () => {
+    if (inEmpData.empDesignation === "doctor") {
+      return [
+        "admin",
+        "receptionist",
+        "consultant",
+        "accountant",
+        "lab attendant",
+        "doctor",
+      ];
+    } else {
+      return [
+        "admin",
+        "receptionist",
+        "consultant",
+        "accountant",
+        "lab attendant",
+      ];
+    }
+  };
+
+  useEffect(() => {
+    roles();
+  }, [inEmpData.empDesignation]);
+
+  const rolesVal = roles();
+  console.log(rolesVal);
   return (
     <>
       <Container>
@@ -1269,14 +1297,7 @@ const EmployeeProfile = () => {
                   >
                     Employee Role
                   </label>
-                  {[
-                    "admin",
-                    "receptionist",
-                    "consultant",
-                    "accountant",
-                    "lab attendant",
-                    "doctor",
-                  ].map((role) => (
+                  {rolesVal.map((role) => (
                     <div className="form-check" key={role}>
                       <input
                         className="form-check-input"

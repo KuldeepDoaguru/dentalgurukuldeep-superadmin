@@ -106,7 +106,7 @@ const AppointmentChart = () => {
     const date = `${formattedDate}-${day}`;
     return {
       date,
-      patients: processedAppointments[date] || 0,
+      Patients: processedAppointments[date] || 0,
     };
   });
 

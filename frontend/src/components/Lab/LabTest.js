@@ -369,7 +369,7 @@ const LabTest = () => {
                           <div className="d-flex flex-column w-100">
                             <label htmlFor="">Test Code</label>
                             <input
-                              type="text"
+                              type="number"
                               placeholder={selectedItem.test_code}
                               className="rounded p-2"
                               name="test_code"
@@ -428,7 +428,7 @@ const LabTest = () => {
                           <div className="d-flex flex-column w-100">
                             <label htmlFor="">Test Cost</label>
                             <input
-                              type="text"
+                              type="number"
                               placeholder={selectedItem.test_cost}
                               className="rounded p-2"
                               name="test_cost"
@@ -485,7 +485,7 @@ const LabTest = () => {
                     <div className="d-flex flex-column w-100">
                       <label htmlFor="">Test Code</label>
                       <input
-                        type="text"
+                        type="number"
                         placeholder="Lab Test Code"
                         className="rounded p-2"
                         name="test_code"
@@ -548,7 +548,7 @@ const LabTest = () => {
                     <div className="d-flex flex-column w-100">
                       <label htmlFor="">Test Cost</label>
                       <input
-                        type="text"
+                        type="number"
                         placeholder="Lab Test Cost"
                         className="rounded p-2"
                         name="test_cost"

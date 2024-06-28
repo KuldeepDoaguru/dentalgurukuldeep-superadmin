@@ -147,7 +147,7 @@ const PatientDetailsLIst = () => {
                               {/* <th className="thead sticky">Marital Status</th> */}
                               <th className="thead sticky">Patient Type</th>
                               <th className="thead sticky">Address</th>
-                              <th className="thead sticky">Adhaar Number</th>
+                              {/* <th className="thead sticky">Adhaar Number</th> */}
                               <th
                                 className="sticky"
                                 style={{ minWidth: "10rem" }}
@@ -180,7 +180,7 @@ const PatientDetailsLIst = () => {
                                   {/* <td className="thead">{item.maritalstatus}</td> */}
                                   <td className="thead">{item.patient_type}</td>
                                   <td className="thead">{item.address}</td>
-                                  <td className="thead">{item.adharno}</td>
+                                  {/* <td className="thead">{item.adharno}</td> */}
                                   <td
                                     className=""
                                     style={{ minWidth: "10rem" }}

@@ -109,7 +109,7 @@ const EarnTMAdmin = () => {
     const date = `${day}-${formattedDate}`;
     return {
       date,
-      patients: dailyAppointments[date] || 0,
+      Patients: dailyAppointments[date] || 0,
       Amount: totalAmountPerDay[date] || 0,
     };
   });

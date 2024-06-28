@@ -61,6 +61,7 @@ import FinalFinancialReport from "./pages/superAdmin/FinancialReport/FinalFinanc
 import axios from "axios";
 import RefundedAmountReport from "./pages/superAdmin/AllReport/RefundedAmountReport";
 import AllRefundList from "./pages/superAdmin/RefundAmountList/AllRefundList";
+import ViewPatientTotalBill from "./pages/superAdmin/ViewPatientTotalBill";
 
 const App = () => {
   // const storedUserData = localStorage.getItem("userData");
@@ -298,6 +299,13 @@ const App = () => {
         <Route
           path="*"
           element={user.id === null ? <UniversalLogin /> : <ErrorPage />}
+        />
+
+        <Route
+          path="/ViewPatientTotalBill/:tpid"
+          element={
+            user.id === null ? <UniversalLogin /> : <ViewPatientTotalBill />
+          }
         />
       </Routes>
     </BrowserRouter>

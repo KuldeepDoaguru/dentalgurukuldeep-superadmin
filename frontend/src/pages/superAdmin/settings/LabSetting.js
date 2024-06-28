@@ -47,10 +47,19 @@ const LabSetting = () => {
 
   const handleAddLabChange = (event) => {
     const { name, value } = event.target;
-    setAddLabField((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    if (name === "contact") {
+      if (/^\d*$/.test(value) && value.length <= 10) {
+        setAddLabField((prevEmpData) => ({
+          ...prevEmpData,
+          [name]: value,
+        }));
+      }
+    } else {
+      setAddLabField((prevEmpData) => ({
+        ...prevEmpData,
+        [name]: value,
+      }));
+    }
   };
 
   console.log(addLabField);
@@ -269,6 +278,7 @@ const LabSetting = () => {
                       <input
                         type="text"
                         maxLength={10}
+                        minLength={10}
                         placeholder="contact number"
                         className="rounded p-2"
                         name="contact"

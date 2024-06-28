@@ -67,34 +67,34 @@ const LabReport = () => {
 
   console.log(filterBillDataByMonth.length);
 
-  const downloadBillingData = async (e) => {
-    e.preventDefault();
-    try {
-      const { data } = await axios.post(
-        `https://dentalgurusuperadmin.doaguru.com/api/v1/super-admin/downloadLabReportByTime/${branch.name}`,
-        { fromDate: fromDate, toDate: toDate },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${user.token}`,
-          },
-        }
-      );
-      console.log(data);
+  // const downloadBillingData = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const { data } = await axios.post(
+  //       `https://dentalgurusuperadmin.doaguru.com/api/v1/super-admin/downloadLabReportByTime/${branch.name}`,
+  //       { fromDate: fromDate, toDate: toDate },
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: `Bearer ${user.token}`,
+  //         },
+  //       }
+  //     );
+  //     console.log(data);
 
-      if (Array.isArray(data)) {
-        const workbook = utils.book_new();
-        const worksheet = utils.json_to_sheet(data);
-        utils.book_append_sheet(workbook, worksheet, `Billing Report`);
-        writeFile(workbook, `${fromDate} - ${toDate}-billing-report.xlsx`);
-        console.log(data);
-      } else {
-        console.error("data is not an array");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //     if (Array.isArray(data)) {
+  //       const workbook = utils.book_new();
+  //       const worksheet = utils.json_to_sheet(data);
+  //       utils.book_append_sheet(workbook, worksheet, `Billing Report`);
+  //       writeFile(workbook, `${fromDate} - ${toDate}-billing-report.xlsx`);
+  //       console.log(data);
+  //     } else {
+  //       console.error("data is not an array");
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   const defaultOptions = {
     loop: true,
@@ -120,13 +120,40 @@ const LabReport = () => {
 
   console.log(checkFilter);
 
+  const exportToExcel = (e) => {
+    e.preventDefault();
+    const csvRows = [];
+    const table = document.querySelector(".table");
+
+    if (!table) {
+      console.error("Table element not found");
+      return;
+    }
+
+    table.querySelectorAll("tr").forEach((row) => {
+      const rowData = [];
+      row.querySelectorAll("td, th").forEach((cell) => {
+        rowData.push(cell.innerText);
+      });
+      csvRows.push(rowData.join(","));
+    });
+
+    const csvContent = csvRows.join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const link = document.createElement("a");
+    link.href = window.URL.createObjectURL(blob);
+    link.download = "Lab-bills-report.csv";
+    link.click();
+    window.URL.revokeObjectURL(link.href);
+  };
+
   return (
     <>
       <Container>
         <div className="container-fluid">
           <div class=" mt-4">
             <div className="d-flex justify-content-between mb-2">
-              <form onSubmit={downloadBillingData}>
+              <form onSubmit={exportToExcel}>
                 <div className="d-flex justify-content-between">
                   <div>
                     <input
@@ -147,9 +174,19 @@ const LabReport = () => {
                       onChange={(e) => setToDate(e.target.value)}
                     />
                   </div>
-                  <button className="btn btn-warning mx-2" type="submit">
-                    Download Report
-                  </button>
+                  {labBills.length > 0 ? (
+                    <button className="btn btn-warning mx-2" type="submit">
+                      Download Report
+                    </button>
+                  ) : (
+                    <button
+                      className="btn btn-warning mx-2"
+                      type="submit"
+                      disabled
+                    >
+                      Download Report
+                    </button>
+                  )}
                 </div>
               </form>
             </div>

@@ -33,10 +33,19 @@ const Lab = () => {
 
   const handleAddLabChange = (event) => {
     const { name, value } = event.target;
-    setUpLabField((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    if (name === "contact") {
+      if (/^\d*$/.test(value) && value.length <= 10) {
+        setUpLabField((prevEmpData) => ({
+          ...prevEmpData,
+          [name]: value,
+        }));
+      }
+    } else {
+      setUpLabField((prevEmpData) => ({
+        ...prevEmpData,
+        [name]: value,
+      }));
+    }
   };
 
   console.log(upLabField);
